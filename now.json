@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "name": "mdxcms",
+  "builds": [
+    {
+      "src": "www/next.config.js",
+      "use": "@now/next"
+    },
+    {
+      "src": "editor/next.config.js",
+      "use": "@now/next"
+    },
+    {
+      "src": "api/src/**/*.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/users",
+      "dest": "/api/src/users/index.js"
+    },   
+    {
+      "src": "/api/user/new",
+      "dest": "/api/src/user/new.js"
+    },
+    {
+      "src": "/editor",
+      "dest": "/editor/"
+    },
+    {
+      "src": "/editor/(.*)",
+      "dest": "/editor/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/www/$1"
+    }
+  ]
+}
