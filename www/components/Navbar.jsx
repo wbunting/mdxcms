@@ -309,10 +309,10 @@ function Navbar({ className, hideLogo, route, isMobile }) {
               py={0.5}
             >
               <a
-                title="Join Free"
+                title="Get Started"
                 className="button"
               >
-                Join Free
+                Get Started
               </a>
             </Button>
           </Link>
