@@ -2139,23 +2139,32 @@ function (_Document) {
           lineNumber: 9
         },
         __self: this
-      }, "body { margin: 0 } /* custom! */")), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("body", {
-        className: "custom_class",
+      }, "body { margin: 0 } /* custom! */"), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("link", {
+        rel: "shortcut icon",
+        type: "image/x-icon",
+        href: "/assets/favicon.ico",
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 11
+          lineNumber: 10
         },
         __self: this
-      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(next_document__WEBPACK_IMPORTED_MODULE_6__["Main"], {
+      })), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement("body", {
+        className: "custom_class",
         __source: {
           fileName: _jsxFileName,
           lineNumber: 12
         },
         __self: this
-      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(next_document__WEBPACK_IMPORTED_MODULE_6__["NextScript"], {
+      }, react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(next_document__WEBPACK_IMPORTED_MODULE_6__["Main"], {
         __source: {
           fileName: _jsxFileName,
           lineNumber: 13
+        },
+        __self: this
+      }), react__WEBPACK_IMPORTED_MODULE_5___default.a.createElement(next_document__WEBPACK_IMPORTED_MODULE_6__["NextScript"], {
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 14
         },
         __self: this
       })));

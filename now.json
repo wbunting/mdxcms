@@ -9,6 +9,10 @@
     {
       "src": "api/src/**/*.js",
       "use": "@now/node"
+    },
+    {
+      "src": "assets/**/*",
+      "use": "@now/static"
     }
   ],
   "routes": [
@@ -23,6 +27,10 @@
     {
       "src": "/api/document",
       "dest": "/api/src/document.js"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
     },
     {
       "src": "/(.*)",

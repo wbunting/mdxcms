@@ -7,6 +7,7 @@ export default class extends Document {
       <Html>
         <Head>
           <style>{`body { margin: 0 } /* custom! */`}</style>
+          <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico" />
         </Head>
         <body className="custom_class">
           <Main />
