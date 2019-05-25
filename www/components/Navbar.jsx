@@ -301,8 +301,8 @@ function Navbar({ className, hideLogo, route, isMobile }) {
           </Link>
           <Link href="/signup" prefetch>
             <Button 
-              bg="white" 
-              border 
+              bg="white"
+              border="1px solid #ffffff"
               borderColor="black" 
               borderRadius={4}
               px={2}
