@@ -1,7 +1,6 @@
 import React from 'react';
 import App, { Container } from 'next/app';
 // import withMDXCMS from '../lib/mdxcms/integrations/next';
-
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};

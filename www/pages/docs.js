@@ -10,6 +10,7 @@ import Container from '../components/Container';
 
 import useCMSReload from 'mdxcms/lib/react/useCMSReload';
 import withMDXCMS from 'mdxcms/lib/integrations/next';
+import MDXComponents from '../components/MDXComponents';
 
 const Docs = ({ mdx, etag }) => {
   const isAmp = useAmp();
@@ -23,7 +24,7 @@ const Docs = ({ mdx, etag }) => {
       <Page title="Next.js - The React Framework">
         <Container>
           <RebassMDX>
-            <MDX>{mdx}</MDX>
+            <MDX components={MDXComponents}>{mdx}</MDX>
           </RebassMDX>
         </Container>
       </Page>

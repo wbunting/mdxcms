@@ -20,7 +20,7 @@ const Home = ({mdx, etag}) => {
       <Header height={48} shadow={false}>
         <Navbar hideLogo={false} />
       </Header>
-      <Page title="Next.js - The React Framework">
+      <Page>
         <Container>
           <RebassMDX>
             <MDX>{mdx}</MDX>

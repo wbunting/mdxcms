@@ -7,7 +7,7 @@ const githubPages = async ({
 }) => {
   const filePath = pathname === '/' ? '/index' : pathname;
   const url = `https://${owner}.github.io/${repo}${filePath}.mdx`
-  const result = await fetch(url);
+  const result = await fetch(url, {credentials: 'include'});
   const mdx = await result.text();
 
   return mdx
