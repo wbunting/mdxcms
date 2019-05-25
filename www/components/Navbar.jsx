@@ -5,9 +5,10 @@ import { withRouter } from 'next/router';
 import classNames from 'classnames';
 
 import MDXCMSLogo from './Logo';
-import Container from './container';
+import {Button} from 'rebass';
+import Container from './Container';
 
-import GitHubLogo from './icons/github';
+import GitHubLogo from './Icons/Github';
 
 function Navbar({ className, hideLogo, route, isMobile }) {
   if (isMobile) {
@@ -100,7 +101,7 @@ function Navbar({ className, hideLogo, route, isMobile }) {
           </div>
           <div className="links">
             <div className="icons">
-              <Link href="https://github.com/mdxcms">
+              <Link href="https://github.com/wbunting/mdxcms">
                 <a
                   aria-label="MDXCMS on GitHub"
                   rel="noreferrer"
@@ -112,26 +113,6 @@ function Navbar({ className, hideLogo, route, isMobile }) {
             </div>
           </div>
           <div className="links mute dropdown">
-            <Link href="/#features" prefetch>
-              <a
-                className={classNames({
-                  selected: route.startsWith('/features')
-                })}
-                title="Features"
-              >
-                Features
-              </a>
-            </Link>
-            <Link href="/learn">
-              <a
-                className={classNames({
-                  selected: route.startsWith('/learn')
-                })}
-                title="Learn"
-              >
-                Learn
-              </a>
-            </Link>
             <a
               href="/docs"
               className={classNames({
@@ -141,16 +122,6 @@ function Navbar({ className, hideLogo, route, isMobile }) {
             >
               Docs
             </a>
-            <Link href="/showcase" prefetch>
-              <a
-                className={classNames({
-                  selected: route.startsWith('/showcase')
-                })}
-                title="Showcase"
-              >
-                Showcase
-              </a>
-            </Link>
             <a
               href="/blog"
               className={classNames({
@@ -193,6 +164,10 @@ function Navbar({ className, hideLogo, route, isMobile }) {
               margin-right: 2rem;
               text-decoration: none;
               transition: color 0.2s ease;
+            }
+            nav .links a.button {
+              margin-right: 0;
+              cursor: pointer;
             }
             nav .links a:hover {
               color: #111;
@@ -263,7 +238,7 @@ function Navbar({ className, hideLogo, route, isMobile }) {
           </div>
         )}
         <div className="links">
-          <Link href="/#about" prefetch>
+          {/* <Link href="/#about" prefetch>
             <a
               className={classNames('mute', {
                 selected: route.startsWith('/about')
@@ -272,7 +247,7 @@ function Navbar({ className, hideLogo, route, isMobile }) {
             >
               About
             </a>
-          </Link>
+          </Link> */}
           <a
             href="/docs"
             className={classNames('mute', {
@@ -282,28 +257,8 @@ function Navbar({ className, hideLogo, route, isMobile }) {
           >
             Docs
           </a>
-        </div>
-        <div className="links">
-          <Link href="/examples" prefetch>
-            <a
-              className={classNames('mute', {
-                selected: route.startsWith('/examples')
-              })}
-              title="Examples"
-            >
-              Examples
-            </a>
-          </Link>
-          <a
-            href="/blog"
-            className={classNames('mute', {
-              selected: route.startsWith('/blog')
-            })}
-          >
-            Blog
-          </a>
           <div className="icons">
-            <Link href="https://github.com/mdxcms">
+            <Link href="https://github.com/wbunting/mdxcms">
               <a
                 aria-label="MDXCMS on GitHub"
                 rel="noreferrer"
@@ -313,6 +268,54 @@ function Navbar({ className, hideLogo, route, isMobile }) {
               </a>
             </Link>
           </div>
+        </div>
+        <div className="links">
+          {/* <Link href="/examples" prefetch>
+            <a
+              className={classNames('mute', {
+                selected: route.startsWith('/examples')
+              })}
+              title="Examples"
+            >
+              Examples
+            </a>
+          </Link> */}
+          {/* <a
+            href="/blog"
+            className={classNames('mute', {
+              selected: route.startsWith('/blog')
+            })}
+          >
+            Blog
+          </a> */}
+          
+          <Link href="/login" prefetch>
+            <a
+              className={classNames('mute', {
+                selected: route.startsWith('/login')
+              })}
+              title="Login"
+            >
+              Login
+            </a>
+          </Link>
+          <Link href="/signup" prefetch>
+            <Button 
+              bg="white" 
+              border 
+              borderColor="black" 
+              borderRadius={4}
+              px={2}
+              py={0.5}
+            >
+              <a
+                title="Join Free"
+                className="button"
+              >
+                Join Free
+              </a>
+            </Button>
+          </Link>
         </div>
       </nav>
     </Container>
