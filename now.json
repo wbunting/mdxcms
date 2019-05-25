@@ -7,10 +7,6 @@
       "use": "@now/next"
     },
     {
-      "src": "editor/next.config.js",
-      "use": "@now/next"
-    },
-    {
       "src": "api/src/**/*.js",
       "use": "@now/node"
     }
@@ -25,12 +21,8 @@
       "dest": "/api/src/user/new.js"
     },
     {
-      "src": "/editor",
-      "dest": "/editor/"
-    },
-    {
-      "src": "/editor/(.*)",
-      "dest": "/editor/$1"
+      "src": "/api/document",
+      "dest": "/api/src/document.js"
     },
     {
       "src": "/(.*)",

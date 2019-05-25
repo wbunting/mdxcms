@@ -1,0 +1,1078 @@
+import toHash from 'tohash'
+
+export const FONTS = [
+  { id: 'Anonymous Pro', name: 'Anonymous Pro' },
+  { id: 'Droid Sans Mono', name: 'Droid Sans Mono' },
+  { id: 'Fantasque Sans Mono', name: 'Fantasque Sans Mono' },
+  { id: 'Fira Code', name: 'Fira Code' },
+  { id: 'Hack', name: 'Hack' },
+  { id: 'IBM Plex Mono', name: 'IBM Plex Mono' },
+  { id: 'Inconsolata', name: 'Inconsolata' },
+  { id: 'Iosevka', name: 'Iosevka' },
+  { id: 'Monoid', name: 'Monoid' },
+  { id: 'Source Code Pro', name: 'Source Code Pro' },
+  { id: 'Space Mono', name: 'Space Mono' },
+  { id: 'Ubuntu Mono', name: 'Ubuntu Mono' }
+]
+
+export const HIGHLIGHT_KEYS = [
+  'background',
+  'text',
+  'variable',
+  'attribute',
+  'definition',
+  'keyword',
+  'operator',
+  'property',
+  'number',
+  'string',
+  'comment',
+  'meta'
+]
+
+export const THEMES = [
+  {
+    id: '3024-night',
+    name: '3024 Night',
+    highlights: {
+      background: '#090300',
+      text: '#d6d5d4',
+      variable: '#01a0e4',
+      attribute: '#00c',
+      definition: '#e8bbd0',
+      keyword: '#db2d20',
+      operator: '#fff',
+      property: '#01a252',
+      number: '#a16a94',
+      string: '#fded02',
+      comment: '#cdab53',
+      meta: '#555'
+    }
+  },
+  {
+    id: 'blackboard',
+    name: 'Blackboard',
+    highlights: {
+      background: '#0C1021',
+      text: '#F8F8F8',
+      variable: '#FF6400',
+      attribute: '#8DA6CE',
+      definition: '#8DA6CE',
+      keyword: '#FBDE2D',
+      operator: '#fff',
+      property: '#fff',
+      number: '#D8FA3C',
+      string: '#61CE3C',
+      comment: '#AEAEAE',
+      meta: '#D8FA3C',
+      tag: '#8DA6CE'
+    }
+  },
+  {
+    id: 'base16-dark',
+    name: 'Base 16 (Dark)',
+    highlights: {
+      background: '#151515',
+      text: '#e0e0e0',
+      variable: '#6a9fb5',
+      attribute: '#00c',
+      definition: '#d28445',
+      keyword: '#ac4142',
+      operator: '#fff',
+      property: '#90a959',
+      number: '#aa759f',
+      string: '#f4bf75',
+      comment: '#8f5536',
+      meta: '#555',
+      tag: '#ac4142'
+    }
+  },
+  {
+    id: 'base16-light',
+    name: 'Base 16 (Light)',
+    light: true,
+    highlights: {
+      background: '#f5f5f5',
+      text: '#202020',
+      variable: '#90a959',
+      attribute: '#90a959',
+      definition: '#d28445',
+      keyword: '#ac4142',
+      operator: '#fff',
+      property: '#90a959',
+      number: '#aa759f',
+      string: '#f4bf75',
+      comment: '#8f5536',
+      meta: '#555',
+      tag: '#ac4142'
+    }
+  },
+  {
+    id: 'cobalt',
+    name: 'Cobalt',
+    highlights: {
+      background: '#002240',
+      text: '#fff',
+      variable: '#9effff',
+      attribute: '#ff80e1',
+      definition: '#fff',
+      keyword: '#ffee80',
+      operator: '#fff',
+      property: '#fff',
+      number: '#ff80e1',
+      string: '#3ad900',
+      comment: '#08f',
+      meta: '#ff9d00',
+      tag: '#9effff'
+    }
+  },
+  {
+    id: 'dracula',
+    name: 'Dracula',
+    highlights: {
+      background: '#282a36',
+      text: '#f8f8f2',
+      variable: '#fff',
+      attribute: '#50fa7b',
+      definition: '#50fa7b',
+      keyword: '#ff79c6',
+      operator: '#ff79c6',
+      property: '#66d9ef',
+      number: '#bd93f9',
+      string: '#f1fa8c',
+      comment: '#6272a4',
+      meta: '#f8f8f2',
+      tag: '#ff79c6'
+    }
+  },
+  {
+    id: 'duotone-dark',
+    name: 'Duotone',
+    highlights: {
+      background: '#2a2734',
+      text: '#6c6783',
+      variable: '#ffcc99',
+      attribute: '#ffcc99',
+      definition: '#eeebff',
+      keyword: '#ffcc99',
+      operator: '#ffad5c',
+      property: '#9a86fd',
+      number: '#ffcc99',
+      string: '#ffb870',
+      comment: '#6c6783',
+      meta: '#555',
+      tag: '#eeebff'
+    }
+  },
+  {
+    id: 'hopscotch',
+    name: 'Hopscotch',
+    highlights: {
+      background: '#322931',
+      text: '#d5d3d5',
+      variable: '#0066ff',
+      attribute: '#8fc13e',
+      definition: '#fd8b19',
+      keyword: '#dd464c',
+      operator: '#fff',
+      property: '#8fc13e',
+      number: '#c85e7c',
+      string: '#fdcc59',
+      comment: '#b33508',
+      meta: '#555',
+      tag: '#dd464c'
+    }
+  },
+  {
+    id: 'lucario',
+    name: 'Lucario',
+    highlights: {
+      background: '#2b3e50',
+      text: '#f8f8f2',
+      variable: '#f8f8f2',
+      attribute: '#66D9EF',
+      definition: '#72C05D',
+      keyword: '#ff6541',
+      operator: '#66D9EF',
+      property: '#f8f8f2',
+      number: '#ca94ff',
+      string: '#E6DB74',
+      comment: '#5c98cd',
+      meta: '#f8f8f2',
+      tag: '#ff6541'
+    }
+  },
+  {
+    id: 'material',
+    name: 'Material',
+    highlights: {
+      background: '#263238',
+      text: 'rgba(233, 237, 237, 1)',
+      variable: '#80CBC4',
+      attribute: '#FFCB6B',
+      definition: 'rgba(233, 237, 237, 1)',
+      keyword: 'rgba(199, 146, 234, 1)',
+      operator: 'rgba(233, 237, 237, 1)',
+      property: '#80CBAE',
+      number: '#F77669',
+      string: '#C3E88D',
+      comment: '#546E7A',
+      meta: '#80CBC4',
+      tag: 'rgba(255, 83, 112, 1)'
+    }
+  },
+  {
+    id: 'monokai',
+    name: 'Monokai',
+    highlights: {
+      background: '#272822',
+      text: '#f8f8f2',
+      variable: '#9effff',
+      attribute: '#a6e22e',
+      definition: '#fd971f',
+      keyword: '#f92672',
+      operator: '#fff',
+      property: '#a6e22e',
+      number: '#ae81ff',
+      string: '#e6db74',
+      comment: '#75715e',
+      meta: '#555',
+      tag: '#bc6283'
+    }
+  },
+  {
+    id: 'night-owl',
+    name: 'Night Owl',
+    highlights: {
+      background: '#011627',
+      text: '#abb2bf',
+      variable: '#82AAFF',
+      attribute: '#F78C6C',
+      definition: '#82AAFF',
+      keyword: '#c792ea',
+      operator: '#c792ea',
+      property: '#fff',
+      number: '#F78C6C',
+      string: '#ecc48d',
+      comment: '#5c6370',
+      meta: '#7fdbca'
+    }
+  },
+  {
+    id: 'nord',
+    name: 'Nord',
+    highlights: {
+      background: '#2e3440',
+      text: '#d8dee9',
+      variable: '#88C0D0',
+      attribute: '#8FBCBB',
+      definition: '#D8DEE9',
+      keyword: '#81A1C1',
+      operator: '#81A1C1',
+      property: '#D8DEE9',
+      number: '#B48EAD',
+      string: '#A3BE8C',
+      comment: '#4C566A',
+      meta: '#81A1C1',
+      tag: '#81A1C1'
+    }
+  },
+  {
+    id: 'oceanic-next',
+    name: 'Oceanic Next',
+    highlights: {
+      background: '#304148',
+      text: '#f8f8f2',
+      variable: '#f8f8f2',
+      attribute: '#C594C5',
+      definition: '#6699CC',
+      keyword: '#C594C5',
+      operator: '#fff',
+      property: '#99C794',
+      number: '#F99157',
+      string: '#99C794',
+      comment: '#65737E',
+      meta: '#555',
+      tag: '#C594C5'
+    }
+  },
+  {
+    id: 'one-light',
+    name: 'One Light',
+    light: true,
+    highlights: {
+      background: '#fafafa',
+      text: '#383a42',
+      variable: '#e06c75',
+      attribute: '#d19a66',
+      definition: '#4078f2',
+      keyword: '#a626a4',
+      operator: '#0184bc',
+      property: '#4078f2',
+      number: '#986801',
+      string: '#50a14f',
+      comment: '#a0a1a7',
+      meta: '#383a42',
+      tag: '#e45649'
+    }
+  },
+  {
+    id: 'one-dark',
+    name: 'One Dark',
+    highlights: {
+      background: '#282c34',
+      text: '#abb2bf',
+      variable: '#e06c75',
+      attribute: '#d19a66',
+      definition: '#e5c07b',
+      keyword: '#c678dd',
+      operator: '#56b6c2',
+      property: '#56b6c2',
+      number: '#d19a66',
+      string: '#98c379',
+      comment: '#5c6370',
+      meta: '#abb2bf',
+      tag: '#e06c75'
+    }
+  },
+  {
+    id: 'panda-syntax',
+    name: 'Panda',
+    highlights: {
+      background: '#292A2B',
+      text: '#E6E6E6',
+      variable: '#ff9ac1',
+      attribute: '#ffb86c',
+      definition: '#e6e6e6',
+      keyword: '#FF75B5',
+      operator: '#f3f3f3',
+      property: '#f3f3f3',
+      number: '#FFB86C',
+      string: '#19F9D8',
+      comment: '#676B79',
+      meta: '#b084eb',
+      tag: '#ff2c6d'
+    }
+  },
+  {
+    id: 'paraiso-dark',
+    name: 'Paraiso',
+    highlights: {
+      background: '#2f1e2e',
+      text: '#b9b6b0',
+      variable: '#06b6ef',
+      attribute: '#48b685',
+      definition: '#f99b15',
+      keyword: '#ef6155;',
+      operator: '#fff',
+      property: '#48b685',
+      number: '#815ba4',
+      string: '#fec418',
+      comment: '#e96ba8',
+      meta: '#555',
+      tag: '#ef6155'
+    }
+  },
+  {
+    id: 'seti',
+    name: 'Seti',
+    highlights: {
+      background: '#151718',
+      text: '#CFD2D1',
+      variable: '#a074c4',
+      attribute: '#9fca56',
+      definition: '#55b5db',
+      keyword: '#e6cd69',
+      operator: '#9fca56',
+      property: '#a074c4',
+      number: '#cd3f45',
+      string: '#55b5db',
+      comment: '#41535b',
+      meta: '#55b5db',
+      tag: '#55b5db'
+    }
+  },
+  {
+    id: 'shades-of-purple',
+    name: 'Shades of Purple ',
+    highlights: {
+      background: '#2D2B55',
+      text: '#FFFFFF',
+      variable: '#9EFFFF',
+      attribute: '#9EFFFF',
+      definition: '#9EFFFF',
+      keyword: '#FF9D00',
+      operator: '#FF9D00',
+      property: '#FAD000',
+      number: '#FF628C',
+      string: '#A5FF90',
+      comment: '#B362FF',
+      meta: '#FF9D00',
+      tag: '#9EFFFF'
+    }
+  },
+  {
+    id: 'solarized dark',
+    name: 'Solarized (Dark)',
+    link: 'solarized',
+    highlights: {
+      background: '#002b36',
+      text: '#839496',
+      variable: '#b58900',
+      attribute: '#2aa198',
+      definition: '#2aa198',
+      keyword: '#cb4b16',
+      operator: '#6c71c4',
+      property: '#2aa198',
+      number: '#d33682',
+      string: '#859900',
+      comment: '#586e75',
+      meta: '#859900',
+      tag: '#93a1a1'
+    }
+  },
+  {
+    id: 'solarized light',
+    name: 'Solarized (Light)',
+    link: 'solarized',
+    light: true,
+    highlights: {
+      background: '#fdf6e3',
+      text: '#657b83',
+      variable: '#839496',
+      attribute: '#2aa198',
+      definition: '#2aa198',
+      keyword: '#cb4b16',
+      operator: '#6c71c4',
+      property: '#2aa198',
+      number: '#d33682',
+      string: '#859900',
+      comment: '#586e75',
+      meta: '#859900',
+      tag: '#93a1a1'
+    }
+  },
+  {
+    id: 'tomorrow-night-bright',
+    name: 'Tomorrow Night',
+    highlights: {
+      background: '#000000',
+      text: '#eaeaea',
+      variable: '#7aa6da',
+      attribute: '#99cc99',
+      definition: '#e78c45',
+      keyword: '#d54e53',
+      operator: '#fff',
+      property: '#99cc99',
+      number: '#a16a94',
+      string: '#e7c547',
+      comment: '#d27b53',
+      meta: '#555',
+      tag: '#d54e53'
+    }
+  },
+  {
+    id: 'twilight',
+    name: 'Twilight',
+    highlights: {
+      background: '#141414',
+      text: '#f7f7f7',
+      variable: '#607392',
+      attribute: '#d6bb6d',
+      definition: '#607392',
+      keyword: '#f9ee98',
+      operator: '#cda869',
+      property: '#fff',
+      number: '#ca7841',
+      string: '#8f9d6a',
+      comment: '#777',
+      meta: '#f7f7f7',
+      tag: '#997643'
+    }
+  },
+  {
+    id: 'verminal',
+    name: 'Verminal',
+    highlights: {
+      background: 'rgba(0, 0, 0, 0.85)',
+      text: '#fff',
+      variable: '#ff9ba3',
+      attribute: '#d19a66',
+      definition: '#34B7FF',
+      keyword: '#9AE1FF',
+      operator: '#FA78C3',
+      property: '#0af',
+      number: '#d19a66',
+      string: '#98c379',
+      comment: '#5c6370',
+      meta: '#abb2bf',
+      tag: '#e06c75'
+    }
+  },
+  {
+    id: 'yeti',
+    name: 'Yeti',
+    light: true,
+    highlights: {
+      background: '#ECEAE8',
+      text: '#d1c9c0',
+      variable: '#a074c4',
+      attribute: '#9fb96e',
+      definition: '#55b5db',
+      keyword: '#9fb96e',
+      operator: '#9fb96e',
+      property: '#a074c4',
+      number: '#a074c4',
+      string: '#96c0d8',
+      comment: '#d4c8be',
+      meta: '#96c0d8',
+      tag: '#96c0d8'
+    }
+  },
+  {
+    id: 'zenburn',
+    name: 'Zenburn',
+    highlights: {
+      background: '#3f3f3f',
+      text: '#dcdccc',
+      variable: '#dcdccc',
+      attribute: '#dfaf8f',
+      definition: '#dcdccc',
+      keyword: '#f0dfaf',
+      operator: '#f0efd0',
+      property: '#dfaf8f',
+      number: '#dcdccc',
+      string: '#cc9393',
+      comment: '#7f9f7f',
+      meta: '#f0dfaf',
+      tag: '#93e0e3'
+    }
+  }
+]
+
+export const THEMES_HASH = toHash(THEMES)
+
+export const LANGUAGES = [
+  {
+    name: 'Auto',
+    mode: 'auto'
+  },
+  {
+    name: 'Apache',
+    mode: 'apache',
+    mime: 'text/apache',
+    custom: true
+  },
+  {
+    name: 'Bash',
+    mode: 'shell',
+    mime: 'application/x-sh'
+  },
+  {
+    name: 'Plain Text',
+    mode: 'text'
+  },
+  {
+    name: 'C',
+    mode: 'clike',
+    mime: 'text/x-csrc',
+    short: 'c'
+  },
+  {
+    name: 'C++',
+    mode: 'clike',
+    mime: 'text/x-c++src',
+    short: 'cpp'
+  },
+  {
+    name: 'C#',
+    mode: 'clike',
+    mime: 'text/x-csharp',
+    short: 'cs'
+  },
+  {
+    name: 'Clojure',
+    mode: 'clojure'
+  },
+  {
+    name: 'Cobol',
+    mode: 'cobol'
+  },
+  {
+    name: 'CoffeeScript',
+    mode: 'coffeescript'
+  },
+  {
+    name: 'Crystal',
+    mode: 'crystal'
+  },
+  {
+    name: 'CSS',
+    mode: 'css'
+  },
+  {
+    name: 'D',
+    mode: 'd'
+  },
+  {
+    name: 'Dart',
+    mode: 'dart'
+  },
+  {
+    name: 'Diff',
+    mode: 'diff',
+    mime: 'text/x-diff'
+  },
+  {
+    name: 'Django',
+    mode: 'django'
+  },
+  {
+    name: 'Docker',
+    mode: 'dockerfile'
+  },
+  {
+    name: 'Elixir',
+    mode: 'elixir',
+    custom: true
+  },
+  {
+    name: 'Elm',
+    mode: 'elm'
+  },
+  {
+    name: 'Erlang',
+    mode: 'erlang'
+  },
+  {
+    name: 'Fortran',
+    mode: 'fortran'
+  },
+  {
+    name: 'F#',
+    mode: 'mllike'
+  },
+  {
+    name: 'Gherkin',
+    mode: 'gherkin'
+  },
+  {
+    name: 'GraphQL',
+    mode: 'graphql',
+    custom: true
+  },
+  {
+    name: 'Go',
+    mode: 'go',
+    mime: 'text/x-go'
+  },
+  {
+    name: 'Groovy',
+    mode: 'groovy'
+  },
+  {
+    name: 'Handlebars',
+    mode: 'handlebars'
+  },
+  {
+    name: 'Haskell',
+    mode: 'haskell'
+  },
+  {
+    name: 'Haxe',
+    mode: 'haxe'
+  },
+  {
+    name: 'HTML',
+    mode: 'htmlmixed'
+  },
+  {
+    name: 'Java',
+    mode: 'clike',
+    mime: 'text/x-java',
+    short: 'java'
+  },
+  {
+    name: 'JavaScript',
+    mode: 'javascript',
+    short: 'javascript'
+  },
+  {
+    name: 'JSON',
+    mode: 'javascript',
+    mime: 'application/json',
+    short: 'json'
+  },
+  {
+    name: 'JSX',
+    mode: 'jsx',
+    short: 'jsx'
+  },
+  {
+    name: 'Julia',
+    mode: 'julia'
+  },
+  {
+    name: 'Kotlin',
+    mode: 'clike',
+    mime: 'text/x-kotlin',
+    short: 'kotlin'
+  },
+  {
+    name: 'LaTeX',
+    mode: 'stex'
+  },
+  {
+    name: 'Lisp',
+    mode: 'commonlisp'
+  },
+  {
+    name: 'Lua',
+    mode: 'lua'
+  },
+  {
+    name: 'Markdown',
+    mode: 'markdown'
+  },
+  {
+    name: 'Mathematica',
+    mode: 'mathematica'
+  },
+  {
+    name: 'MATLAB/Octave',
+    mode: 'octave',
+    mime: 'text/x-octave'
+  },
+  {
+    name: 'MySQL',
+    mode: 'sql',
+    mime: 'text/x-mysql',
+    short: 'mysql'
+  },
+  {
+    name: 'N-Triples',
+    mode: 'ntriples',
+    mime: 'application/n-triples'
+  },
+  {
+    name: 'NGINX',
+    mode: 'nginx'
+  },
+  {
+    name: 'Nim',
+    mode: 'nimrod',
+    custom: true
+  },
+  {
+    name: 'Objective C',
+    mode: 'clike',
+    mime: 'text/x-objectivec',
+    short: 'objectivec'
+  },
+  {
+    name: 'OCaml',
+    mode: 'mllike'
+  },
+  {
+    name: 'Pascal',
+    mode: 'pascal'
+  },
+  {
+    name: 'Perl',
+    mode: 'perl'
+  },
+  {
+    name: 'PHP',
+    mode: 'php',
+    mime: 'text/x-php',
+    short: 'php'
+  },
+  {
+    name: 'PowerShell',
+    mode: 'powershell'
+  },
+  {
+    name: 'Python',
+    mode: 'python'
+  },
+  {
+    name: 'R',
+    mode: 'r'
+  },
+  {
+    name: 'RISC-V',
+    mode: 'riscv',
+    custom: true
+  },
+  {
+    name: 'Ruby',
+    mode: 'ruby'
+  },
+  {
+    name: 'Rust',
+    mode: 'rust'
+  },
+  {
+    name: 'Sass',
+    mode: 'sass'
+  },
+  {
+    name: 'Scala',
+    mode: 'clike',
+    mime: 'text/x-scala',
+    short: 'scala'
+  },
+  {
+    name: 'Smalltalk',
+    mode: 'smalltalk'
+  },
+  {
+    name: 'SPARQL',
+    mode: 'sparql',
+    mime: 'application/sparql-query'
+  },
+  {
+    name: 'SQL',
+    mode: 'sql'
+  },
+  {
+    name: 'Stylus',
+    mode: 'stylus',
+    mime: 'stylus'
+  },
+  {
+    name: 'Swift',
+    mode: 'swift'
+  },
+  {
+    name: 'TCL',
+    mode: 'tcl'
+  },
+  {
+    name: 'TOML',
+    mode: 'toml'
+  },
+  {
+    name: 'Turtle',
+    mode: 'turtle',
+    mime: 'text/turtle'
+  },
+  {
+    name: 'TypeScript',
+    mode: 'javascript',
+    mime: 'application/typescript',
+    short: 'typescript'
+  },
+  {
+    name: 'TSX',
+    mode: 'jsx',
+    mime: 'text/typescript-jsx',
+    short: 'tsx'
+  },
+  {
+    name: 'Twig',
+    mode: 'twig',
+    mime: 'text/x-twig'
+  },
+  {
+    name: 'VB.NET',
+    mode: 'vb'
+  },
+  {
+    name: 'Verilog',
+    mode: 'verilog'
+  },
+  {
+    name: 'VHDL',
+    mode: 'vhdl'
+  },
+  {
+    name: 'Vue',
+    mode: 'vue'
+  },
+  {
+    name: 'XML',
+    mode: 'xml'
+  },
+  {
+    name: 'YAML',
+    mode: 'yaml'
+  }
+]
+
+export const EXPORT_SIZES = [
+  { id: '1x', name: '1x', value: 1 },
+  { id: '2x', name: '2x', value: 2 },
+  { id: '4x', name: '4x', value: 4 }
+]
+
+export const EXPORT_SIZES_HASH = toHash(EXPORT_SIZES)
+
+export const LANGUAGE_MIME_HASH = toHash(LANGUAGES, 'mime')
+export const LANGUAGE_MODE_HASH = toHash(LANGUAGES, 'mode')
+export const LANGUAGE_NAME_HASH = toHash(LANGUAGES, 'short')
+
+export const DEFAULT_LANGUAGE = 'auto'
+export const DEFAULT_THEME = THEMES_HASH.seti
+export const DEFAULT_BG_COLOR = 'rgba(171, 184, 195, 1)'
+export const DEFAULT_EXPORT_SIZE = EXPORT_SIZES_HASH['2x']
+
+export const COLORS = {
+  BLACK: '#121212',
+  PRIMARY: '#F8E81C',
+  SECONDARY: '#fff',
+  GRAY: '#858585',
+  DARK_GRAY: '#393939',
+  HOVER: '#1F1F1F',
+  PURPLE: '#C198FB',
+  DARK_PURPLE: '#55436F',
+  RED: 'red'
+}
+
+export const DEFAULT_CODE = `const pluckDeep = key => obj => key.split('.').reduce((accum, key) => accum[key], obj)
+const compose = (...fns) => res => fns.reduce((accum, next) => next(accum), res)
+const unfold = (f, seed) => {
+  const go = (f, seed, acc) => {
+    const res = f(seed)
+    return res ? go(f, res[1], acc.concat([res[0]])) : acc
+  }
+  return go(f, seed, [])
+}`
+
+// if (typeof window !== 'undefined' && typeof window.navigator !== 'undefined') {
+//   const alreadyLoaded = new Set()
+
+//   LANGUAGES.filter(language => language.mode !== 'auto' && language.mode !== 'text').forEach(
+//     language => {
+//       if (language.mode && !alreadyLoaded.has(language.mode)) {
+//         alreadyLoaded.add(language.mode)
+//         language.custom
+//           ? require(`./custom/modes/${language.mode}`)
+//           : require(`codemirror/mode/${language.mode}/${language.mode}`)
+//       }
+//     }
+//   )
+// }
+
+export const DEFAULT_SETTINGS = {
+  paddingVertical: '56px',
+  paddingHorizontal: '56px',
+  marginVertical: '45px',
+  marginHorizontal: '45px',
+  backgroundImage: null,
+  backgroundImageSelection: null,
+  backgroundMode: 'color',
+  backgroundColor: DEFAULT_BG_COLOR,
+  dropShadow: true,
+  dropShadowOffsetY: '20px',
+  dropShadowBlurRadius: '68px',
+  theme: DEFAULT_THEME.id,
+  windowTheme: 'none',
+  language: DEFAULT_LANGUAGE,
+  fontFamily: 'Hack',
+  fontSize: '14px',
+  lineHeight: '133%',
+  windowControls: true,
+  widthAdjustment: true,
+  lineNumbers: false,
+  exportSize: '2x',
+  watermark: false,
+  squaredImage: false
+}
+
+export const DEFAULT_PRESET_ID = 'preset:4'
+
+export const DEFAULT_PRESETS = [
+  {
+    ...DEFAULT_SETTINGS,
+    icon: '/static/presets/4.png',
+    id: DEFAULT_PRESET_ID
+  },
+  {
+    ...DEFAULT_SETTINGS,
+    backgroundColor: 'rgba(74,144,226,1)',
+    dropShadow: false,
+    theme: 'material',
+    fontFamily: 'Fira Code',
+    lineHeight: '152%',
+    icon: '/static/presets/7.png',
+    id: 'preset:7'
+  },
+  {
+    ...DEFAULT_SETTINGS,
+    backgroundColor: 'rgba(248,231,28,1)',
+    dropShadow: false,
+    theme: 'blackboard',
+    fontFamily: 'Fira Code',
+    lineHeight: '152%',
+    icon: '/static/presets/8.png',
+    id: 'preset:8'
+  },
+  {
+    ...DEFAULT_SETTINGS,
+    backgroundColor: 'rgba(182,162,145,1)',
+    dropShadow: false,
+    theme: 'zenburn',
+    windowTheme: 'bw',
+    lineHeight: '152%',
+    icon: '/static/presets/9.png',
+    id: 'preset:9'
+  },
+  {
+    ...DEFAULT_SETTINGS,
+    backgroundColor: 'rgba(121,72,185,1)',
+    dropShadow: false,
+    theme: 'verminal',
+    windowTheme: 'bw',
+    fontFamily: 'Fira Code',
+    fontSize: '14px',
+    lineHeight: '143%',
+    icon: '/static/presets/0.png',
+    id: 'preset:0'
+  },
+  {
+    ...DEFAULT_SETTINGS,
+    backgroundColor: 'rgba(239,40,44,1)',
+    theme: 'one-light',
+    lineHeight: '143%',
+    icon: '/static/presets/1.png',
+    id: 'preset:1'
+  },
+  {
+    ...DEFAULT_SETTINGS,
+    backgroundColor: 'rgba(31,129,109,1)',
+    dropShadow: false,
+    theme: 'night-owl',
+    lineHeight: '143%',
+    windowControls: false,
+    icon: '/static/presets/2.png',
+    id: 'preset:2'
+  },
+  {
+    ...DEFAULT_SETTINGS,
+    backgroundColor: 'rgba(249,237,212,1)',
+    theme: 'twilight',
+    fontFamily: 'IBM Plex Mono',
+    lineHeight: '143%',
+    icon: '/static/presets/3.png',
+    id: 'preset:3'
+  },
+
+  {
+    ...DEFAULT_SETTINGS,
+    backgroundColor: 'rgba(222,171,99,1)',
+    theme: 'duotone-dark',
+    icon: '/static/presets/5.png',
+    id: 'preset:5'
+  },
+  {
+    ...DEFAULT_SETTINGS,
+    backgroundColor: 'rgba(187,187,187,1)',
+    dropShadowOffsetY: '3px',
+    dropShadowBlurRadius: '13px',
+    theme: 'solarized light',
+    windowTheme: 'sharp',
+    icon: '/static/presets/6.png',
+    id: 'preset:6'
+  }
+]

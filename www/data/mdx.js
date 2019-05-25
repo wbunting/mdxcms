@@ -1,13 +1,8 @@
-const sleep = msec => new Promise(resolve => setTimeout(resolve, msec));
+import fetch from 'isomorphic-unfetch';
 
 const getMDXData = async () => {
-  await sleep(1000);
-
-  const mdx = `
-# Hello, world!
- 
-<Demo />
-`
+ const res = await fetch('http://localhost:3000/api/document')
+ const {mdx} = await res.json();
 
   return mdx;
 }
