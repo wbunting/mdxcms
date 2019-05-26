@@ -9,6 +9,7 @@ export default apolloClient =>
             id
             repositories {
               files {
+                id
                 content
                 name
               }

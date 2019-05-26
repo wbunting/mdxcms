@@ -17,6 +17,7 @@ const typeDefs = gql`
     signup(email: String!, password: String!): AuthPayload!
     login(email: String!, password: String!): AuthPayload!
     createFile(content: String!, fileName: String!): File
+    updateFile(fileId: ID!, content: String!): File
   }
 
   type User {
@@ -68,12 +69,18 @@ const resolvers = {
   Mutation: {
     createFile(root, args, context) {
       const userId = getUserId(context);
-      return context.prisma.createPost({
+      return context.prisma.createFile({
         mdx: args.mdx,
         fileName: args.fileName,
         author: {
           connect: { id: userId },
         },
+      });
+    },
+    updateFile(root, args, context) {
+      return context.prisma.updateFile({
+        where: { id: args.fileId },
+        data: { content: args.content },
       });
     },
     signup: async (parent, { email, password }, ctx, info) => {

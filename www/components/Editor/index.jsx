@@ -10,9 +10,9 @@ const Controls = styled(Flex)({
   height: '48px',
 });
 
-const CREATE_FILE = gql`
-  mutation CreateFile($mdx: String!, $fileName: String!) {
-    createFile(mdx: $mdx, fileName: $fileName) {
+const UPDATE_FILE = gql`
+  mutation UpdateFile($fileId: ID!, $content: String!) {
+    updateFile(fileId: $fileId, content: $content) {
       id
     }
   }
@@ -20,10 +20,10 @@ const CREATE_FILE = gql`
 const Editor = ({ activeFile }) => {
   const [code, setCode] = React.useState(activeFile.content);
   const [editor, setEditor] = React.useState('raw');
-  const createPost = useMutation(CREATE_FILE, {
+  const createPost = useMutation(UPDATE_FILE, {
     variables: {
-      mdx: code,
-      name: activeFile.name,
+      fileId: activeFile.id,
+      content: code,
     },
   });
 

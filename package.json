@@ -3,6 +3,7 @@
   "workspaces": [
     "api",
     "www",
-    "packages/*"
+    "packages/*",
+    "examples/*"
   ]
 }

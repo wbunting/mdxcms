@@ -1,24 +1,25 @@
 import React from 'react';
 import githubPages from '../backends/githubPages';
+import mdxcms from '../backends/mdxcms';
 import useCMSReload from '../react/useCMSReload';
 
 const getFetcher = backend => {
   switch (backend) {
     case 'github':
       return githubPages;
+    case 'mdxcms':
+      return mdxcms;
     default:
-      throw new Error('unrecognized backend');
+      throw new Error(`unrecognized backend: ${backend}`);
   }
-}
+};
 
-const withMDXCMS = backend => (meta) => (Component) => {
+const withMDXCMS = backend => meta => Component => {
   const _Component = ({ pageProps, mdx, etag }) => {
     useCMSReload(etag);
 
-    return (
-      <Component {...pageProps} mdx={mdx} />
-    );
-  }
+    return <Component {...pageProps} mdx={mdx} />;
+  };
 
   _Component.getInitialProps = async ({ res, pathname }) => {
     let pageProps = {};
@@ -27,17 +28,17 @@ const withMDXCMS = backend => (meta) => (Component) => {
 
     const mdx = await dataFetcher({
       ...meta,
-      pathname
-    })
+      pathname,
+    });
 
-    const etag = require("crypto")
-      .createHash("md5")
+    const etag = require('crypto')
+      .createHash('md5')
       .update(mdx)
-      .digest("hex");
+      .digest('hex');
 
     if (res) {
-      res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate");
-      res.setHeader("X-version", etag);
+      res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate');
+      res.setHeader('X-version', etag);
     }
 
     if (Component.getInitialProps) {
@@ -45,9 +46,9 @@ const withMDXCMS = backend => (meta) => (Component) => {
     }
 
     return { pageProps, mdx, etag };
-  }
+  };
 
   return _Component;
-}
+};
 
 export default withMDXCMS;

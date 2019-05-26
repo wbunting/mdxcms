@@ -19,13 +19,20 @@ var _react = _interopRequireDefault(require("react"));
 
 var _githubPages = _interopRequireDefault(require("../backends/githubPages"));
 
+var _mdxcms = _interopRequireDefault(require("../backends/mdxcms"));
+
+var _useCMSReload = _interopRequireDefault(require("../react/useCMSReload"));
+
 var getFetcher = function getFetcher(backend) {
   switch (backend) {
     case 'github':
       return _githubPages.default;
 
+    case 'mdxcms':
+      return _mdxcms.default;
+
     default:
-      throw new Error('unrecognized backend');
+      throw new Error("unrecognized backend: ".concat(backend));
   }
 };
 
@@ -36,9 +43,9 @@ var withMDXCMS = function withMDXCMS(backend) {
         var pageProps = _ref.pageProps,
             mdx = _ref.mdx,
             etag = _ref.etag;
+        (0, _useCMSReload.default)(etag);
         return _react.default.createElement(Component, (0, _extends2.default)({}, pageProps, {
-          mdx: mdx,
-          etag: etag
+          mdx: mdx
         }));
       };
 
@@ -63,11 +70,11 @@ var withMDXCMS = function withMDXCMS(backend) {
 
                 case 5:
                   mdx = _context.sent;
-                  etag = require("crypto").createHash("md5").update(mdx).digest("hex");
+                  etag = require('crypto').createHash('md5').update(mdx).digest('hex');
 
                   if (res) {
-                    res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate");
-                    res.setHeader("X-version", etag);
+                    res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate');
+                    res.setHeader('X-version', etag);
                   }
 
                   if (!Component.getInitialProps) {

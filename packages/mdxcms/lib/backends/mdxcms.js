@@ -13,33 +13,34 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime-corejs2/
 
 var _isomorphicUnfetch = _interopRequireDefault(require("isomorphic-unfetch"));
 
-var githubPages =
+var mdxcms =
 /*#__PURE__*/
 function () {
   var _ref2 = (0, _asyncToGenerator2.default)(
   /*#__PURE__*/
   _regenerator.default.mark(function _callee(_ref) {
-    var owner, repo, pathname, filePath, url, result, mdx;
+    var fileId, url, result, data, _JSON$parse, content;
+
     return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            owner = _ref.owner, repo = _ref.repo, pathname = _ref.pathname;
-            filePath = pathname === '/' ? '/index' : pathname;
-            url = "https://".concat(owner, ".github.io/").concat(repo).concat(filePath, ".mdx");
-            _context.next = 5;
+            fileId = _ref.fileId;
+            url = "https://mdxcms.com/api/file/".concat(fileId);
+            _context.next = 4;
             return (0, _isomorphicUnfetch.default)(url, {
               credentials: 'include'
             });
 
-          case 5:
+          case 4:
             result = _context.sent;
-            _context.next = 8;
+            _context.next = 7;
             return result.text();
 
-          case 8:
-            mdx = _context.sent;
-            return _context.abrupt("return", mdx);
+          case 7:
+            data = _context.sent;
+            _JSON$parse = JSON.parse(data), content = _JSON$parse.content;
+            return _context.abrupt("return", content);
 
           case 10:
           case "end":
@@ -49,10 +50,10 @@ function () {
     }, _callee);
   }));
 
-  return function githubPages(_x) {
+  return function mdxcms(_x) {
     return _ref2.apply(this, arguments);
   };
 }();
 
-var _default = githubPages;
+var _default = mdxcms;
 exports.default = _default;
