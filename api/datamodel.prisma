@@ -1,13 +1,15 @@
 type User {
   id: ID! @id
-  email: String @unique
-  name: String!
+  email: String! @unique
+  password: String!
   posts: [Post!]!
 }
 
 type Post {
   id: ID! @id
-  title: String!
-  author: User @relation(link: INLINE)
-  mdx: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  published: Boolean! @default(value: false)
+  mdx: String
+  author: User!
 }

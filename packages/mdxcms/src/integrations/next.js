@@ -1,5 +1,6 @@
 import React from 'react';
 import githubPages from '../backends/githubPages';
+import useCMSReload from '../react/useCMSReload';
 
 const getFetcher = backend => {
   switch (backend) {
@@ -12,8 +13,10 @@ const getFetcher = backend => {
 
 const withMDXCMS = backend => (meta) => (Component) => {
   const _Component = ({ pageProps, mdx, etag }) => {
+    useCMSReload(etag);
+
     return (
-      <Component {...pageProps} mdx={mdx} etag={etag} />
+      <Component {...pageProps} mdx={mdx} />
     );
   }
 

@@ -15,6 +15,8 @@ type BatchPayload {
   count: Long!
 }
 
+scalar DateTime
+
 scalar Long
 
 type Mutation {
@@ -51,9 +53,11 @@ type PageInfo {
 
 type Post {
   id: ID!
-  title: String!
-  author: User
-  mdx: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  published: Boolean!
+  mdx: String
+  author: User!
 }
 
 type PostConnection {
@@ -63,9 +67,9 @@ type PostConnection {
 }
 
 input PostCreateInput {
-  title: String!
-  author: UserCreateOneWithoutPostsInput
-  mdx: String!
+  published: Boolean
+  mdx: String
+  author: UserCreateOneWithoutPostsInput!
 }
 
 input PostCreateManyWithoutAuthorInput {
@@ -74,8 +78,8 @@ input PostCreateManyWithoutAuthorInput {
 }
 
 input PostCreateWithoutAuthorInput {
-  title: String!
-  mdx: String!
+  published: Boolean
+  mdx: String
 }
 
 type PostEdge {
@@ -86,20 +90,22 @@ type PostEdge {
 enum PostOrderByInput {
   id_ASC
   id_DESC
-  title_ASC
-  title_DESC
-  mdx_ASC
-  mdx_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  published_ASC
+  published_DESC
+  mdx_ASC
+  mdx_DESC
 }
 
 type PostPreviousValues {
   id: ID!
-  title: String!
-  mdx: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  published: Boolean!
+  mdx: String
 }
 
 input PostScalarWhereInput {
@@ -117,20 +123,24 @@ input PostScalarWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  published: Boolean
+  published_not: Boolean
   mdx: String
   mdx_not: String
   mdx_in: [String!]
@@ -169,18 +179,18 @@ input PostSubscriptionWhereInput {
 }
 
 input PostUpdateInput {
-  title: String
-  author: UserUpdateOneWithoutPostsInput
+  published: Boolean
   mdx: String
+  author: UserUpdateOneRequiredWithoutPostsInput
 }
 
 input PostUpdateManyDataInput {
-  title: String
+  published: Boolean
   mdx: String
 }
 
 input PostUpdateManyMutationInput {
-  title: String
+  published: Boolean
   mdx: String
 }
 
@@ -202,7 +212,7 @@ input PostUpdateManyWithWhereNestedInput {
 }
 
 input PostUpdateWithoutAuthorDataInput {
-  title: String
+  published: Boolean
   mdx: String
 }
 
@@ -232,21 +242,24 @@ input PostWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  author: UserWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  published: Boolean
+  published_not: Boolean
   mdx: String
   mdx_not: String
   mdx_in: [String!]
@@ -261,6 +274,7 @@ input PostWhereInput {
   mdx_not_starts_with: String
   mdx_ends_with: String
   mdx_not_ends_with: String
+  author: UserWhereInput
   AND: [PostWhereInput!]
   OR: [PostWhereInput!]
   NOT: [PostWhereInput!]
@@ -287,8 +301,8 @@ type Subscription {
 
 type User {
   id: ID!
-  email: String
-  name: String!
+  email: String!
+  password: String!
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
 }
 
@@ -299,8 +313,8 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  email: String
-  name: String!
+  email: String!
+  password: String!
   posts: PostCreateManyWithoutAuthorInput
 }
 
@@ -310,8 +324,8 @@ input UserCreateOneWithoutPostsInput {
 }
 
 input UserCreateWithoutPostsInput {
-  email: String
-  name: String!
+  email: String!
+  password: String!
 }
 
 type UserEdge {
@@ -324,8 +338,8 @@ enum UserOrderByInput {
   id_DESC
   email_ASC
   email_DESC
-  name_ASC
-  name_DESC
+  password_ASC
+  password_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -334,8 +348,8 @@ enum UserOrderByInput {
 
 type UserPreviousValues {
   id: ID!
-  email: String
-  name: String!
+  email: String!
+  password: String!
 }
 
 type UserSubscriptionPayload {
@@ -358,27 +372,25 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   email: String
-  name: String
+  password: String
   posts: PostUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateManyMutationInput {
   email: String
-  name: String
+  password: String
 }
 
-input UserUpdateOneWithoutPostsInput {
+input UserUpdateOneRequiredWithoutPostsInput {
   create: UserCreateWithoutPostsInput
   update: UserUpdateWithoutPostsDataInput
   upsert: UserUpsertWithoutPostsInput
-  delete: Boolean
-  disconnect: Boolean
   connect: UserWhereUniqueInput
 }
 
 input UserUpdateWithoutPostsDataInput {
   email: String
-  name: String
+  password: String
 }
 
 input UserUpsertWithoutPostsInput {
@@ -415,20 +427,20 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
-  name: String
-  name_not: String
-  name_in: [String!]
-  name_not_in: [String!]
-  name_lt: String
-  name_lte: String
-  name_gt: String
-  name_gte: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput

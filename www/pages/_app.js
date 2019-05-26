@@ -1,26 +1,19 @@
 import React from 'react';
 import App, { Container } from 'next/app';
-// import withMDXCMS from '../lib/mdxcms/integrations/next';
+import withApollo from '../lib/withApollo';
+import { ApolloProvider } from 'react-apollo';
 class MyApp extends App {
-  static async getInitialProps({ Component, ctx }) {
-    let pageProps = {};
-
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx);
-    }
-
-    return { pageProps };
-  }
-
   render() {
-    const { Component, pageProps } = this.props;
+    const { Component, pageProps, apolloClient } = this.props;
 
     return (
       <Container>
-        <Component {...pageProps} />
+        <ApolloProvider client={apolloClient}>
+          <Component {...pageProps} />
+        </ApolloProvider>
       </Container>
     );
   }
 }
 
-export default MyApp
+export default withApollo(MyApp);

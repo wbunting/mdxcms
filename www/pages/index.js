@@ -1,6 +1,6 @@
 import React from 'react'
 import RebassMDX from '@rebass/mdx'
-import { useAmp, withAmp } from 'next/amp';
+import { withAmp } from 'next/amp';
 import MDX from '@mdx-js/runtime';
 
 import Navbar from '../components/Navbar';
@@ -8,13 +8,9 @@ import Header from '../components/Header';
 import Page from '../components/Page';
 import Container from '../components/Container';
 
-import useCMSReload from 'mdxcms/lib/react/useCMSReload';
 import withMDXCMS from 'mdxcms/lib/integrations/next';
 
-const Home = ({mdx, etag}) => {
-  const isAmp = useAmp();
-  useCMSReload(etag);
-
+const Home = ({mdx}) => {
   return (
     <>
       <Header height={48} shadow={false}>

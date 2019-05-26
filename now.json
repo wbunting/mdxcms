@@ -8,7 +8,11 @@
       "use": "@now/next"
     },
     {
-      "src": "api/src/**/*.js",
+      "src": "api/graphql/index.js",
+      "use": "@now/node-server"
+    },
+    {
+      "src": "api/rest/**/*.js",
       "use": "@now/node"
     },
     {
@@ -18,16 +22,20 @@
   ],
   "routes": [
     {
+      "src": "/api/graphql",
+      "dest": "/api/graphql/index.js"
+    },
+    {
       "src": "/api/users",
-      "dest": "/api/src/users/index.js"
-    },   
+      "dest": "/api/rest/users/index.js"
+    },
     {
       "src": "/api/user/new",
-      "dest": "/api/src/user/new.js"
+      "dest": "/api/rest/user/new.js"
     },
     {
       "src": "/api/document",
-      "dest": "/api/src/document.js"
+      "dest": "/api/rest/document.js"
     },
     {
       "src": "/assets/(.*)",
@@ -37,5 +45,8 @@
       "src": "/(.*)",
       "dest": "/www/$1"
     }
-  ]
+  ],
+  "env": {
+    "JWT_SECRET": "@jwt-token"
+  }
 }
