@@ -1,10 +1,10 @@
-import React from 'react'
-import dynamic from 'next/dynamic'
-import * as hljs from 'highlight.js'
-import debounce from 'lodash.debounce'
-import ms from 'ms'
-import { Controlled as CodeMirror } from 'react-codemirror2'
-import SpinnerWrapper from './SpinnerWrapper'
+import React from 'react';
+import dynamic from 'next/dynamic';
+import * as hljs from 'highlight.js';
+import debounce from 'lodash.debounce';
+import ms from 'ms';
+import { Controlled as CodeMirror } from 'react-codemirror2';
+import SpinnerWrapper from './SpinnerWrapper';
 
 import {
   COLORS,
@@ -12,25 +12,26 @@ import {
   LANGUAGE_NAME_HASH,
   LANGUAGE_MIME_HASH,
   DEFAULT_SETTINGS,
-  THEMES_HASH
-} from '../../../lib/constants'
+  THEMES_HASH,
+} from '../../../lib/constants';
 
 const Watermark = dynamic(() => import('./svg/Watermark'), {
-  loading: () => null
-})
+  loading: () => null,
+});
 
 function searchLanguage(l) {
-  const config = LANGUAGE_NAME_HASH[l] || LANGUAGE_MODE_HASH[l] || LANGUAGE_MIME_HASH[l]
+  const config =
+    LANGUAGE_NAME_HASH[l] || LANGUAGE_MODE_HASH[l] || LANGUAGE_MIME_HASH[l];
 
   if (config) {
-    return config.mime || config.mode
+    return config.mime || config.mode;
   }
 }
 
 class Carbon extends React.PureComponent {
   static defaultProps = {
-    onChange: () => { }
-  }
+    onChange: () => {},
+  };
 
   componentDidUpdate(prevProps) {
     // TODO keep opacities in state
@@ -38,7 +39,7 @@ class Carbon extends React.PureComponent {
       prevProps.config.theme != this.props.config.theme ||
       prevProps.config.language != this.props.config.language
     ) {
-      this.prevLine = null
+      this.prevLine = null;
     }
   }
 
@@ -46,42 +47,42 @@ class Carbon extends React.PureComponent {
     (newCode, language) => {
       if (language === 'auto') {
         // try to set the language
-        const detectedLanguage = hljs.highlightAuto(newCode).language
-        const languageMode = searchLanguage(detectedLanguage)
+        const detectedLanguage = hljs.highlightAuto(newCode).language;
+        const languageMode = searchLanguage(detectedLanguage);
 
         if (languageMode) {
-          return languageMode
+          return languageMode;
         }
       }
 
-      const languageMode = searchLanguage(language)
+      const languageMode = searchLanguage(language);
 
       if (languageMode) {
-        return languageMode
+        return languageMode;
       }
 
-      return language
+      return language;
     },
     ms('300ms'),
     {
       leading: true,
-      trailing: true
+      trailing: true,
     }
-  )
+  );
 
   onBeforeChange = (editor, meta, code) => {
     if (!this.props.readOnly) {
-      this.props.onChange(code)
+      this.props.onChange(code);
     }
-  }
+  };
 
-  prevLine = null
+  prevLine = null;
   onGutterClick = (editor, lineNumber, gutter, e) => {
     editor.display.view.forEach((line, i, arr) => {
       if (i != lineNumber) {
         if (this.prevLine == null) {
-          line.text.style.opacity = 0.5
-          line.gutter.style.opacity = 0.5
+          line.text.style.opacity = 0.5;
+          line.gutter.style.opacity = 0.5;
         }
       } else {
         if (e.shiftKey && this.prevLine != null) {
@@ -90,25 +91,27 @@ class Carbon extends React.PureComponent {
             index < Math.max(this.prevLine, i) + 1;
             index++
           ) {
-            arr[index].text.style.opacity = arr[this.prevLine].text.style.opacity
-            arr[index].gutter.style.opacity = arr[this.prevLine].gutter.style.opacity
+            arr[index].text.style.opacity =
+              arr[this.prevLine].text.style.opacity;
+            arr[index].gutter.style.opacity =
+              arr[this.prevLine].gutter.style.opacity;
           }
         } else {
-          line.text.style.opacity = line.text.style.opacity == 1 ? 0.5 : 1
-          line.gutter.style.opacity = line.gutter.style.opacity == 1 ? 0.5 : 1
+          line.text.style.opacity = line.text.style.opacity == 1 ? 0.5 : 1;
+          line.gutter.style.opacity = line.gutter.style.opacity == 1 ? 0.5 : 1;
         }
       }
-    })
-    this.prevLine = lineNumber
-  }
+    });
+    this.prevLine = lineNumber;
+  };
 
   render() {
-    const config = { ...DEFAULT_SETTINGS, ...this.props.config }
+    const config = { ...DEFAULT_SETTINGS, ...this.props.config };
 
     const languageMode = this.handleLanguageChange(
       this.props.children,
       config.language && config.language.toLowerCase()
-    )
+    );
 
     const options = {
       lineNumbers: config.lineNumbers,
@@ -118,20 +121,21 @@ class Carbon extends React.PureComponent {
       viewportMargin: Infinity,
       lineWrapping: true,
       extraKeys: {
-        'Shift-Tab': 'indentLess'
+        'Shift-Tab': 'indentLess',
       },
       // negative values removes the cursor, undefined means default (530)
       cursorBlinkRate: this.props.readOnly ? -1 : undefined,
       // needs to be able to refresh every 16ms to hit 60 frames / second
-      pollInterval: 16
-    }
+      pollInterval: 16,
+    };
     const backgroundImage =
-      (this.props.config.backgroundImage && this.props.config.backgroundImageSelection) ||
-      this.props.config.backgroundImage
+      (this.props.config.backgroundImage &&
+        this.props.config.backgroundImageSelection) ||
+      this.props.config.backgroundImage;
 
-    const themeConfig = this.props.theme || THEMES_HASH[config.theme]
+    const themeConfig = this.props.theme || THEMES_HASH[config.theme];
 
-    const light = themeConfig && themeConfig.light
+    const light = themeConfig && themeConfig.light;
 
     const paddingVertical = 0;
     const paddingHorizontal = 0;
@@ -139,7 +143,9 @@ class Carbon extends React.PureComponent {
     const content = (
       <div className="container">
         <CodeMirror
-          className={`CodeMirror__container window-theme__${config.windowTheme}`}
+          className={`CodeMirror__container window-theme__${
+            config.windowTheme
+          }`}
           onBeforeChange={this.onBeforeChange}
           value={this.props.children}
           options={options}
@@ -176,7 +182,7 @@ class Carbon extends React.PureComponent {
               bottom: 0px;
               left: 0px;
             }
-           
+
             .container .alpha {
               position: absolute;
               top: 0px;
@@ -195,24 +201,25 @@ class Carbon extends React.PureComponent {
               z-index: 1;
               border-radius: 5px;
               ${config.dropShadow
-              ? `box-shadow: 0 ${config.dropShadowOffsetY} ${
-              config.dropShadowBlurRadius
-              } rgba(0, 0, 0, 0.55)`
-              : ''};
+                ? `box-shadow: 0 ${config.dropShadowOffsetY} ${
+                    config.dropShadowBlurRadius
+                  } rgba(0, 0, 0, 0.55)`
+                : ''};
             }
             .container :global(.CodeMirror__container .CodeMirror) {
               height: auto;
               min-width: inherit;
               padding: 0px 0px;
               padding-left: 12px;
-              ${config.lineNumbers ? 'padding-left: 12px;' : ''} border-radius: 5px;
+              ${config.lineNumbers
+                ? 'padding-left: 12px;'
+                : ''} border-radius: 5px;
               font-family: ${config.fontFamily}, monospace !important;
               font-size: ${config.fontSize};
               line-height: ${config.lineHeight};
               font-variant-ligatures: contextual;
               font-feature-settings: 'calt' 1;
               user-select: none;
-              height: 100vh;
             }
             .container :global(.CodeMirror-scroll),
             .container :global(.CodeMirror-hscrollbar) {
@@ -224,7 +231,8 @@ class Carbon extends React.PureComponent {
             .container :global(.window-theme__bw > .CodeMirror) {
               border: 2px solid ${COLORS.SECONDARY};
             }
-            .container :global(.window-controls + .CodeMirror__container > .CodeMirror) {
+            .container
+              :global(.window-controls + .CodeMirror__container > .CodeMirror) {
               padding-top: 48px;
             }
             .container :global(.CodeMirror-linenumber) {
@@ -233,12 +241,18 @@ class Carbon extends React.PureComponent {
           `}
         </style>
       </div>
-    )
+    );
 
     return (
       <div className="section">
-        <div className="export-container" ref={this.props.innerRef} id="export-container">
-          <SpinnerWrapper loading={this.props.loading}>{content}</SpinnerWrapper>
+        <div
+          className="export-container"
+          ref={this.props.innerRef}
+          id="export-container"
+        >
+          <SpinnerWrapper loading={this.props.loading}>
+            {content}
+          </SpinnerWrapper>
           <div className="twitter-png-fix" />
         </div>
         <style jsx>
@@ -248,15 +262,17 @@ class Carbon extends React.PureComponent {
               height: 100%;
               display: flex;
               flex-direction: column;
-              justify-content: center;
-              align-items: center;
+              justify-content: flex-start;
+              align-items: flex-start;
               overflow: hidden;
             }
           `}
         </style>
       </div>
-    )
+    );
   }
 }
 
-export default React.forwardRef((props, ref) => <Carbon {...props} innerRef={ref} />)
+export default React.forwardRef((props, ref) => (
+  <Carbon {...props} innerRef={ref} />
+));

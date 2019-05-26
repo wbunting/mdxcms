@@ -14,7 +14,8 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
   U[keyof U];
 
 export interface Exists {
-  post: (where?: PostWhereInput) => Promise<boolean>;
+  contentRepository: (where?: ContentRepositoryWhereInput) => Promise<boolean>;
+  file: (where?: FileWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -37,29 +38,54 @@ export interface Prisma {
    * Queries
    */
 
-  post: (where: PostWhereUniqueInput) => PostPromise;
-  posts: (
+  contentRepository: (
+    where: ContentRepositoryWhereUniqueInput
+  ) => ContentRepositoryPromise;
+  contentRepositories: (
     args?: {
-      where?: PostWhereInput;
-      orderBy?: PostOrderByInput;
+      where?: ContentRepositoryWhereInput;
+      orderBy?: ContentRepositoryOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
       first?: Int;
       last?: Int;
     }
-  ) => FragmentableArray<Post>;
-  postsConnection: (
+  ) => FragmentableArray<ContentRepository>;
+  contentRepositoriesConnection: (
     args?: {
-      where?: PostWhereInput;
-      orderBy?: PostOrderByInput;
+      where?: ContentRepositoryWhereInput;
+      orderBy?: ContentRepositoryOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
       first?: Int;
       last?: Int;
     }
-  ) => PostConnectionPromise;
+  ) => ContentRepositoryConnectionPromise;
+  file: (where: FileWhereUniqueInput) => FilePromise;
+  files: (
+    args?: {
+      where?: FileWhereInput;
+      orderBy?: FileOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<File>;
+  filesConnection: (
+    args?: {
+      where?: FileWhereInput;
+      orderBy?: FileOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FileConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserPromise;
   users: (
     args?: {
@@ -89,22 +115,44 @@ export interface Prisma {
    * Mutations
    */
 
-  createPost: (data: PostCreateInput) => PostPromise;
-  updatePost: (
-    args: { data: PostUpdateInput; where: PostWhereUniqueInput }
-  ) => PostPromise;
-  updateManyPosts: (
-    args: { data: PostUpdateManyMutationInput; where?: PostWhereInput }
-  ) => BatchPayloadPromise;
-  upsertPost: (
+  createContentRepository: (
+    data: ContentRepositoryCreateInput
+  ) => ContentRepositoryPromise;
+  updateContentRepository: (
     args: {
-      where: PostWhereUniqueInput;
-      create: PostCreateInput;
-      update: PostUpdateInput;
+      data: ContentRepositoryUpdateInput;
+      where: ContentRepositoryWhereUniqueInput;
     }
-  ) => PostPromise;
-  deletePost: (where: PostWhereUniqueInput) => PostPromise;
-  deleteManyPosts: (where?: PostWhereInput) => BatchPayloadPromise;
+  ) => ContentRepositoryPromise;
+  upsertContentRepository: (
+    args: {
+      where: ContentRepositoryWhereUniqueInput;
+      create: ContentRepositoryCreateInput;
+      update: ContentRepositoryUpdateInput;
+    }
+  ) => ContentRepositoryPromise;
+  deleteContentRepository: (
+    where: ContentRepositoryWhereUniqueInput
+  ) => ContentRepositoryPromise;
+  deleteManyContentRepositories: (
+    where?: ContentRepositoryWhereInput
+  ) => BatchPayloadPromise;
+  createFile: (data: FileCreateInput) => FilePromise;
+  updateFile: (
+    args: { data: FileUpdateInput; where: FileWhereUniqueInput }
+  ) => FilePromise;
+  updateManyFiles: (
+    args: { data: FileUpdateManyMutationInput; where?: FileWhereInput }
+  ) => BatchPayloadPromise;
+  upsertFile: (
+    args: {
+      where: FileWhereUniqueInput;
+      create: FileCreateInput;
+      update: FileUpdateInput;
+    }
+  ) => FilePromise;
+  deleteFile: (where: FileWhereUniqueInput) => FilePromise;
+  deleteManyFiles: (where?: FileWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (
     args: { data: UserUpdateInput; where: UserWhereUniqueInput }
@@ -130,9 +178,12 @@ export interface Prisma {
 }
 
 export interface Subscription {
-  post: (
-    where?: PostSubscriptionWhereInput
-  ) => PostSubscriptionPayloadSubscription;
+  contentRepository: (
+    where?: ContentRepositorySubscriptionWhereInput
+  ) => ContentRepositorySubscriptionPayloadSubscription;
+  file: (
+    where?: FileSubscriptionWhereInput
+  ) => FileSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -146,7 +197,7 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type PostOrderByInput =
+export type FileOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "createdAt_ASC"
@@ -155,8 +206,20 @@ export type PostOrderByInput =
   | "updatedAt_DESC"
   | "published_ASC"
   | "published_DESC"
-  | "mdx_ASC"
-  | "mdx_DESC";
+  | "name_ASC"
+  | "name_DESC"
+  | "content_ASC"
+  | "content_DESC"
+  | "parent_ASC"
+  | "parent_DESC";
+
+export type ContentRepositoryOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
@@ -172,11 +235,11 @@ export type UserOrderByInput =
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type PostWhereUniqueInput = AtLeastOne<{
+export type ContentRepositoryWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
 }>;
 
-export interface PostWhereInput {
+export interface FileWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -209,24 +272,52 @@ export interface PostWhereInput {
   updatedAt_gte?: DateTimeInput;
   published?: Boolean;
   published_not?: Boolean;
-  mdx?: String;
-  mdx_not?: String;
-  mdx_in?: String[] | String;
-  mdx_not_in?: String[] | String;
-  mdx_lt?: String;
-  mdx_lte?: String;
-  mdx_gt?: String;
-  mdx_gte?: String;
-  mdx_contains?: String;
-  mdx_not_contains?: String;
-  mdx_starts_with?: String;
-  mdx_not_starts_with?: String;
-  mdx_ends_with?: String;
-  mdx_not_ends_with?: String;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  content?: String;
+  content_not?: String;
+  content_in?: String[] | String;
+  content_not_in?: String[] | String;
+  content_lt?: String;
+  content_lte?: String;
+  content_gt?: String;
+  content_gte?: String;
+  content_contains?: String;
+  content_not_contains?: String;
+  content_starts_with?: String;
+  content_not_starts_with?: String;
+  content_ends_with?: String;
+  content_not_ends_with?: String;
+  parent?: ID_Input;
+  parent_not?: ID_Input;
+  parent_in?: ID_Input[] | ID_Input;
+  parent_not_in?: ID_Input[] | ID_Input;
+  parent_lt?: ID_Input;
+  parent_lte?: ID_Input;
+  parent_gt?: ID_Input;
+  parent_gte?: ID_Input;
+  parent_contains?: ID_Input;
+  parent_not_contains?: ID_Input;
+  parent_starts_with?: ID_Input;
+  parent_not_starts_with?: ID_Input;
+  parent_ends_with?: ID_Input;
+  parent_not_ends_with?: ID_Input;
   author?: UserWhereInput;
-  AND?: PostWhereInput[] | PostWhereInput;
-  OR?: PostWhereInput[] | PostWhereInput;
-  NOT?: PostWhereInput[] | PostWhereInput;
+  AND?: FileWhereInput[] | FileWhereInput;
+  OR?: FileWhereInput[] | FileWhereInput;
+  NOT?: FileWhereInput[] | FileWhereInput;
 }
 
 export interface UserWhereInput {
@@ -272,120 +363,241 @@ export interface UserWhereInput {
   password_not_starts_with?: String;
   password_ends_with?: String;
   password_not_ends_with?: String;
-  posts_every?: PostWhereInput;
-  posts_some?: PostWhereInput;
-  posts_none?: PostWhereInput;
+  repositories_every?: ContentRepositoryWhereInput;
+  repositories_some?: ContentRepositoryWhereInput;
+  repositories_none?: ContentRepositoryWhereInput;
   AND?: UserWhereInput[] | UserWhereInput;
   OR?: UserWhereInput[] | UserWhereInput;
   NOT?: UserWhereInput[] | UserWhereInput;
 }
+
+export interface ContentRepositoryWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  files_every?: FileWhereInput;
+  files_some?: FileWhereInput;
+  files_none?: FileWhereInput;
+  AND?: ContentRepositoryWhereInput[] | ContentRepositoryWhereInput;
+  OR?: ContentRepositoryWhereInput[] | ContentRepositoryWhereInput;
+  NOT?: ContentRepositoryWhereInput[] | ContentRepositoryWhereInput;
+}
+
+export type FileWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   email?: String;
 }>;
 
-export interface PostCreateInput {
-  published?: Boolean;
-  mdx?: String;
-  author: UserCreateOneWithoutPostsInput;
+export interface ContentRepositoryCreateInput {
+  files?: FileCreateManyInput;
 }
 
-export interface UserCreateOneWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
+export interface FileCreateManyInput {
+  create?: FileCreateInput[] | FileCreateInput;
+  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput;
+}
+
+export interface FileCreateInput {
+  published?: Boolean;
+  name: String;
+  content: String;
+  parent: ID_Input;
+  children?: FileCreatechildrenInput;
+  author: UserCreateOneInput;
+}
+
+export interface FileCreatechildrenInput {
+  set?: ID_Input[] | ID_Input;
+}
+
+export interface UserCreateOneInput {
+  create?: UserCreateInput;
   connect?: UserWhereUniqueInput;
-}
-
-export interface UserCreateWithoutPostsInput {
-  email: String;
-  password: String;
-}
-
-export interface PostUpdateInput {
-  published?: Boolean;
-  mdx?: String;
-  author?: UserUpdateOneRequiredWithoutPostsInput;
-}
-
-export interface UserUpdateOneRequiredWithoutPostsInput {
-  create?: UserCreateWithoutPostsInput;
-  update?: UserUpdateWithoutPostsDataInput;
-  upsert?: UserUpsertWithoutPostsInput;
-  connect?: UserWhereUniqueInput;
-}
-
-export interface UserUpdateWithoutPostsDataInput {
-  email?: String;
-  password?: String;
-}
-
-export interface UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput;
-  create: UserCreateWithoutPostsInput;
-}
-
-export interface PostUpdateManyMutationInput {
-  published?: Boolean;
-  mdx?: String;
 }
 
 export interface UserCreateInput {
   email: String;
   password: String;
-  posts?: PostCreateManyWithoutAuthorInput;
+  repositories?: ContentRepositoryCreateManyInput;
 }
 
-export interface PostCreateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+export interface ContentRepositoryCreateManyInput {
+  create?: ContentRepositoryCreateInput[] | ContentRepositoryCreateInput;
+  connect?:
+    | ContentRepositoryWhereUniqueInput[]
+    | ContentRepositoryWhereUniqueInput;
 }
 
-export interface PostCreateWithoutAuthorInput {
+export interface ContentRepositoryUpdateInput {
+  files?: FileUpdateManyInput;
+}
+
+export interface FileUpdateManyInput {
+  create?: FileCreateInput[] | FileCreateInput;
+  update?:
+    | FileUpdateWithWhereUniqueNestedInput[]
+    | FileUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | FileUpsertWithWhereUniqueNestedInput[]
+    | FileUpsertWithWhereUniqueNestedInput;
+  delete?: FileWhereUniqueInput[] | FileWhereUniqueInput;
+  connect?: FileWhereUniqueInput[] | FileWhereUniqueInput;
+  set?: FileWhereUniqueInput[] | FileWhereUniqueInput;
+  disconnect?: FileWhereUniqueInput[] | FileWhereUniqueInput;
+  deleteMany?: FileScalarWhereInput[] | FileScalarWhereInput;
+  updateMany?:
+    | FileUpdateManyWithWhereNestedInput[]
+    | FileUpdateManyWithWhereNestedInput;
+}
+
+export interface FileUpdateWithWhereUniqueNestedInput {
+  where: FileWhereUniqueInput;
+  data: FileUpdateDataInput;
+}
+
+export interface FileUpdateDataInput {
   published?: Boolean;
-  mdx?: String;
+  name?: String;
+  content?: String;
+  parent?: ID_Input;
+  children?: FileUpdatechildrenInput;
+  author?: UserUpdateOneRequiredInput;
 }
 
-export interface UserUpdateInput {
+export interface FileUpdatechildrenInput {
+  set?: ID_Input[] | ID_Input;
+}
+
+export interface UserUpdateOneRequiredInput {
+  create?: UserCreateInput;
+  update?: UserUpdateDataInput;
+  upsert?: UserUpsertNestedInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateDataInput {
   email?: String;
   password?: String;
-  posts?: PostUpdateManyWithoutAuthorInput;
+  repositories?: ContentRepositoryUpdateManyInput;
 }
 
-export interface PostUpdateManyWithoutAuthorInput {
-  create?: PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput;
-  delete?: PostWhereUniqueInput[] | PostWhereUniqueInput;
-  connect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
-  set?: PostWhereUniqueInput[] | PostWhereUniqueInput;
-  disconnect?: PostWhereUniqueInput[] | PostWhereUniqueInput;
+export interface ContentRepositoryUpdateManyInput {
+  create?: ContentRepositoryCreateInput[] | ContentRepositoryCreateInput;
   update?:
-    | PostUpdateWithWhereUniqueWithoutAuthorInput[]
-    | PostUpdateWithWhereUniqueWithoutAuthorInput;
+    | ContentRepositoryUpdateWithWhereUniqueNestedInput[]
+    | ContentRepositoryUpdateWithWhereUniqueNestedInput;
   upsert?:
-    | PostUpsertWithWhereUniqueWithoutAuthorInput[]
-    | PostUpsertWithWhereUniqueWithoutAuthorInput;
-  deleteMany?: PostScalarWhereInput[] | PostScalarWhereInput;
-  updateMany?:
-    | PostUpdateManyWithWhereNestedInput[]
-    | PostUpdateManyWithWhereNestedInput;
+    | ContentRepositoryUpsertWithWhereUniqueNestedInput[]
+    | ContentRepositoryUpsertWithWhereUniqueNestedInput;
+  delete?:
+    | ContentRepositoryWhereUniqueInput[]
+    | ContentRepositoryWhereUniqueInput;
+  connect?:
+    | ContentRepositoryWhereUniqueInput[]
+    | ContentRepositoryWhereUniqueInput;
+  set?: ContentRepositoryWhereUniqueInput[] | ContentRepositoryWhereUniqueInput;
+  disconnect?:
+    | ContentRepositoryWhereUniqueInput[]
+    | ContentRepositoryWhereUniqueInput;
+  deleteMany?:
+    | ContentRepositoryScalarWhereInput[]
+    | ContentRepositoryScalarWhereInput;
 }
 
-export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput;
-  data: PostUpdateWithoutAuthorDataInput;
+export interface ContentRepositoryUpdateWithWhereUniqueNestedInput {
+  where: ContentRepositoryWhereUniqueInput;
+  data: ContentRepositoryUpdateDataInput;
 }
 
-export interface PostUpdateWithoutAuthorDataInput {
-  published?: Boolean;
-  mdx?: String;
+export interface ContentRepositoryUpdateDataInput {
+  files?: FileUpdateManyInput;
 }
 
-export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput;
-  update: PostUpdateWithoutAuthorDataInput;
-  create: PostCreateWithoutAuthorInput;
+export interface ContentRepositoryUpsertWithWhereUniqueNestedInput {
+  where: ContentRepositoryWhereUniqueInput;
+  update: ContentRepositoryUpdateDataInput;
+  create: ContentRepositoryCreateInput;
 }
 
-export interface PostScalarWhereInput {
+export interface ContentRepositoryScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  AND?: ContentRepositoryScalarWhereInput[] | ContentRepositoryScalarWhereInput;
+  OR?: ContentRepositoryScalarWhereInput[] | ContentRepositoryScalarWhereInput;
+  NOT?: ContentRepositoryScalarWhereInput[] | ContentRepositoryScalarWhereInput;
+}
+
+export interface UserUpsertNestedInput {
+  update: UserUpdateDataInput;
+  create: UserCreateInput;
+}
+
+export interface FileUpsertWithWhereUniqueNestedInput {
+  where: FileWhereUniqueInput;
+  update: FileUpdateDataInput;
+  create: FileCreateInput;
+}
+
+export interface FileScalarWhereInput {
   id?: ID_Input;
   id_not?: ID_Input;
   id_in?: ID_Input[] | ID_Input;
@@ -418,33 +630,87 @@ export interface PostScalarWhereInput {
   updatedAt_gte?: DateTimeInput;
   published?: Boolean;
   published_not?: Boolean;
-  mdx?: String;
-  mdx_not?: String;
-  mdx_in?: String[] | String;
-  mdx_not_in?: String[] | String;
-  mdx_lt?: String;
-  mdx_lte?: String;
-  mdx_gt?: String;
-  mdx_gte?: String;
-  mdx_contains?: String;
-  mdx_not_contains?: String;
-  mdx_starts_with?: String;
-  mdx_not_starts_with?: String;
-  mdx_ends_with?: String;
-  mdx_not_ends_with?: String;
-  AND?: PostScalarWhereInput[] | PostScalarWhereInput;
-  OR?: PostScalarWhereInput[] | PostScalarWhereInput;
-  NOT?: PostScalarWhereInput[] | PostScalarWhereInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  content?: String;
+  content_not?: String;
+  content_in?: String[] | String;
+  content_not_in?: String[] | String;
+  content_lt?: String;
+  content_lte?: String;
+  content_gt?: String;
+  content_gte?: String;
+  content_contains?: String;
+  content_not_contains?: String;
+  content_starts_with?: String;
+  content_not_starts_with?: String;
+  content_ends_with?: String;
+  content_not_ends_with?: String;
+  parent?: ID_Input;
+  parent_not?: ID_Input;
+  parent_in?: ID_Input[] | ID_Input;
+  parent_not_in?: ID_Input[] | ID_Input;
+  parent_lt?: ID_Input;
+  parent_lte?: ID_Input;
+  parent_gt?: ID_Input;
+  parent_gte?: ID_Input;
+  parent_contains?: ID_Input;
+  parent_not_contains?: ID_Input;
+  parent_starts_with?: ID_Input;
+  parent_not_starts_with?: ID_Input;
+  parent_ends_with?: ID_Input;
+  parent_not_ends_with?: ID_Input;
+  AND?: FileScalarWhereInput[] | FileScalarWhereInput;
+  OR?: FileScalarWhereInput[] | FileScalarWhereInput;
+  NOT?: FileScalarWhereInput[] | FileScalarWhereInput;
 }
 
-export interface PostUpdateManyWithWhereNestedInput {
-  where: PostScalarWhereInput;
-  data: PostUpdateManyDataInput;
+export interface FileUpdateManyWithWhereNestedInput {
+  where: FileScalarWhereInput;
+  data: FileUpdateManyDataInput;
 }
 
-export interface PostUpdateManyDataInput {
+export interface FileUpdateManyDataInput {
   published?: Boolean;
-  mdx?: String;
+  name?: String;
+  content?: String;
+  parent?: ID_Input;
+  children?: FileUpdatechildrenInput;
+}
+
+export interface FileUpdateInput {
+  published?: Boolean;
+  name?: String;
+  content?: String;
+  parent?: ID_Input;
+  children?: FileUpdatechildrenInput;
+  author?: UserUpdateOneRequiredInput;
+}
+
+export interface FileUpdateManyMutationInput {
+  published?: Boolean;
+  name?: String;
+  content?: String;
+  parent?: ID_Input;
+  children?: FileUpdatechildrenInput;
+}
+
+export interface UserUpdateInput {
+  email?: String;
+  password?: String;
+  repositories?: ContentRepositoryUpdateManyInput;
 }
 
 export interface UserUpdateManyMutationInput {
@@ -452,15 +718,32 @@ export interface UserUpdateManyMutationInput {
   password?: String;
 }
 
-export interface PostSubscriptionWhereInput {
+export interface ContentRepositorySubscriptionWhereInput {
   mutation_in?: MutationType[] | MutationType;
   updatedFields_contains?: String;
   updatedFields_contains_every?: String[] | String;
   updatedFields_contains_some?: String[] | String;
-  node?: PostWhereInput;
-  AND?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-  OR?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
-  NOT?: PostSubscriptionWhereInput[] | PostSubscriptionWhereInput;
+  node?: ContentRepositoryWhereInput;
+  AND?:
+    | ContentRepositorySubscriptionWhereInput[]
+    | ContentRepositorySubscriptionWhereInput;
+  OR?:
+    | ContentRepositorySubscriptionWhereInput[]
+    | ContentRepositorySubscriptionWhereInput;
+  NOT?:
+    | ContentRepositorySubscriptionWhereInput[]
+    | ContentRepositorySubscriptionWhereInput;
+}
+
+export interface FileSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: FileWhereInput;
+  AND?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput;
+  OR?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput;
+  NOT?: FileSubscriptionWhereInput[] | FileSubscriptionWhereInput;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -478,31 +761,84 @@ export interface NodeNode {
   id: ID_Output;
 }
 
-export interface Post {
+export interface ContentRepository {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface ContentRepositoryPromise
+  extends Promise<ContentRepository>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  files: <T = FragmentableArray<File>>(
+    args?: {
+      where?: FileWhereInput;
+      orderBy?: FileOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface ContentRepositorySubscription
+  extends Promise<AsyncIterator<ContentRepository>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  files: <T = Promise<AsyncIterator<FileSubscription>>>(
+    args?: {
+      where?: FileWhereInput;
+      orderBy?: FileOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+}
+
+export interface File {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
   published: Boolean;
-  mdx?: String;
+  name: String;
+  content: String;
+  parent: ID_Output;
+  children: ID_Output[];
 }
 
-export interface PostPromise extends Promise<Post>, Fragmentable {
+export interface FilePromise extends Promise<File>, Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
   published: () => Promise<Boolean>;
-  mdx: () => Promise<String>;
+  name: () => Promise<String>;
+  content: () => Promise<String>;
+  parent: () => Promise<ID_Output>;
+  children: () => Promise<ID_Output[]>;
   author: <T = UserPromise>() => T;
 }
 
-export interface PostSubscription
-  extends Promise<AsyncIterator<Post>>,
+export interface FileSubscription
+  extends Promise<AsyncIterator<File>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   published: () => Promise<AsyncIterator<Boolean>>;
-  mdx: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  content: () => Promise<AsyncIterator<String>>;
+  parent: () => Promise<AsyncIterator<ID_Output>>;
+  children: () => Promise<AsyncIterator<ID_Output[]>>;
   author: <T = UserSubscription>() => T;
 }
 
@@ -516,10 +852,10 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
   password: () => Promise<String>;
-  posts: <T = FragmentableArray<Post>>(
+  repositories: <T = FragmentableArray<ContentRepository>>(
     args?: {
-      where?: PostWhereInput;
-      orderBy?: PostOrderByInput;
+      where?: ContentRepositoryWhereInput;
+      orderBy?: ContentRepositoryOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -535,10 +871,10 @@ export interface UserSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
-  posts: <T = Promise<AsyncIterator<PostSubscription>>>(
+  repositories: <T = Promise<AsyncIterator<ContentRepositorySubscription>>>(
     args?: {
-      where?: PostWhereInput;
-      orderBy?: PostOrderByInput;
+      where?: ContentRepositoryWhereInput;
+      orderBy?: ContentRepositoryOrderByInput;
       skip?: Int;
       after?: String;
       before?: String;
@@ -548,25 +884,25 @@ export interface UserSubscription
   ) => T;
 }
 
-export interface PostConnection {
+export interface ContentRepositoryConnection {
   pageInfo: PageInfo;
-  edges: PostEdge[];
+  edges: ContentRepositoryEdge[];
 }
 
-export interface PostConnectionPromise
-  extends Promise<PostConnection>,
+export interface ContentRepositoryConnectionPromise
+  extends Promise<ContentRepositoryConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<PostEdge>>() => T;
-  aggregate: <T = AggregatePostPromise>() => T;
+  edges: <T = FragmentableArray<ContentRepositoryEdge>>() => T;
+  aggregate: <T = AggregateContentRepositoryPromise>() => T;
 }
 
-export interface PostConnectionSubscription
-  extends Promise<AsyncIterator<PostConnection>>,
+export interface ContentRepositoryConnectionSubscription
+  extends Promise<AsyncIterator<ContentRepositoryConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<PostEdgeSubscription>>>() => T;
-  aggregate: <T = AggregatePostSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ContentRepositoryEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateContentRepositorySubscription>() => T;
 }
 
 export interface PageInfo {
@@ -592,35 +928,91 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface PostEdge {
-  node: Post;
+export interface ContentRepositoryEdge {
+  node: ContentRepository;
   cursor: String;
 }
 
-export interface PostEdgePromise extends Promise<PostEdge>, Fragmentable {
-  node: <T = PostPromise>() => T;
+export interface ContentRepositoryEdgePromise
+  extends Promise<ContentRepositoryEdge>,
+    Fragmentable {
+  node: <T = ContentRepositoryPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface PostEdgeSubscription
-  extends Promise<AsyncIterator<PostEdge>>,
+export interface ContentRepositoryEdgeSubscription
+  extends Promise<AsyncIterator<ContentRepositoryEdge>>,
     Fragmentable {
-  node: <T = PostSubscription>() => T;
+  node: <T = ContentRepositorySubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregatePost {
+export interface AggregateContentRepository {
   count: Int;
 }
 
-export interface AggregatePostPromise
-  extends Promise<AggregatePost>,
+export interface AggregateContentRepositoryPromise
+  extends Promise<AggregateContentRepository>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregatePostSubscription
-  extends Promise<AsyncIterator<AggregatePost>>,
+export interface AggregateContentRepositorySubscription
+  extends Promise<AsyncIterator<AggregateContentRepository>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface FileConnection {
+  pageInfo: PageInfo;
+  edges: FileEdge[];
+}
+
+export interface FileConnectionPromise
+  extends Promise<FileConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<FileEdge>>() => T;
+  aggregate: <T = AggregateFilePromise>() => T;
+}
+
+export interface FileConnectionSubscription
+  extends Promise<AsyncIterator<FileConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<FileEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateFileSubscription>() => T;
+}
+
+export interface FileEdge {
+  node: File;
+  cursor: String;
+}
+
+export interface FileEdgePromise extends Promise<FileEdge>, Fragmentable {
+  node: <T = FilePromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface FileEdgeSubscription
+  extends Promise<AsyncIterator<FileEdge>>,
+    Fragmentable {
+  node: <T = FileSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateFile {
+  count: Int;
+}
+
+export interface AggregateFilePromise
+  extends Promise<AggregateFile>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateFileSubscription
+  extends Promise<AsyncIterator<AggregateFile>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -695,57 +1087,113 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface PostSubscriptionPayload {
+export interface ContentRepositorySubscriptionPayload {
   mutation: MutationType;
-  node: Post;
+  node: ContentRepository;
   updatedFields: String[];
-  previousValues: PostPreviousValues;
+  previousValues: ContentRepositoryPreviousValues;
 }
 
-export interface PostSubscriptionPayloadPromise
-  extends Promise<PostSubscriptionPayload>,
+export interface ContentRepositorySubscriptionPayloadPromise
+  extends Promise<ContentRepositorySubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = PostPromise>() => T;
+  node: <T = ContentRepositoryPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = PostPreviousValuesPromise>() => T;
+  previousValues: <T = ContentRepositoryPreviousValuesPromise>() => T;
 }
 
-export interface PostSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<PostSubscriptionPayload>>,
+export interface ContentRepositorySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ContentRepositorySubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = PostSubscription>() => T;
+  node: <T = ContentRepositorySubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = PostPreviousValuesSubscription>() => T;
+  previousValues: <T = ContentRepositoryPreviousValuesSubscription>() => T;
 }
 
-export interface PostPreviousValues {
+export interface ContentRepositoryPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface ContentRepositoryPreviousValuesPromise
+  extends Promise<ContentRepositoryPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface ContentRepositoryPreviousValuesSubscription
+  extends Promise<AsyncIterator<ContentRepositoryPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface FileSubscriptionPayload {
+  mutation: MutationType;
+  node: File;
+  updatedFields: String[];
+  previousValues: FilePreviousValues;
+}
+
+export interface FileSubscriptionPayloadPromise
+  extends Promise<FileSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = FilePromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = FilePreviousValuesPromise>() => T;
+}
+
+export interface FileSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<FileSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = FileSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = FilePreviousValuesSubscription>() => T;
+}
+
+export interface FilePreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
   published: Boolean;
-  mdx?: String;
+  name: String;
+  content: String;
+  parent: ID_Output;
+  children: ID_Output[];
 }
 
-export interface PostPreviousValuesPromise
-  extends Promise<PostPreviousValues>,
+export interface FilePreviousValuesPromise
+  extends Promise<FilePreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
   published: () => Promise<Boolean>;
-  mdx: () => Promise<String>;
+  name: () => Promise<String>;
+  content: () => Promise<String>;
+  parent: () => Promise<ID_Output>;
+  children: () => Promise<ID_Output[]>;
 }
 
-export interface PostPreviousValuesSubscription
-  extends Promise<AsyncIterator<PostPreviousValues>>,
+export interface FilePreviousValuesSubscription
+  extends Promise<AsyncIterator<FilePreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   published: () => Promise<AsyncIterator<Boolean>>;
-  mdx: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
+  content: () => Promise<AsyncIterator<String>>;
+  parent: () => Promise<AsyncIterator<ID_Output>>;
+  children: () => Promise<AsyncIterator<ID_Output[]>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -838,7 +1286,11 @@ export const models: Model[] = [
     embedded: false
   },
   {
-    name: "Post",
+    name: "ContentRepository",
+    embedded: false
+  },
+  {
+    name: "File",
     embedded: false
   }
 ];

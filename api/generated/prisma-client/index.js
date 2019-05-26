@@ -9,7 +9,11 @@ var models = [
     embedded: false
   },
   {
-    name: "Post",
+    name: "ContentRepository",
+    embedded: false
+  },
+  {
+    name: "File",
     embedded: false
   }
 ];

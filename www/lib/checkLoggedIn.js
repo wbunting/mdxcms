@@ -4,10 +4,15 @@ export default apolloClient =>
   apolloClient
     .query({
       query: gql`
-        query me {
-          user {
+        query {
+          me {
             id
-            email
+            repositories {
+              files {
+                content
+                name
+              }
+            }
           }
         }
       `,

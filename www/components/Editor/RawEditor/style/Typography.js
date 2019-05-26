@@ -1,4 +1,4 @@
-import React from './node_modules/react'
+import React from 'react';
 
 export default () => (
   <style jsx global>
@@ -106,4 +106,4 @@ export default () => (
       }
     `}
   </style>
-)
+);

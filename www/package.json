@@ -52,6 +52,7 @@
     "raw-loader": "^2.0.0",
     "react": "^16.8.6",
     "react-apollo": "^2.1.4",
+    "react-apollo-hooks": "^0.4.5",
     "react-codemirror2": "^6.0.0",
     "react-dom": "^16.8.6",
     "react-live": "^2.1.2",

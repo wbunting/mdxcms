@@ -25,9 +25,31 @@ const Input = styled.input`
   outline: none;
 `;
 
-const SIGNUP = gql`
-  mutation Signup($email: String!, $password: String!) {
-    signup(email: $email, password: $password) {
+const ErrorRebassBox = styled(Box)({
+  borderRadius: '4px',
+});
+
+const ErrorBox = ({ error }) => {
+  if (
+    error.graphQLErrors &&
+    error.graphQLErrors[0].message.includes('No user found')
+  ) {
+    return (
+      <ErrorRebassBox bg="red" px={2} py={2} color="white">
+        We were not able to find a user with that email address.
+      </ErrorRebassBox>
+    );
+  }
+  return (
+    <ErrorRebassBox bg="red" px={2} py={2} color="white">
+      An unexpected error occured. Please contact support.
+    </ErrorRebassBox>
+  );
+};
+
+const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
       token
       user {
         id
@@ -36,16 +58,16 @@ const SIGNUP = gql`
   }
 `;
 
-const EmailRegisterBox = withApollo(({ client }) => {
+const LoginBox = withApollo(({ client }) => {
   const [email, setEmail] = React.useState(null);
   const [password, setPassword] = React.useState(null);
 
   return (
     <Mutation
-      mutation={SIGNUP}
+      mutation={LOGIN}
       onCompleted={data => {
         // Store the token in cookie
-        document.cookie = cookie.serialize('token', data.signup.token, {
+        document.cookie = cookie.serialize('token', data.login.token, {
           maxAge: 30 * 24 * 60 * 60, // 30 days
         });
         // Force a reload of all the current queries now that the user is
@@ -59,13 +81,13 @@ const EmailRegisterBox = withApollo(({ client }) => {
         console.log(error);
       }}
     >
-      {(create, { data, error }) => (
+      {(signIn, { data, error }) => (
         <form
           onSubmit={e => {
             e.preventDefault();
             e.stopPropagation();
 
-            create({
+            signIn({
               variables: {
                 email,
                 password,
@@ -76,7 +98,35 @@ const EmailRegisterBox = withApollo(({ client }) => {
             setPassword('');
           }}
         >
-          <Box py={1}>
+          <Flex
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box py={1}>
+              <Box
+                width={250}
+                bg="white"
+                color="black"
+                py={2}
+                css={{
+                  border: '1px solid black',
+                  borderRadius: '4px',
+                }}
+              >
+                <Flex alignItems="center" justifyContent="center">
+                  <Email />
+                  <Box px={2}>
+                    <Input
+                      type="text"
+                      onChange={e => setEmail(e.target.value)}
+                      value={email}
+                      placeholder="you@domain.com"
+                    />
+                  </Box>
+                </Flex>
+              </Box>
+            </Box>
             <Box
               width={250}
               bg="white"
@@ -88,64 +138,38 @@ const EmailRegisterBox = withApollo(({ client }) => {
               }}
             >
               <Flex alignItems="center" justifyContent="center">
-                <Email />
+                <Lock />
                 <Box px={2}>
                   <Input
-                    type="text"
-                    onChange={e => setEmail(e.target.value)}
-                    value={email}
-                    placeholder="you@domain.com"
+                    type="password"
+                    onChange={e => setPassword(e.target.value)}
+                    value={password}
+                    placeholder="Password"
                   />
                 </Box>
               </Flex>
             </Box>
-          </Box>
-          <Box
-            width={250}
-            bg="white"
-            color="black"
-            py={2}
-            css={{
-              border: '1px solid black',
-              borderRadius: '4px',
-            }}
-          >
-            <Flex alignItems="center" justifyContent="center">
-              <Lock />
-              <Box px={2}>
-                <Input
-                  type="password"
-                  onChange={e => setPassword(e.target.value)}
-                  value={password}
-                  placeholder="Password"
-                />
-              </Box>
-            </Flex>
-          </Box>
-          <Box py={1}>
-            <Button width={250} bg="black" color="white">
-              <Flex alignItems="center" justifyContent="center">
-                <Box px={2}>Sign Up</Box>
-              </Flex>
-            </Button>
-          </Box>
-          {error && (
-            <Box bg="red" borderRadius={4} color="white">
-              {JSON.stringify(error)}
+            <Box py={1}>
+              <Button width={250} bg="black" color="white">
+                <Flex alignItems="center" justifyContent="center">
+                  <Box px={2}>Login</Box>
+                </Flex>
+              </Button>
             </Box>
-          )}
+            {error && <ErrorBox error={error} />}
+          </Flex>
         </form>
       )}
     </Mutation>
   );
 });
 
-const Signup = () => {
+const Login = () => {
   const [method, setMethod] = React.useState(null);
 
   const renderButtons = () => {
     if (method === 'email') {
-      return <EmailRegisterBox />;
+      return <LoginBox />;
     } else if (method === 'github') {
     } else if (!method) {
       return (
@@ -159,7 +183,7 @@ const Signup = () => {
             >
               <Flex justifyContent="center" alignItems="center">
                 <GitHubLogo invert />
-                <Box px={2}>Sign up with Github</Box>
+                <Box px={2}>Sign in with Github</Box>
               </Flex>
             </Button>
           </Box>
@@ -173,7 +197,7 @@ const Signup = () => {
             >
               <Flex justifyContent="center" alignItems="center">
                 <Email />
-                <Box px={2}>Sign up with Email</Box>
+                <Box px={2}>Sign in with Email</Box>
               </Flex>
             </Button>
           </Box>
@@ -191,15 +215,12 @@ const Signup = () => {
         <Box my={6}>
           <Flex flexDirection="column" alignItems="center">
             <Box py={1}>
-              <h1>Sign Up for MDXCMS</h1>
-            </Box>
-            <Box py={1}>
-              <p>A dead-simple way to manage your site's `.mdx` content</p>
+              <h1>Login to MDXCMS</h1>
             </Box>
             {renderButtons()}
             <Box py={1}>
-              <Link href="/login">
-                <a>Already have an account? Login</a>
+              <Link href="/signup">
+                <a>Don't have an account? Sign Up</a>
               </Link>
             </Box>
           </Flex>
@@ -210,10 +231,12 @@ const Signup = () => {
 };
 
 // if you are already logged in then redirect to editor
-Signup.getInitialProps = async context => {
+Login.getInitialProps = async context => {
   const { loggedInUser } = await checkLoggedIn(context.apolloClient);
 
-  if (loggedInUser.user) {
+  console.log(loggedInUser);
+
+  if (loggedInUser.me) {
     // Already signed in? No need to continue.
     // Throw them back to the main page
     redirect(context, '/editor');
@@ -222,4 +245,4 @@ Signup.getInitialProps = async context => {
   return {};
 };
 
-export default withAmp(Signup, { hybrid: true });
+export default withAmp(Login, { hybrid: true });

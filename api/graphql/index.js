@@ -1,6 +1,6 @@
 const { prisma } = require('../generated/prisma-client');
 const { ApolloServer, gql } = require('apollo-server');
-const bcrypt = require('bcryptjs');
+const { hash, compare } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const { permissions } = require('./permissions');
@@ -11,31 +11,39 @@ const typeDefs = gql`
 
   type Query {
     me: User!
-    publishedPosts: [Post!]!
-    post(postId: ID!): Post
-    postsByUser(userId: ID!): [Post!]!
   }
 
   type Mutation {
     signup(email: String!, password: String!): AuthPayload!
     login(email: String!, password: String!): AuthPayload!
-    createDraft(title: String!, userId: ID!): Post
-    publish(postId: ID!): Post
+    createFile(content: String!, fileName: String!): File
   }
 
   type User {
     id: ID!
     email: String!
-    posts: [Post!]!
+    repositories: [ContentRepository!]!
   }
 
-  type Post {
+  type ContentRepository {
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    files: [File!]!
+    author: User!
+  }
+
+  type File {
     id: ID!
     createdAt: DateTime!
     updatedAt: DateTime!
     published: Boolean!
-    mdx: String!
+    name: String!
+    content: String!
+    parent: String!
+    children: [String!]!
     author: User!
+    repository: ContentRepository!
   }
 
   type AuthPayload {
@@ -52,44 +60,48 @@ class AuthError extends Error {
 
 const resolvers = {
   Query: {
-    publishedPosts(root, args, context) {
-      return context.prisma.posts({ where: { published: true } });
-    },
-    post(root, args, context) {
-      return context.prisma.post({ id: args.postId });
-    },
-    postsByUser(root, args, context) {
-      return context.prisma
-        .user({
-          id: args.userId,
-        })
-        .posts();
-    },
     me: async (root, args, context) => {
       const userId = getUserId(context);
       return context.prisma.user({ id: userId });
     },
   },
   Mutation: {
-    createDraft(root, args, context) {
+    createFile(root, args, context) {
+      const userId = getUserId(context);
       return context.prisma.createPost({
-        title: args.title,
+        mdx: args.mdx,
+        fileName: args.fileName,
         author: {
-          connect: { id: args.userId },
+          connect: { id: userId },
         },
       });
     },
-    publish(root, args, context) {
-      return context.prisma.updatePost({
-        where: { id: args.postId },
-        data: { published: true },
-      });
-    },
     signup: async (parent, { email, password }, ctx, info) => {
-      const hashedPassword = await bcrypt.hash(password, 10);
+      const hashedPassword = await hash(password, 10);
       const user = await ctx.prisma.createUser({
         email,
         password: hashedPassword,
+      });
+      const defaultRepo = await ctx.prisma.createContentRepository({
+        author: {
+          connect: {
+            id: user.id,
+          },
+        },
+      });
+      const defaultFile = await ctx.prisma.createFile({
+        name: 'hello-world.mdx',
+        content: '# Welcome to MDXMCS!',
+        author: {
+          connect: {
+            id: user.id,
+          },
+        },
+        repository: {
+          connect: {
+            id: defaultRepo.id,
+          },
+        },
       });
 
       return {
@@ -107,24 +119,32 @@ const resolvers = {
         throw new Error('Invalid password');
       }
       return {
-        token: sign({ userId: user.id }, process.env.JWT_SECRET),
+        token: jwt.sign({ userId: user.id }, process.env.JWT_SECRET),
         user,
       };
     },
   },
   User: {
-    posts(root, args, context) {
+    repositories(root, args, context) {
       return context.prisma
         .user({
           id: root.id,
         })
-        .posts();
+        .repositories();
     },
   },
-  Post: {
+  ContentRepository: {
+    author: ({ id }, args, context) => {
+      return context.prisma.contentRepository({ id }).author();
+    },
+    files: ({ id }, args, context) => {
+      return context.prisma.contentRepository({ id }).files();
+    },
+  },
+  File: {
     author(root, args, context) {
       return context.prisma
-        .post({
+        .file({
           id: root.id,
         })
         .author();

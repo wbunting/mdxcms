@@ -1,5 +1,5 @@
-import React from './node_modules/react'
-import Spinner from './node_modules/react-spinner'
+import React from 'react';
+import Spinner from 'react-spinner';
 
 export default function SpinnerWrapper(props) {
   if (props.loading) {
@@ -15,8 +15,8 @@ export default function SpinnerWrapper(props) {
           `}
         </style>
       </div>
-    )
+    );
   }
 
-  return props.children
+  return props.children;
 }

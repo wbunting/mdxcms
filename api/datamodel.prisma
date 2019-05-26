@@ -2,14 +2,26 @@ type User {
   id: ID! @id
   email: String! @unique
   password: String!
-  posts: [Post!]!
+  repositories: [ContentRepository!]!
 }
 
-type Post {
+type ContentRepository {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  files: [File!]!
+  author: User!
+}
+
+type File {
   id: ID! @id
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   published: Boolean! @default(value: false)
-  mdx: String
+  name: String!
+  content: String!
+  parent: String
+  children: [String!]! @scalarList(strategy: RELATION)
+  repository: ContentRepository!
   author: User!
 }
