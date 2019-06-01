@@ -21,8 +21,9 @@ const withMDXCMS = backend => meta => Component => {
     return <Component {...pageProps} mdx={mdx} />;
   };
 
-  _Component.getInitialProps = async ({ res, pathname }) => {
+  _Component.getInitialProps = async ctx => {
     let pageProps = {};
+    const { res, pathname } = ctx;
 
     const dataFetcher = getFetcher(backend);
 

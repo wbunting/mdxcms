@@ -26,12 +26,12 @@ const EditorBox = styled(Flex)({
   overflowY: 'hidden',
 });
 
-export default () => (
+export default ({ code, handleChange }) => (
   <EditorBox>
     <Editor
-      initialValue={initialValue || `# Hello World!`}
+      initialValue={code}
       onChange={({ title, value, emoji }) => {
-        __DEVELOPER_SAVE(value);
+        handleChange(stringifyMDX(serializer.serialize(value)));
       }}
       components={{
         ...Rebass,

@@ -1,5 +1,5 @@
 import MDX from '@mdx-js/runtime';
-import withMDXCMS from 'mdxcms/lib/integrations/next';
+import withMDXCMS from '@mdxcms/client/lib/integrations/next';
 
 const Page = ({ mdx }) => <MDX>{mdx}</MDX>;
 

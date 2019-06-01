@@ -1,5 +1,5 @@
-import React from 'react'
-import RebassMDX from '@rebass/mdx'
+import React from 'react';
+import RebassMDX from '@rebass/mdx';
 import { withAmp } from 'next/amp';
 import MDX from '@mdx-js/runtime';
 
@@ -8,9 +8,9 @@ import Header from '../components/Header';
 import Page from '../components/Page';
 import Container from '../components/Container';
 
-import withMDXCMS from 'mdxcms/lib/integrations/next';
+import withMDXCMS from '@mdxcms/client/lib/integrations/next';
 
-const Home = ({mdx}) => {
+const Home = ({ mdx }) => {
   return (
     <>
       <Header height={48} shadow={false}>
@@ -24,10 +24,10 @@ const Home = ({mdx}) => {
         </Container>
       </Page>
     </>
-  )
+  );
 };
 
 export default withMDXCMS('github')({
   owner: 'wbunting',
-  repo: 'mdxcms-content'
+  repo: 'mdxcms-content',
 })(withAmp(Home, { hybrid: true }));

@@ -1,4 +1,4 @@
-import toHash from 'tohash'
+import toHash from 'tohash';
 
 export const FONTS = [
   { id: 'Anonymous Pro', name: 'Anonymous Pro' },
@@ -12,8 +12,8 @@ export const FONTS = [
   { id: 'Monoid', name: 'Monoid' },
   { id: 'Source Code Pro', name: 'Source Code Pro' },
   { id: 'Space Mono', name: 'Space Mono' },
-  { id: 'Ubuntu Mono', name: 'Ubuntu Mono' }
-]
+  { id: 'Ubuntu Mono', name: 'Ubuntu Mono' },
+];
 
 export const HIGHLIGHT_KEYS = [
   'background',
@@ -27,8 +27,8 @@ export const HIGHLIGHT_KEYS = [
   'number',
   'string',
   'comment',
-  'meta'
-]
+  'meta',
+];
 
 export const THEMES = [
   {
@@ -46,8 +46,8 @@ export const THEMES = [
       number: '#a16a94',
       string: '#fded02',
       comment: '#cdab53',
-      meta: '#555'
-    }
+      meta: '#555',
+    },
   },
   {
     id: 'blackboard',
@@ -65,8 +65,8 @@ export const THEMES = [
       string: '#61CE3C',
       comment: '#AEAEAE',
       meta: '#D8FA3C',
-      tag: '#8DA6CE'
-    }
+      tag: '#8DA6CE',
+    },
   },
   {
     id: 'base16-dark',
@@ -84,8 +84,8 @@ export const THEMES = [
       string: '#f4bf75',
       comment: '#8f5536',
       meta: '#555',
-      tag: '#ac4142'
-    }
+      tag: '#ac4142',
+    },
   },
   {
     id: 'base16-light',
@@ -104,8 +104,8 @@ export const THEMES = [
       string: '#f4bf75',
       comment: '#8f5536',
       meta: '#555',
-      tag: '#ac4142'
-    }
+      tag: '#ac4142',
+    },
   },
   {
     id: 'cobalt',
@@ -123,8 +123,8 @@ export const THEMES = [
       string: '#3ad900',
       comment: '#08f',
       meta: '#ff9d00',
-      tag: '#9effff'
-    }
+      tag: '#9effff',
+    },
   },
   {
     id: 'dracula',
@@ -142,8 +142,8 @@ export const THEMES = [
       string: '#f1fa8c',
       comment: '#6272a4',
       meta: '#f8f8f2',
-      tag: '#ff79c6'
-    }
+      tag: '#ff79c6',
+    },
   },
   {
     id: 'duotone-dark',
@@ -161,8 +161,8 @@ export const THEMES = [
       string: '#ffb870',
       comment: '#6c6783',
       meta: '#555',
-      tag: '#eeebff'
-    }
+      tag: '#eeebff',
+    },
   },
   {
     id: 'hopscotch',
@@ -180,8 +180,8 @@ export const THEMES = [
       string: '#fdcc59',
       comment: '#b33508',
       meta: '#555',
-      tag: '#dd464c'
-    }
+      tag: '#dd464c',
+    },
   },
   {
     id: 'lucario',
@@ -199,8 +199,8 @@ export const THEMES = [
       string: '#E6DB74',
       comment: '#5c98cd',
       meta: '#f8f8f2',
-      tag: '#ff6541'
-    }
+      tag: '#ff6541',
+    },
   },
   {
     id: 'material',
@@ -218,8 +218,8 @@ export const THEMES = [
       string: '#C3E88D',
       comment: '#546E7A',
       meta: '#80CBC4',
-      tag: 'rgba(255, 83, 112, 1)'
-    }
+      tag: 'rgba(255, 83, 112, 1)',
+    },
   },
   {
     id: 'monokai',
@@ -237,8 +237,8 @@ export const THEMES = [
       string: '#e6db74',
       comment: '#75715e',
       meta: '#555',
-      tag: '#bc6283'
-    }
+      tag: '#bc6283',
+    },
   },
   {
     id: 'night-owl',
@@ -255,8 +255,8 @@ export const THEMES = [
       number: '#F78C6C',
       string: '#ecc48d',
       comment: '#5c6370',
-      meta: '#7fdbca'
-    }
+      meta: '#7fdbca',
+    },
   },
   {
     id: 'nord',
@@ -274,8 +274,8 @@ export const THEMES = [
       string: '#A3BE8C',
       comment: '#4C566A',
       meta: '#81A1C1',
-      tag: '#81A1C1'
-    }
+      tag: '#81A1C1',
+    },
   },
   {
     id: 'oceanic-next',
@@ -293,8 +293,8 @@ export const THEMES = [
       string: '#99C794',
       comment: '#65737E',
       meta: '#555',
-      tag: '#C594C5'
-    }
+      tag: '#C594C5',
+    },
   },
   {
     id: 'one-light',
@@ -313,8 +313,8 @@ export const THEMES = [
       string: '#50a14f',
       comment: '#a0a1a7',
       meta: '#383a42',
-      tag: '#e45649'
-    }
+      tag: '#e45649',
+    },
   },
   {
     id: 'one-dark',
@@ -332,8 +332,8 @@ export const THEMES = [
       string: '#98c379',
       comment: '#5c6370',
       meta: '#abb2bf',
-      tag: '#e06c75'
-    }
+      tag: '#e06c75',
+    },
   },
   {
     id: 'panda-syntax',
@@ -351,8 +351,8 @@ export const THEMES = [
       string: '#19F9D8',
       comment: '#676B79',
       meta: '#b084eb',
-      tag: '#ff2c6d'
-    }
+      tag: '#ff2c6d',
+    },
   },
   {
     id: 'paraiso-dark',
@@ -370,14 +370,14 @@ export const THEMES = [
       string: '#fec418',
       comment: '#e96ba8',
       meta: '#555',
-      tag: '#ef6155'
-    }
+      tag: '#ef6155',
+    },
   },
   {
     id: 'seti',
     name: 'Seti',
     highlights: {
-      background: '#151718',
+      background: '#000',
       text: '#CFD2D1',
       variable: '#a074c4',
       attribute: '#9fca56',
@@ -389,8 +389,8 @@ export const THEMES = [
       string: '#55b5db',
       comment: '#41535b',
       meta: '#55b5db',
-      tag: '#55b5db'
-    }
+      tag: '#55b5db',
+    },
   },
   {
     id: 'shades-of-purple',
@@ -408,8 +408,8 @@ export const THEMES = [
       string: '#A5FF90',
       comment: '#B362FF',
       meta: '#FF9D00',
-      tag: '#9EFFFF'
-    }
+      tag: '#9EFFFF',
+    },
   },
   {
     id: 'solarized dark',
@@ -428,8 +428,8 @@ export const THEMES = [
       string: '#859900',
       comment: '#586e75',
       meta: '#859900',
-      tag: '#93a1a1'
-    }
+      tag: '#93a1a1',
+    },
   },
   {
     id: 'solarized light',
@@ -449,8 +449,8 @@ export const THEMES = [
       string: '#859900',
       comment: '#586e75',
       meta: '#859900',
-      tag: '#93a1a1'
-    }
+      tag: '#93a1a1',
+    },
   },
   {
     id: 'tomorrow-night-bright',
@@ -468,8 +468,8 @@ export const THEMES = [
       string: '#e7c547',
       comment: '#d27b53',
       meta: '#555',
-      tag: '#d54e53'
-    }
+      tag: '#d54e53',
+    },
   },
   {
     id: 'twilight',
@@ -487,8 +487,8 @@ export const THEMES = [
       string: '#8f9d6a',
       comment: '#777',
       meta: '#f7f7f7',
-      tag: '#997643'
-    }
+      tag: '#997643',
+    },
   },
   {
     id: 'verminal',
@@ -506,8 +506,8 @@ export const THEMES = [
       string: '#98c379',
       comment: '#5c6370',
       meta: '#abb2bf',
-      tag: '#e06c75'
-    }
+      tag: '#e06c75',
+    },
   },
   {
     id: 'yeti',
@@ -526,8 +526,8 @@ export const THEMES = [
       string: '#96c0d8',
       comment: '#d4c8be',
       meta: '#96c0d8',
-      tag: '#96c0d8'
-    }
+      tag: '#96c0d8',
+    },
   },
   {
     id: 'zenburn',
@@ -545,377 +545,377 @@ export const THEMES = [
       string: '#cc9393',
       comment: '#7f9f7f',
       meta: '#f0dfaf',
-      tag: '#93e0e3'
-    }
-  }
-]
+      tag: '#93e0e3',
+    },
+  },
+];
 
-export const THEMES_HASH = toHash(THEMES)
+export const THEMES_HASH = toHash(THEMES);
 
 export const LANGUAGES = [
   {
     name: 'Auto',
-    mode: 'auto'
+    mode: 'auto',
   },
   {
     name: 'Apache',
     mode: 'apache',
     mime: 'text/apache',
-    custom: true
+    custom: true,
   },
   {
     name: 'Bash',
     mode: 'shell',
-    mime: 'application/x-sh'
+    mime: 'application/x-sh',
   },
   {
     name: 'Plain Text',
-    mode: 'text'
+    mode: 'text',
   },
   {
     name: 'C',
     mode: 'clike',
     mime: 'text/x-csrc',
-    short: 'c'
+    short: 'c',
   },
   {
     name: 'C++',
     mode: 'clike',
     mime: 'text/x-c++src',
-    short: 'cpp'
+    short: 'cpp',
   },
   {
     name: 'C#',
     mode: 'clike',
     mime: 'text/x-csharp',
-    short: 'cs'
+    short: 'cs',
   },
   {
     name: 'Clojure',
-    mode: 'clojure'
+    mode: 'clojure',
   },
   {
     name: 'Cobol',
-    mode: 'cobol'
+    mode: 'cobol',
   },
   {
     name: 'CoffeeScript',
-    mode: 'coffeescript'
+    mode: 'coffeescript',
   },
   {
     name: 'Crystal',
-    mode: 'crystal'
+    mode: 'crystal',
   },
   {
     name: 'CSS',
-    mode: 'css'
+    mode: 'css',
   },
   {
     name: 'D',
-    mode: 'd'
+    mode: 'd',
   },
   {
     name: 'Dart',
-    mode: 'dart'
+    mode: 'dart',
   },
   {
     name: 'Diff',
     mode: 'diff',
-    mime: 'text/x-diff'
+    mime: 'text/x-diff',
   },
   {
     name: 'Django',
-    mode: 'django'
+    mode: 'django',
   },
   {
     name: 'Docker',
-    mode: 'dockerfile'
+    mode: 'dockerfile',
   },
   {
     name: 'Elixir',
     mode: 'elixir',
-    custom: true
+    custom: true,
   },
   {
     name: 'Elm',
-    mode: 'elm'
+    mode: 'elm',
   },
   {
     name: 'Erlang',
-    mode: 'erlang'
+    mode: 'erlang',
   },
   {
     name: 'Fortran',
-    mode: 'fortran'
+    mode: 'fortran',
   },
   {
     name: 'F#',
-    mode: 'mllike'
+    mode: 'mllike',
   },
   {
     name: 'Gherkin',
-    mode: 'gherkin'
+    mode: 'gherkin',
   },
   {
     name: 'GraphQL',
     mode: 'graphql',
-    custom: true
+    custom: true,
   },
   {
     name: 'Go',
     mode: 'go',
-    mime: 'text/x-go'
+    mime: 'text/x-go',
   },
   {
     name: 'Groovy',
-    mode: 'groovy'
+    mode: 'groovy',
   },
   {
     name: 'Handlebars',
-    mode: 'handlebars'
+    mode: 'handlebars',
   },
   {
     name: 'Haskell',
-    mode: 'haskell'
+    mode: 'haskell',
   },
   {
     name: 'Haxe',
-    mode: 'haxe'
+    mode: 'haxe',
   },
   {
     name: 'HTML',
-    mode: 'htmlmixed'
+    mode: 'htmlmixed',
   },
   {
     name: 'Java',
     mode: 'clike',
     mime: 'text/x-java',
-    short: 'java'
+    short: 'java',
   },
   {
     name: 'JavaScript',
     mode: 'javascript',
-    short: 'javascript'
+    short: 'javascript',
   },
   {
     name: 'JSON',
     mode: 'javascript',
     mime: 'application/json',
-    short: 'json'
+    short: 'json',
   },
   {
     name: 'JSX',
     mode: 'jsx',
-    short: 'jsx'
+    short: 'jsx',
   },
   {
     name: 'Julia',
-    mode: 'julia'
+    mode: 'julia',
   },
   {
     name: 'Kotlin',
     mode: 'clike',
     mime: 'text/x-kotlin',
-    short: 'kotlin'
+    short: 'kotlin',
   },
   {
     name: 'LaTeX',
-    mode: 'stex'
+    mode: 'stex',
   },
   {
     name: 'Lisp',
-    mode: 'commonlisp'
+    mode: 'commonlisp',
   },
   {
     name: 'Lua',
-    mode: 'lua'
+    mode: 'lua',
   },
   {
     name: 'Markdown',
-    mode: 'markdown'
+    mode: 'markdown',
   },
   {
     name: 'Mathematica',
-    mode: 'mathematica'
+    mode: 'mathematica',
   },
   {
     name: 'MATLAB/Octave',
     mode: 'octave',
-    mime: 'text/x-octave'
+    mime: 'text/x-octave',
   },
   {
     name: 'MySQL',
     mode: 'sql',
     mime: 'text/x-mysql',
-    short: 'mysql'
+    short: 'mysql',
   },
   {
     name: 'N-Triples',
     mode: 'ntriples',
-    mime: 'application/n-triples'
+    mime: 'application/n-triples',
   },
   {
     name: 'NGINX',
-    mode: 'nginx'
+    mode: 'nginx',
   },
   {
     name: 'Nim',
     mode: 'nimrod',
-    custom: true
+    custom: true,
   },
   {
     name: 'Objective C',
     mode: 'clike',
     mime: 'text/x-objectivec',
-    short: 'objectivec'
+    short: 'objectivec',
   },
   {
     name: 'OCaml',
-    mode: 'mllike'
+    mode: 'mllike',
   },
   {
     name: 'Pascal',
-    mode: 'pascal'
+    mode: 'pascal',
   },
   {
     name: 'Perl',
-    mode: 'perl'
+    mode: 'perl',
   },
   {
     name: 'PHP',
     mode: 'php',
     mime: 'text/x-php',
-    short: 'php'
+    short: 'php',
   },
   {
     name: 'PowerShell',
-    mode: 'powershell'
+    mode: 'powershell',
   },
   {
     name: 'Python',
-    mode: 'python'
+    mode: 'python',
   },
   {
     name: 'R',
-    mode: 'r'
+    mode: 'r',
   },
   {
     name: 'RISC-V',
     mode: 'riscv',
-    custom: true
+    custom: true,
   },
   {
     name: 'Ruby',
-    mode: 'ruby'
+    mode: 'ruby',
   },
   {
     name: 'Rust',
-    mode: 'rust'
+    mode: 'rust',
   },
   {
     name: 'Sass',
-    mode: 'sass'
+    mode: 'sass',
   },
   {
     name: 'Scala',
     mode: 'clike',
     mime: 'text/x-scala',
-    short: 'scala'
+    short: 'scala',
   },
   {
     name: 'Smalltalk',
-    mode: 'smalltalk'
+    mode: 'smalltalk',
   },
   {
     name: 'SPARQL',
     mode: 'sparql',
-    mime: 'application/sparql-query'
+    mime: 'application/sparql-query',
   },
   {
     name: 'SQL',
-    mode: 'sql'
+    mode: 'sql',
   },
   {
     name: 'Stylus',
     mode: 'stylus',
-    mime: 'stylus'
+    mime: 'stylus',
   },
   {
     name: 'Swift',
-    mode: 'swift'
+    mode: 'swift',
   },
   {
     name: 'TCL',
-    mode: 'tcl'
+    mode: 'tcl',
   },
   {
     name: 'TOML',
-    mode: 'toml'
+    mode: 'toml',
   },
   {
     name: 'Turtle',
     mode: 'turtle',
-    mime: 'text/turtle'
+    mime: 'text/turtle',
   },
   {
     name: 'TypeScript',
     mode: 'javascript',
     mime: 'application/typescript',
-    short: 'typescript'
+    short: 'typescript',
   },
   {
     name: 'TSX',
     mode: 'jsx',
     mime: 'text/typescript-jsx',
-    short: 'tsx'
+    short: 'tsx',
   },
   {
     name: 'Twig',
     mode: 'twig',
-    mime: 'text/x-twig'
+    mime: 'text/x-twig',
   },
   {
     name: 'VB.NET',
-    mode: 'vb'
+    mode: 'vb',
   },
   {
     name: 'Verilog',
-    mode: 'verilog'
+    mode: 'verilog',
   },
   {
     name: 'VHDL',
-    mode: 'vhdl'
+    mode: 'vhdl',
   },
   {
     name: 'Vue',
-    mode: 'vue'
+    mode: 'vue',
   },
   {
     name: 'XML',
-    mode: 'xml'
+    mode: 'xml',
   },
   {
     name: 'YAML',
-    mode: 'yaml'
-  }
-]
+    mode: 'yaml',
+  },
+];
 
 export const EXPORT_SIZES = [
   { id: '1x', name: '1x', value: 1 },
   { id: '2x', name: '2x', value: 2 },
-  { id: '4x', name: '4x', value: 4 }
-]
+  { id: '4x', name: '4x', value: 4 },
+];
 
-export const EXPORT_SIZES_HASH = toHash(EXPORT_SIZES)
+export const EXPORT_SIZES_HASH = toHash(EXPORT_SIZES);
 
-export const LANGUAGE_MIME_HASH = toHash(LANGUAGES, 'mime')
-export const LANGUAGE_MODE_HASH = toHash(LANGUAGES, 'mode')
-export const LANGUAGE_NAME_HASH = toHash(LANGUAGES, 'short')
+export const LANGUAGE_MIME_HASH = toHash(LANGUAGES, 'mime');
+export const LANGUAGE_MODE_HASH = toHash(LANGUAGES, 'mode');
+export const LANGUAGE_NAME_HASH = toHash(LANGUAGES, 'short');
 
-export const DEFAULT_LANGUAGE = 'auto'
-export const DEFAULT_THEME = THEMES_HASH.seti
-export const DEFAULT_BG_COLOR = 'rgba(171, 184, 195, 1)'
-export const DEFAULT_EXPORT_SIZE = EXPORT_SIZES_HASH['2x']
+export const DEFAULT_LANGUAGE = 'auto';
+export const DEFAULT_THEME = THEMES_HASH.seti;
+export const DEFAULT_BG_COLOR = 'rgba(171, 184, 195, 1)';
+export const DEFAULT_EXPORT_SIZE = EXPORT_SIZES_HASH['2x'];
 
 export const COLORS = {
   BLACK: '#121212',
@@ -926,8 +926,8 @@ export const COLORS = {
   HOVER: '#1F1F1F',
   PURPLE: '#C198FB',
   DARK_PURPLE: '#55436F',
-  RED: 'red'
-}
+  RED: 'red',
+};
 
 export const DEFAULT_CODE = `const pluckDeep = key => obj => key.split('.').reduce((accum, key) => accum[key], obj)
 const compose = (...fns) => res => fns.reduce((accum, next) => next(accum), res)
@@ -937,7 +937,7 @@ const unfold = (f, seed) => {
     return res ? go(f, res[1], acc.concat([res[0]])) : acc
   }
   return go(f, seed, [])
-}`
+}`;
 
 // if (typeof window !== 'undefined' && typeof window.navigator !== 'undefined') {
 //   const alreadyLoaded = new Set()
@@ -977,16 +977,16 @@ export const DEFAULT_SETTINGS = {
   lineNumbers: false,
   exportSize: '2x',
   watermark: false,
-  squaredImage: false
-}
+  squaredImage: false,
+};
 
-export const DEFAULT_PRESET_ID = 'preset:4'
+export const DEFAULT_PRESET_ID = 'preset:4';
 
 export const DEFAULT_PRESETS = [
   {
     ...DEFAULT_SETTINGS,
     icon: '/static/presets/4.png',
-    id: DEFAULT_PRESET_ID
+    id: DEFAULT_PRESET_ID,
   },
   {
     ...DEFAULT_SETTINGS,
@@ -996,7 +996,7 @@ export const DEFAULT_PRESETS = [
     fontFamily: 'Fira Code',
     lineHeight: '152%',
     icon: '/static/presets/7.png',
-    id: 'preset:7'
+    id: 'preset:7',
   },
   {
     ...DEFAULT_SETTINGS,
@@ -1006,7 +1006,7 @@ export const DEFAULT_PRESETS = [
     fontFamily: 'Fira Code',
     lineHeight: '152%',
     icon: '/static/presets/8.png',
-    id: 'preset:8'
+    id: 'preset:8',
   },
   {
     ...DEFAULT_SETTINGS,
@@ -1016,7 +1016,7 @@ export const DEFAULT_PRESETS = [
     windowTheme: 'bw',
     lineHeight: '152%',
     icon: '/static/presets/9.png',
-    id: 'preset:9'
+    id: 'preset:9',
   },
   {
     ...DEFAULT_SETTINGS,
@@ -1028,7 +1028,7 @@ export const DEFAULT_PRESETS = [
     fontSize: '14px',
     lineHeight: '143%',
     icon: '/static/presets/0.png',
-    id: 'preset:0'
+    id: 'preset:0',
   },
   {
     ...DEFAULT_SETTINGS,
@@ -1036,7 +1036,7 @@ export const DEFAULT_PRESETS = [
     theme: 'one-light',
     lineHeight: '143%',
     icon: '/static/presets/1.png',
-    id: 'preset:1'
+    id: 'preset:1',
   },
   {
     ...DEFAULT_SETTINGS,
@@ -1046,7 +1046,7 @@ export const DEFAULT_PRESETS = [
     lineHeight: '143%',
     windowControls: false,
     icon: '/static/presets/2.png',
-    id: 'preset:2'
+    id: 'preset:2',
   },
   {
     ...DEFAULT_SETTINGS,
@@ -1055,7 +1055,7 @@ export const DEFAULT_PRESETS = [
     fontFamily: 'IBM Plex Mono',
     lineHeight: '143%',
     icon: '/static/presets/3.png',
-    id: 'preset:3'
+    id: 'preset:3',
   },
 
   {
@@ -1063,7 +1063,7 @@ export const DEFAULT_PRESETS = [
     backgroundColor: 'rgba(222,171,99,1)',
     theme: 'duotone-dark',
     icon: '/static/presets/5.png',
-    id: 'preset:5'
+    id: 'preset:5',
   },
   {
     ...DEFAULT_SETTINGS,
@@ -1073,6 +1073,6 @@ export const DEFAULT_PRESETS = [
     theme: 'solarized light',
     windowTheme: 'sharp',
     icon: '/static/presets/6.png',
-    id: 'preset:6'
-  }
-]
+    id: 'preset:6',
+  },
+];

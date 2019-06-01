@@ -1,5 +1,5 @@
 {
-  "name": "mdxcms",
+  "name": "@mdxcms/client",
   "version": "1.0.0",
   "main": "lib/**/*",
   "license": "MIT",

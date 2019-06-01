@@ -20,12 +20,18 @@ const UPDATE_FILE = gql`
 const Editor = ({ activeFile }) => {
   const [code, setCode] = React.useState(activeFile.content);
   const [editor, setEditor] = React.useState('raw');
+  React.useEffect(() => {
+    setCode(activeFile.content);
+  }, [activeFile]);
+
   const createPost = useMutation(UPDATE_FILE, {
     variables: {
       fileId: activeFile.id,
       content: code,
     },
   });
+
+  const EditorComponent = editor === 'raw' ? RawEditor : WISYWIGEditor;
 
   return (
     <Box>
@@ -68,11 +74,7 @@ const Editor = ({ activeFile }) => {
           </Button>
         </Flex>
       </Controls>
-      {editor === 'raw' ? (
-        <RawEditor code={code} handleChange={c => setCode(c)} />
-      ) : (
-        <WISYWIGEditor />
-      )}
+      <EditorComponent code={code} handleChange={c => setCode(c)} />
     </Box>
   );
 };

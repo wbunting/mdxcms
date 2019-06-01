@@ -11,6 +11,16 @@ type ContentRepository {
   updatedAt: DateTime! @updatedAt
   files: [File!]!
   author: User!
+  name: String! @default(value: "hello-mdxcms")
+  dependencies: [Dependency!]!
+}
+
+type Dependency {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String!
+  verison: String!
 }
 
 type File {
@@ -24,4 +34,5 @@ type File {
   children: [String!]! @scalarList(strategy: RELATION)
   repository: ContentRepository!
   author: User!
+  isDirectory: Boolean! @default(value: false)
 }
