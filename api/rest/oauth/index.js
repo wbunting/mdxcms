@@ -85,6 +85,8 @@ module.exports = async (req, res) => {
     const user = await prisma.createUser({
       email,
       password: hashedPassword,
+      zeitLinked: true,
+      zeitToken: access_token,
     });
 
     const defaultRepo = await prisma.createContentRepository({

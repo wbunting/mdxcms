@@ -2,6 +2,8 @@ type User {
   id: ID! @id
   email: String! @unique
   password: String
+  zeitLinked: Boolean! @default(value: false)
+  zeitToken: String
   repositories: [ContentRepository!]!
 }
 

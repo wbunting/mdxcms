@@ -24,6 +24,8 @@ const typeDefs = gql`
     id: ID!
     email: String!
     repositories: [ContentRepository!]!
+    zeitLinked: Boolean!
+    zeitToken: String
   }
 
   type ContentRepository {

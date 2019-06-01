@@ -38,7 +38,7 @@ const OAuth = ({
         <Box my={6}>
           <Flex flexDirection="column" alignItems="center">
             <Box py={1}>
-              <h1>Authenticating...</h1>
+              <h1>Setting things up...</h1>
             </Box>
           </Flex>
         </Box>

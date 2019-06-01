@@ -30,24 +30,12 @@
       "dest": "/api/graphql/index.js"
     },
     {
-      "src": "/api/users",
-      "dest": "/api/rest/users/index.js"
-    },
-    {
-      "src": "/api/user/new-from-zeit",
-      "dest": "/api/rest/user/new-from-zeit.js"
-    },
-    {
       "src": "/api/oauth",
       "dest": "/api/rest/oauth/index.js"
     },
     {
       "src": "/api/file/(.*)",
       "dest": "/api/rest/file/index.js?id=$1"
-    },
-    {
-      "src": "/api/document",
-      "dest": "/api/rest/document.js"
     },
     {
       "src": "/assets/(.*)",
