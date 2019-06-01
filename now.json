@@ -64,7 +64,7 @@
   ],
   "env": {
     "JWT_SECRET": "@jwt-token",
-    "NOW_INTEGRATION_SECRET": "@now-intergration-secret",
+    "NOW_INTEGRATION_SECRET": "@now-integration-secret",
     "NOW_INTEGRATION_ID": "@now-intergration-id"
   }
 }
