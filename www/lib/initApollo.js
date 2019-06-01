@@ -11,8 +11,13 @@ if (!process.browser) {
 }
 
 function create(initialState, { getToken, fetchOptions }) {
+  const baseUri =
+    process.env.NOW_REGION === 'dev1'
+      ? 'http://localhost:3000'
+      : 'https://mdxcms.com';
+
   const httpLink = createHttpLink({
-    uri: 'http://localhost:3000/api/graphql',
+    uri: `${baseUri}/api/graphql`,
     credentials: 'same-origin',
     fetchOptions,
   });

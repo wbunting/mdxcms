@@ -29,11 +29,16 @@ module.exports = async (req, res) => {
   const { query } = parse(req.url, true);
   const { code } = query;
 
+  const baseUri =
+    process.env.NOW_REGION === 'dev1'
+      ? 'http://localhost:3000'
+      : 'https://mdxcms.com';
+
   const params = {
     client_id: process.env.NOW_INTEGRATION_ID,
     client_secret: process.env.NOW_INTEGRATION_SECRET,
     code,
-    redirect_uri: 'http://localhost:3000/oauth',
+    redirect_uri: `${baseUri}/oauth`,
   };
 
   const searchParams = Object.keys(params)

@@ -1080,8 +1080,9 @@ if (true) {
 function create(initialState, _ref) {
   var getToken = _ref.getToken,
       fetchOptions = _ref.fetchOptions;
+  var baseUri = process.env.NOW_REGION === 'dev1' ? 'http://localhost:3000' : 'https://mdxcms.com';
   var httpLink = Object(apollo_link_http__WEBPACK_IMPORTED_MODULE_2__["createHttpLink"])({
-    uri: 'http://localhost:3000/api/graphql',
+    uri: "".concat(baseUri, "/api/graphql"),
     credentials: 'same-origin',
     fetchOptions: fetchOptions
   });
