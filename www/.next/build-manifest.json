@@ -11,10 +11,6 @@
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ],
-    "/docs": [
-      "static/runtime/webpack.js",
-      "static/runtime/main.js"
-    ],
     "/editor": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
