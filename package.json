@@ -4,7 +4,8 @@
     "api",
     "www",
     "packages/*",
-    "examples/*"
+    "examples/*",
+    "now-integration"
   ],
   "scripts": {
     "prisma:deploy": "cd ./api; prisma deploy -e ../.env"

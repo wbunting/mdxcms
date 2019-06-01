@@ -22,6 +22,10 @@
     {
       "src": "integration-static/**/*",
       "use": "@now/static"
+    },
+    {
+      "src": "now-integration/src/index.ts",
+      "use": "@now/node"
     }
   ],
   "routes": [
@@ -44,6 +48,10 @@
     {
       "src": "/integration-static/(.*)",
       "dest": "/integration-static/$1"
+    },
+    {
+      "src": "/now-integration",
+      "dest": "/now-integration/src/index.ts"
     },
     {
       "src": "/(.*)",

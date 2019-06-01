@@ -25,6 +25,15 @@ const getZeitUser = async (access_token, res) => {
   }
 };
 
+const encodeParams = jsonParams =>
+  Object.keys(jsonParams)
+    .map(key => {
+      return (
+        encodeURIComponent(key) + '=' + encodeURIComponent(jsonParams[key])
+      );
+    })
+    .join('&');
+
 module.exports = async (req, res) => {
   const { query } = parse(req.url, true);
   const { code } = query;
@@ -41,18 +50,12 @@ module.exports = async (req, res) => {
     redirect_uri: `${baseUri}/oauth`,
   };
 
-  const searchParams = Object.keys(params)
-    .map(key => {
-      return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
-    })
-    .join('&');
-
   const response = await fetch(`${ZEIT_API}/v2/oauth/access_token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: searchParams,
+    body: encodeParams(params),
   });
   const data = await response.json();
   const { access_token } = data;
@@ -89,7 +92,25 @@ module.exports = async (req, res) => {
       zeitToken: access_token,
     });
 
+    const defaultProjectName = 'my-first-mdxcms';
+
+    // spin up a ziet project with the files
+    const projectResponse = await fetch(
+      `${ZEIT_API}/v1/projects/ensure-project`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: defaultProjectName }),
+      }
+    );
+    const projectData = await projectResponse.json();
+
     const defaultRepo = await prisma.createContentRepository({
+      zeitProjectName: projectData.name,
+      zeitProjectId: projectData.id,
       author: {
         connect: {
           id: user.id,
@@ -97,9 +118,27 @@ module.exports = async (req, res) => {
       },
     });
 
+    const initialFile = {
+      file: 'hello-world.mdx',
+      data: '# Welcome to MDXMCS!',
+    };
+
+    const deploymentResponse = await fetch(`${ZEIT_API}/v9/now/deployments`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: defaultProjectName,
+        version: 2,
+        files: [initialFile],
+      }),
+    });
+
     await prisma.createFile({
-      name: 'hello-world.mdx',
-      content: '# Welcome to MDXMCS!',
+      name: initialFile.file,
+      content: initialFile.data,
       author: {
         connect: {
           id: user.id,

@@ -1,6 +1,7 @@
 import React from 'react';
 import githubPages from '../backends/githubPages';
 import mdxcms from '../backends/mdxcms';
+import zeit from '../backends/zeit';
 import useCMSReload from '../react/useCMSReload';
 
 const getFetcher = backend => {
@@ -9,6 +10,8 @@ const getFetcher = backend => {
       return githubPages;
     case 'mdxcms':
       return mdxcms;
+    case 'zeit':
+      return zeit;
     default:
       throw new Error(`unrecognized backend: ${backend}`);
   }
