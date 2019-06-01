@@ -12,7 +12,7 @@ import Navbar from '../components/Navbar';
 import Header from '../components/Header';
 import Page from '../components/Page';
 
-import GitHubLogo from '../components/Icons/Github';
+import ZeitLogo from '../components/Icons/Zeit';
 import Email from '../components/Icons/Email';
 import Lock from '../components/Icons/Lock';
 
@@ -143,10 +143,18 @@ const EmailRegisterBox = withApollo(({ client }) => {
 const Signup = () => {
   const [method, setMethod] = React.useState(null);
 
+  const redirectToZeit = () => {
+    const url = `https://zeit.co/oauth/authorize?client_id=oac_Z0iR2lPBkdPRNpFr7Q6gERIi`;
+
+    window.location.href = url;
+
+    setMethod('zeit');
+  };
+
   const renderButtons = () => {
     if (method === 'email') {
       return <EmailRegisterBox />;
-    } else if (method === 'github') {
+    } else if (method === 'zeit') {
     } else if (!method) {
       return (
         <>
@@ -155,11 +163,11 @@ const Signup = () => {
               width={250}
               bg="black"
               color="white"
-              onClick={() => setMethod('github')}
+              onClick={() => redirectToZeit()}
             >
               <Flex justifyContent="center" alignItems="center">
-                <GitHubLogo invert />
-                <Box px={2}>Sign up with Github</Box>
+                <ZeitLogo invert />
+                <Box px={2}>Sign up with Zeit</Box>
               </Flex>
             </Button>
           </Box>

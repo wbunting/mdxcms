@@ -13,6 +13,7 @@ import Header from '../components/Header';
 import Page from '../components/Page';
 
 import GitHubLogo from '../components/Icons/Github';
+import ZeitLogo from '../components/Icons/Zeit';
 import Email from '../components/Icons/Email';
 import Lock from '../components/Icons/Lock';
 
@@ -167,10 +168,16 @@ const LoginBox = withApollo(({ client }) => {
 const Login = () => {
   const [method, setMethod] = React.useState(null);
 
+  const redirectToZeit = () => {
+    const url = `https://zeit.co/oauth/authorize?client_id=oac_Z0iR2lPBkdPRNpFr7Q6gERIi`;
+
+    window.location.href = url;
+  };
+
   const renderButtons = () => {
     if (method === 'email') {
       return <LoginBox />;
-    } else if (method === 'github') {
+    } else if (method === 'zeit') {
     } else if (!method) {
       return (
         <>
@@ -179,11 +186,11 @@ const Login = () => {
               width={250}
               bg="black"
               color="white"
-              onClick={() => setMethod('github')}
+              onClick={() => redirectToZeit()}
             >
               <Flex justifyContent="center" alignItems="center">
-                <GitHubLogo invert />
-                <Box px={2}>Sign in with Github</Box>
+                <ZeitLogo invert />
+                <Box px={2}>Sign in with Zeit</Box>
               </Flex>
             </Button>
           </Box>
@@ -233,8 +240,6 @@ const Login = () => {
 // if you are already logged in then redirect to editor
 Login.getInitialProps = async context => {
   const { loggedInUser } = await checkLoggedIn(context.apolloClient);
-
-  console.log(loggedInUser);
 
   if (loggedInUser.me) {
     // Already signed in? No need to continue.

@@ -1,0 +1,9 @@
+{
+  "name": "now-integration",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@zeit/integration-utils": "latest"
+  }
+}

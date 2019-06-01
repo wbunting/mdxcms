@@ -18,6 +18,10 @@
     {
       "src": "assets/**/*",
       "use": "@now/static"
+    },
+    {
+      "src": "integration-static/**/*",
+      "use": "@now/static"
     }
   ],
   "routes": [
@@ -30,8 +34,12 @@
       "dest": "/api/rest/users/index.js"
     },
     {
-      "src": "/api/user/new",
-      "dest": "/api/rest/user/new.js"
+      "src": "/api/user/new-from-zeit",
+      "dest": "/api/rest/user/new-from-zeit.js"
+    },
+    {
+      "src": "/api/oauth",
+      "dest": "/api/rest/oauth/index.js"
     },
     {
       "src": "/api/file/(.*)",
@@ -46,11 +54,17 @@
       "dest": "/assets/$1"
     },
     {
+      "src": "/integration-static/(.*)",
+      "dest": "/integration-static/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/www/$1"
     }
   ],
   "env": {
-    "JWT_SECRET": "@jwt-token"
+    "JWT_SECRET": "@jwt-token",
+    "NOW_INTEGRATION_SECRET": "@now-intergration-secret",
+    "NOW_INTEGRATION_ID": "@now-intergration-id"
   }
 }

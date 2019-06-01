@@ -5,5 +5,8 @@
     "www",
     "packages/*",
     "examples/*"
-  ]
+  ],
+  "scripts": {
+    "prisma:deploy": "cd ./api; prisma deploy -e ../.env"
+  }
 }
