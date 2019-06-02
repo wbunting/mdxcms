@@ -5,25 +5,7 @@ const { parse } = require('url');
 const { hash } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const ZEIT_API = 'https://api.zeit.co';
-
-const getZeitUser = async (access_token, res) => {
-  try {
-    const userResponse = await fetch(`${ZEIT_API}/www/user`, {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-    });
-    const { user } = await userResponse.json();
-    if (!user) {
-      throw new Error('failed to get user from Zeit');
-    }
-    return user;
-  } catch (e) {
-    console.log(e);
-    res.end(e);
-  }
-};
+const { ZEIT_API, getZeitUser } = require('../../lib/util');
 
 const encodeParams = jsonParams =>
   Object.keys(jsonParams)
@@ -34,14 +16,11 @@ const encodeParams = jsonParams =>
     })
     .join('&');
 
-module.exports = async (req, res) => {
-  const { query } = parse(req.url, true);
-  const { code } = query;
-
-  const baseUri =
-    process.env.NOW_REGION === 'dev1'
-      ? 'http://localhost:3000'
-      : 'https://mdxcms.com';
+const getZeitToken = async code => {
+  const baseUri = 'http://localhost:3000';
+  // process.env.NOW_REGION === 'dev1'
+  //   ? 'http://localhost:3000'
+  //   : 'https://mdxcms.com';
 
   const params = {
     client_id: process.env.NOW_INTEGRATION_ID,
@@ -59,17 +38,22 @@ module.exports = async (req, res) => {
   });
   const data = await response.json();
   const { access_token } = data;
-  const zeitUser = await getZeitUser(access_token, res);
-  const { email } = zeitUser;
+  return access_token;
+};
 
-  console.log('zeit user email', email);
+module.exports = async (req, res) => {
+  const { query } = parse(req.url, true);
+  const { code } = query;
+
+  const zeitToken = await getZeitToken(code);
+  const zeitUser = await getZeitUser(zeitToken, res);
+  const { email } = zeitUser;
 
   // see if user exists
   const userWithThisEmail = await prisma.user({
     email,
   });
 
-  console.log('our user with that email', userWithThisEmail);
   if (userWithThisEmail) {
     res.end(
       JSON.stringify({
@@ -87,68 +71,8 @@ module.exports = async (req, res) => {
 
     const user = await prisma.createUser({
       email,
-      password: hashedPassword,
-      zeitLinked: true,
-      zeitToken: access_token,
-    });
-
-    const defaultProjectName = 'my-first-mdxcms';
-
-    // spin up a ziet project with the files
-    const projectResponse = await fetch(
-      `${ZEIT_API}/v1/projects/ensure-project`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name: defaultProjectName }),
-      }
-    );
-    const projectData = await projectResponse.json();
-
-    const defaultRepo = await prisma.createContentRepository({
-      zeitProjectName: projectData.name,
-      zeitProjectId: projectData.id,
-      author: {
-        connect: {
-          id: user.id,
-        },
-      },
-    });
-
-    const initialFile = {
-      file: 'hello-world.mdx',
-      data: '# Welcome to MDXMCS!',
-    };
-
-    const deploymentResponse = await fetch(`${ZEIT_API}/v9/now/deployments`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: defaultProjectName,
-        version: 2,
-        files: [initialFile],
-      }),
-    });
-
-    await prisma.createFile({
-      name: initialFile.file,
-      content: initialFile.data,
-      author: {
-        connect: {
-          id: user.id,
-        },
-      },
-      repository: {
-        connect: {
-          id: defaultRepo.id,
-        },
-      },
+      apiToken: hashedPassword,
+      zeitToken,
     });
 
     res.end(

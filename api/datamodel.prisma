@@ -1,10 +1,9 @@
 type User {
   id: ID! @id
   email: String! @unique
-  password: String
-  zeitLinked: Boolean! @default(value: false)
   zeitToken: String
   repositories: [ContentRepository!]!
+  apiToken: String! @unique
 }
 
 type ContentRepository {
@@ -15,6 +14,16 @@ type ContentRepository {
   author: User!
   name: String! @default(value: "hello-mdxcms")
   dependencies: [Dependency!]!
+  zeitProject: ZeitProject @relation(link: INLINE)
+}
+
+type ZeitProject {
+  id: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+  name: String!
+  projectId: String!
+  repository: ContentRepository!
 }
 
 type Dependency {

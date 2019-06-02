@@ -38,8 +38,12 @@
       "dest": "/api/rest/oauth/index.js"
     },
     {
-      "src": "/api/file/(.*)",
-      "dest": "/api/rest/file/index.js?id=$1"
+      "src": "/api/file",
+      "dest": "/api/rest/file/index.js"
+    },
+    {
+      "src": "/api/zeit/projects",
+      "dest": "/api/rest/zeit/projects.js"
     },
     {
       "src": "/assets/(.*)",

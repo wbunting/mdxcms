@@ -8,7 +8,7 @@ import Header from '../components/Header';
 import Page from '../components/Page';
 import Container from '../components/Container';
 
-import withMDXCMS from '@mdxcms/client/lib/integrations/next';
+import withMDXCMS from 'mdxcms/lib/integrations/next';
 
 const Home = ({ mdx }) => {
   return (
@@ -27,7 +27,7 @@ const Home = ({ mdx }) => {
   );
 };
 
-export default withMDXCMS('github')({
+export default withMDXCMS({
   owner: 'wbunting',
   repo: 'mdxcms-content',
 })(withAmp(Home, { hybrid: true }));

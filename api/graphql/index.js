@@ -2,6 +2,8 @@ const { prisma } = require('../generated/prisma-client');
 const { ApolloServer, gql } = require('apollo-server');
 const { hash, compare } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fetch = require('isomorphic-unfetch');
+const ZEIT_API = 'https://api.zeit.co';
 
 const { permissions } = require('./permissions');
 const { getUserId } = require('./utils');
@@ -14,10 +16,9 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    signup(email: String!, password: String!): AuthPayload!
-    login(email: String!, password: String!): AuthPayload!
     createFile(content: String!, name: String!, repositoryId: ID!): File
-    updateFile(fileId: ID!, content: String!): File
+    updateFile(fileId: ID!, content: String!, repositoryName: String!): File
+    createRepo(projectId: ID!, name: String!): ContentRepository
   }
 
   type User {
@@ -26,6 +27,7 @@ const typeDefs = gql`
     repositories: [ContentRepository!]!
     zeitLinked: Boolean!
     zeitToken: String
+    apiToken: String!
   }
 
   type ContentRepository {
@@ -35,6 +37,15 @@ const typeDefs = gql`
     files: [File!]!
     author: User!
     name: String!
+    zeitProject: ZeitProject
+  }
+
+  type ZeitProject {
+    id: ID!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+    name: String!
+    projectId: String!
   }
 
   type File {
@@ -49,11 +60,6 @@ const typeDefs = gql`
     author: User!
     repository: ContentRepository!
     isDirectory: Boolean!
-  }
-
-  type AuthPayload {
-    token: String!
-    user: User!
   }
 `;
 
@@ -84,58 +90,48 @@ const resolvers = {
         },
       });
     },
-    updateFile(root, args, context) {
-      return context.prisma.updateFile({
-        where: { id: args.fileId },
-        data: { content: args.content },
-      });
-    },
-    signup: async (parent, { email, password }, ctx, info) => {
-      const hashedPassword = await hash(password, 10);
-      const user = await ctx.prisma.createUser({
-        email,
-        password: hashedPassword,
-      });
-      const defaultRepo = await ctx.prisma.createContentRepository({
+    createRepo: async (roots, args, context) => {
+      const userId = getUserId(context);
+      const repo = await context.prisma.createContentRepository({
         author: {
           connect: {
-            id: user.id,
+            id: userId,
           },
         },
+        name: args.name,
       });
-      const defaultFile = await ctx.prisma.createFile({
+      await context.prisma.createZeitProject({
+        name: args.name,
+        projectId: args.projectId,
+        repository: {
+          connect: { id: repo.id },
+        },
+      });
+      await context.prisma.createFile({
         name: 'hello-world.mdx',
         content: '# Welcome to MDXMCS!',
         author: {
           connect: {
-            id: user.id,
+            id: userId,
           },
         },
         repository: {
           connect: {
-            id: defaultRepo.id,
+            id: repo.id,
           },
         },
       });
 
-      return {
-        token: jwt.sign({ userId: user.id }, process.env.JWT_SECRET),
-        user,
-      };
+      return repo;
     },
-    login: async (parent, { email, password }, context) => {
-      const user = await context.prisma.user({ email });
-      if (!user) {
-        throw new Error(`No user found for email: ${email}`);
-      }
-      const passwordValid = await compare(password, user.password);
-      if (!passwordValid) {
-        throw new Error('Invalid password');
-      }
-      return {
-        token: jwt.sign({ userId: user.id }, process.env.JWT_SECRET),
-        user,
-      };
+    updateFile: async (root, args, context) => {
+      const userId = getUserId(context);
+      const file = await context.prisma.updateFile({
+        where: { id: args.fileId },
+        data: { content: args.content },
+      });
+
+      return file;
     },
   },
   User: {
@@ -153,6 +149,9 @@ const resolvers = {
     },
     files: ({ id }, args, context) => {
       return context.prisma.contentRepository({ id }).files();
+    },
+    zeitProject: ({ id }, args, context) => {
+      return context.prisma.contentRepository({ id }).zeitProject();
     },
   },
   File: {

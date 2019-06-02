@@ -12,5 +12,8 @@
       "src": "/(.*)",
       "dest": "/$1"
     }
-  ]
+  ],
+  "env": {
+    "MDXCMS_SECRET": "@mdxcms-mdxcms-token"
+  }
 }

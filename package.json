@@ -8,6 +8,7 @@
     "now-integration"
   ],
   "scripts": {
-    "prisma:deploy": "cd ./api; prisma deploy -e ../.env"
+    "prisma:deploy": "cd ./api; prisma deploy -e ../.env",
+    "prisma:generate": "cd ./api; prisma generate -e ../.env"
   }
 }

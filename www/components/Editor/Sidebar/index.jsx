@@ -40,14 +40,18 @@ const Control = ({ repository, handleNewFile, handleNewFolder }) => {
       color="black"
       px={2}
       py={1}
-      justifyContent="flex-end"
+      justifyContent="space-between"
       alignItems="center"
     >
-      <Box px={2}>{repository.name}</Box>
-      <NewFile repositoryId={repository.id} />
       <Box px={2}>
-        <FolderPlus onClick={handleNewFolder} color="white" />
+        <Title>Files</Title>
       </Box>
+      <Flex alignItems="center">
+        <NewFile repositoryId={repository.id} />
+        <Box px={2}>
+          <FolderPlus onClick={handleNewFolder} color="white" />
+        </Box>
+      </Flex>
     </Flex>
   );
 };
@@ -58,7 +62,14 @@ const FileLineContainer = styled.div`
   }
 `;
 
-const FileLine = ({ fileName, depth, active, fileId, setActiveFile }) => {
+const FileLine = ({
+  fileName,
+  depth,
+  active,
+  fileId,
+  setActiveFile,
+  activeFileUnsavedChanges,
+}) => {
   return (
     <FileLineContainer>
       <Flex
@@ -75,7 +86,9 @@ const FileLine = ({ fileName, depth, active, fileId, setActiveFile }) => {
         </Box>
         <Box px={depth} />
         <Box>
-          <Text fontSize={1}>{fileName}</Text>
+          <Text fontSize={1}>{`${fileName}${
+            activeFileUnsavedChanges ? '*' : ''
+          }`}</Text>
         </Box>
       </Flex>
     </FileLineContainer>
@@ -105,7 +118,12 @@ const Title = styled.span`
   color: black;
 `;
 
-const Files = ({ repository, activeFile, setActiveFile }) => (
+const Files = ({
+  repository,
+  activeFile,
+  setActiveFile,
+  activeFileUnsavedChanges,
+}) => (
   <>
     <Control repository={repository} />
     {repository.files.map(f => (
@@ -115,27 +133,32 @@ const Files = ({ repository, activeFile, setActiveFile }) => (
         fileId={f.id}
         depth={0}
         active={f.id === activeFile}
+        activeFileUnsavedChanges={activeFileUnsavedChanges}
       />
     ))}
   </>
 );
 
-const Sidebar = ({ repository, activeFile, setActiveFile }) => (
+const RepositoryPicker = () => <Box>Repo</Box>;
+
+const Sidebar = ({
+  repository,
+  activeFile,
+  setActiveFile,
+  activeFileUnsavedChanges,
+}) => (
   <Container>
     <Item>
-      <Title>Files</Title>
+      <RepositoryPicker />
     </Item>
     <Item>
       <Files
         repository={repository}
         activeFile={activeFile}
         setActiveFile={setActiveFile}
+        activeFileUnsavedChanges={activeFileUnsavedChanges}
       />
     </Item>
-    <Item>
-      <Title>Dependencies</Title>
-    </Item>
-    <Item />
   </Container>
 );
 

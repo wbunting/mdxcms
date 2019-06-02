@@ -1,7 +1,5 @@
 import { Box, Flex, Button } from 'rebass';
 import styled from 'styled-components';
-import gql from 'graphql-tag';
-import { useMutation } from 'react-apollo-hooks';
 
 import RawEditor from './RawEditor';
 import WISYWIGEditor from './WISYWIGEditor';
@@ -10,27 +8,8 @@ const Controls = styled(Flex)({
   height: '48px',
 });
 
-const UPDATE_FILE = gql`
-  mutation UpdateFile($fileId: ID!, $content: String!) {
-    updateFile(fileId: $fileId, content: $content) {
-      id
-    }
-  }
-`;
-const Editor = ({ activeFile }) => {
-  const [code, setCode] = React.useState(activeFile.content);
+const Editor = ({ activeFile, code, setCode, save }) => {
   const [editor, setEditor] = React.useState('raw');
-  React.useEffect(() => {
-    setCode(activeFile.content);
-  }, [activeFile]);
-
-  const createPost = useMutation(UPDATE_FILE, {
-    variables: {
-      fileId: activeFile.id,
-      content: code,
-    },
-  });
-
   const EditorComponent = editor === 'raw' ? RawEditor : WISYWIGEditor;
 
   return (
@@ -66,7 +45,7 @@ const Editor = ({ activeFile }) => {
             bg="white"
             color="black"
             border="1px solid black"
-            onClick={createPost}
+            onClick={save}
           >
             <Flex alignItems="center" justifyContent="center">
               <Box px={2}>Save</Box>

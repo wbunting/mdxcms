@@ -13,6 +13,14 @@ var models = [
     embedded: false
   },
   {
+    name: "ZeitProject",
+    embedded: false
+  },
+  {
+    name: "Dependency",
+    embedded: false
+  },
+  {
     name: "File",
     embedded: false
   }
@@ -20,6 +28,6 @@ var models = [
 exports.Prisma = prisma_lib_1.makePrismaClientClass({
   typeDefs,
   models,
-  endpoint: `https://us1.prisma.sh/will-bunting-3ac39d/mdxcms/dev`
+  endpoint: `${process.env["PRISMA_ENDPOINT"]}`
 });
 exports.prisma = new exports.Prisma();

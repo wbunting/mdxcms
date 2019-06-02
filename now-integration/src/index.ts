@@ -48,8 +48,9 @@ const dashboard = async (viewOptions: ViewOptions) => {
 const projectRequiredView = async () => {
   return htm`
     <Page>
-      <P>A Project is required</P>
-    </Page>
+			<Notice type="message">Please select a project first 🙏</Notice>
+			<ProjectSwitcher />
+		</Page>
   `;
 };
 

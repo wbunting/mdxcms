@@ -7,8 +7,10 @@ export default apolloClient =>
         query {
           me {
             id
+            apiToken
             repositories {
               id
+              name
               files {
                 id
                 content

@@ -15,8 +15,10 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 
 export interface Exists {
   contentRepository: (where?: ContentRepositoryWhereInput) => Promise<boolean>;
+  dependency: (where?: DependencyWhereInput) => Promise<boolean>;
   file: (where?: FileWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
+  zeitProject: (where?: ZeitProjectWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -63,6 +65,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => ContentRepositoryConnectionPromise;
+  dependency: (where: DependencyWhereUniqueInput) => DependencyPromise;
+  dependencies: (
+    args?: {
+      where?: DependencyWhereInput;
+      orderBy?: DependencyOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<Dependency>;
+  dependenciesConnection: (
+    args?: {
+      where?: DependencyWhereInput;
+      orderBy?: DependencyOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => DependencyConnectionPromise;
   file: (where: FileWhereUniqueInput) => FilePromise;
   files: (
     args?: {
@@ -109,6 +134,29 @@ export interface Prisma {
       last?: Int;
     }
   ) => UserConnectionPromise;
+  zeitProject: (where: ZeitProjectWhereUniqueInput) => ZeitProjectPromise;
+  zeitProjects: (
+    args?: {
+      where?: ZeitProjectWhereInput;
+      orderBy?: ZeitProjectOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => FragmentableArray<ZeitProject>;
+  zeitProjectsConnection: (
+    args?: {
+      where?: ZeitProjectWhereInput;
+      orderBy?: ZeitProjectOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => ZeitProjectConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
@@ -124,6 +172,12 @@ export interface Prisma {
       where: ContentRepositoryWhereUniqueInput;
     }
   ) => ContentRepositoryPromise;
+  updateManyContentRepositories: (
+    args: {
+      data: ContentRepositoryUpdateManyMutationInput;
+      where?: ContentRepositoryWhereInput;
+    }
+  ) => BatchPayloadPromise;
   upsertContentRepository: (
     args: {
       where: ContentRepositoryWhereUniqueInput;
@@ -137,6 +191,25 @@ export interface Prisma {
   deleteManyContentRepositories: (
     where?: ContentRepositoryWhereInput
   ) => BatchPayloadPromise;
+  createDependency: (data: DependencyCreateInput) => DependencyPromise;
+  updateDependency: (
+    args: { data: DependencyUpdateInput; where: DependencyWhereUniqueInput }
+  ) => DependencyPromise;
+  updateManyDependencies: (
+    args: {
+      data: DependencyUpdateManyMutationInput;
+      where?: DependencyWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertDependency: (
+    args: {
+      where: DependencyWhereUniqueInput;
+      create: DependencyCreateInput;
+      update: DependencyUpdateInput;
+    }
+  ) => DependencyPromise;
+  deleteDependency: (where: DependencyWhereUniqueInput) => DependencyPromise;
+  deleteManyDependencies: (where?: DependencyWhereInput) => BatchPayloadPromise;
   createFile: (data: FileCreateInput) => FilePromise;
   updateFile: (
     args: { data: FileUpdateInput; where: FileWhereUniqueInput }
@@ -169,6 +242,27 @@ export interface Prisma {
   ) => UserPromise;
   deleteUser: (where: UserWhereUniqueInput) => UserPromise;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
+  createZeitProject: (data: ZeitProjectCreateInput) => ZeitProjectPromise;
+  updateZeitProject: (
+    args: { data: ZeitProjectUpdateInput; where: ZeitProjectWhereUniqueInput }
+  ) => ZeitProjectPromise;
+  updateManyZeitProjects: (
+    args: {
+      data: ZeitProjectUpdateManyMutationInput;
+      where?: ZeitProjectWhereInput;
+    }
+  ) => BatchPayloadPromise;
+  upsertZeitProject: (
+    args: {
+      where: ZeitProjectWhereUniqueInput;
+      create: ZeitProjectCreateInput;
+      update: ZeitProjectUpdateInput;
+    }
+  ) => ZeitProjectPromise;
+  deleteZeitProject: (where: ZeitProjectWhereUniqueInput) => ZeitProjectPromise;
+  deleteManyZeitProjects: (
+    where?: ZeitProjectWhereInput
+  ) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -181,12 +275,18 @@ export interface Subscription {
   contentRepository: (
     where?: ContentRepositorySubscriptionWhereInput
   ) => ContentRepositorySubscriptionPayloadSubscription;
+  dependency: (
+    where?: DependencySubscriptionWhereInput
+  ) => DependencySubscriptionPayloadSubscription;
   file: (
     where?: FileSubscriptionWhereInput
   ) => FileSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
+  zeitProject: (
+    where?: ZeitProjectSubscriptionWhereInput
+  ) => ZeitProjectSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -211,7 +311,9 @@ export type FileOrderByInput =
   | "content_ASC"
   | "content_DESC"
   | "parent_ASC"
-  | "parent_DESC";
+  | "parent_DESC"
+  | "isDirectory_ASC"
+  | "isDirectory_DESC";
 
 export type ContentRepositoryOrderByInput =
   | "id_ASC"
@@ -219,19 +321,47 @@ export type ContentRepositoryOrderByInput =
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
-  | "updatedAt_DESC";
+  | "updatedAt_DESC"
+  | "name_ASC"
+  | "name_DESC";
+
+export type DependencyOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "verison_ASC"
+  | "verison_DESC";
 
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
   | "email_ASC"
   | "email_DESC"
-  | "password_ASC"
-  | "password_DESC"
+  | "zeitToken_ASC"
+  | "zeitToken_DESC"
+  | "apiToken_ASC"
+  | "apiToken_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
   | "updatedAt_DESC";
+
+export type ZeitProjectOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC"
+  | "name_ASC"
+  | "name_DESC"
+  | "projectId_ASC"
+  | "projectId_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
@@ -300,75 +430,27 @@ export interface FileWhereInput {
   content_not_starts_with?: String;
   content_ends_with?: String;
   content_not_ends_with?: String;
-  parent?: ID_Input;
-  parent_not?: ID_Input;
-  parent_in?: ID_Input[] | ID_Input;
-  parent_not_in?: ID_Input[] | ID_Input;
-  parent_lt?: ID_Input;
-  parent_lte?: ID_Input;
-  parent_gt?: ID_Input;
-  parent_gte?: ID_Input;
-  parent_contains?: ID_Input;
-  parent_not_contains?: ID_Input;
-  parent_starts_with?: ID_Input;
-  parent_not_starts_with?: ID_Input;
-  parent_ends_with?: ID_Input;
-  parent_not_ends_with?: ID_Input;
+  parent?: String;
+  parent_not?: String;
+  parent_in?: String[] | String;
+  parent_not_in?: String[] | String;
+  parent_lt?: String;
+  parent_lte?: String;
+  parent_gt?: String;
+  parent_gte?: String;
+  parent_contains?: String;
+  parent_not_contains?: String;
+  parent_starts_with?: String;
+  parent_not_starts_with?: String;
+  parent_ends_with?: String;
+  parent_not_ends_with?: String;
+  repository?: ContentRepositoryWhereInput;
   author?: UserWhereInput;
+  isDirectory?: Boolean;
+  isDirectory_not?: Boolean;
   AND?: FileWhereInput[] | FileWhereInput;
   OR?: FileWhereInput[] | FileWhereInput;
   NOT?: FileWhereInput[] | FileWhereInput;
-}
-
-export interface UserWhereInput {
-  id?: ID_Input;
-  id_not?: ID_Input;
-  id_in?: ID_Input[] | ID_Input;
-  id_not_in?: ID_Input[] | ID_Input;
-  id_lt?: ID_Input;
-  id_lte?: ID_Input;
-  id_gt?: ID_Input;
-  id_gte?: ID_Input;
-  id_contains?: ID_Input;
-  id_not_contains?: ID_Input;
-  id_starts_with?: ID_Input;
-  id_not_starts_with?: ID_Input;
-  id_ends_with?: ID_Input;
-  id_not_ends_with?: ID_Input;
-  email?: String;
-  email_not?: String;
-  email_in?: String[] | String;
-  email_not_in?: String[] | String;
-  email_lt?: String;
-  email_lte?: String;
-  email_gt?: String;
-  email_gte?: String;
-  email_contains?: String;
-  email_not_contains?: String;
-  email_starts_with?: String;
-  email_not_starts_with?: String;
-  email_ends_with?: String;
-  email_not_ends_with?: String;
-  password?: String;
-  password_not?: String;
-  password_in?: String[] | String;
-  password_not_in?: String[] | String;
-  password_lt?: String;
-  password_lte?: String;
-  password_gt?: String;
-  password_gte?: String;
-  password_contains?: String;
-  password_not_contains?: String;
-  password_starts_with?: String;
-  password_not_starts_with?: String;
-  password_ends_with?: String;
-  password_not_ends_with?: String;
-  repositories_every?: ContentRepositoryWhereInput;
-  repositories_some?: ContentRepositoryWhereInput;
-  repositories_none?: ContentRepositoryWhereInput;
-  AND?: UserWhereInput[] | UserWhereInput;
-  OR?: UserWhereInput[] | UserWhereInput;
-  NOT?: UserWhereInput[] | UserWhereInput;
 }
 
 export interface ContentRepositoryWhereInput {
@@ -405,10 +487,227 @@ export interface ContentRepositoryWhereInput {
   files_every?: FileWhereInput;
   files_some?: FileWhereInput;
   files_none?: FileWhereInput;
+  author?: UserWhereInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  dependencies_every?: DependencyWhereInput;
+  dependencies_some?: DependencyWhereInput;
+  dependencies_none?: DependencyWhereInput;
+  zeitProject?: ZeitProjectWhereInput;
   AND?: ContentRepositoryWhereInput[] | ContentRepositoryWhereInput;
   OR?: ContentRepositoryWhereInput[] | ContentRepositoryWhereInput;
   NOT?: ContentRepositoryWhereInput[] | ContentRepositoryWhereInput;
 }
+
+export interface UserWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  email?: String;
+  email_not?: String;
+  email_in?: String[] | String;
+  email_not_in?: String[] | String;
+  email_lt?: String;
+  email_lte?: String;
+  email_gt?: String;
+  email_gte?: String;
+  email_contains?: String;
+  email_not_contains?: String;
+  email_starts_with?: String;
+  email_not_starts_with?: String;
+  email_ends_with?: String;
+  email_not_ends_with?: String;
+  zeitToken?: String;
+  zeitToken_not?: String;
+  zeitToken_in?: String[] | String;
+  zeitToken_not_in?: String[] | String;
+  zeitToken_lt?: String;
+  zeitToken_lte?: String;
+  zeitToken_gt?: String;
+  zeitToken_gte?: String;
+  zeitToken_contains?: String;
+  zeitToken_not_contains?: String;
+  zeitToken_starts_with?: String;
+  zeitToken_not_starts_with?: String;
+  zeitToken_ends_with?: String;
+  zeitToken_not_ends_with?: String;
+  repositories_every?: ContentRepositoryWhereInput;
+  repositories_some?: ContentRepositoryWhereInput;
+  repositories_none?: ContentRepositoryWhereInput;
+  apiToken?: String;
+  apiToken_not?: String;
+  apiToken_in?: String[] | String;
+  apiToken_not_in?: String[] | String;
+  apiToken_lt?: String;
+  apiToken_lte?: String;
+  apiToken_gt?: String;
+  apiToken_gte?: String;
+  apiToken_contains?: String;
+  apiToken_not_contains?: String;
+  apiToken_starts_with?: String;
+  apiToken_not_starts_with?: String;
+  apiToken_ends_with?: String;
+  apiToken_not_ends_with?: String;
+  AND?: UserWhereInput[] | UserWhereInput;
+  OR?: UserWhereInput[] | UserWhereInput;
+  NOT?: UserWhereInput[] | UserWhereInput;
+}
+
+export interface DependencyWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  verison?: String;
+  verison_not?: String;
+  verison_in?: String[] | String;
+  verison_not_in?: String[] | String;
+  verison_lt?: String;
+  verison_lte?: String;
+  verison_gt?: String;
+  verison_gte?: String;
+  verison_contains?: String;
+  verison_not_contains?: String;
+  verison_starts_with?: String;
+  verison_not_starts_with?: String;
+  verison_ends_with?: String;
+  verison_not_ends_with?: String;
+  AND?: DependencyWhereInput[] | DependencyWhereInput;
+  OR?: DependencyWhereInput[] | DependencyWhereInput;
+  NOT?: DependencyWhereInput[] | DependencyWhereInput;
+}
+
+export interface ZeitProjectWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  projectId?: String;
+  projectId_not?: String;
+  projectId_in?: String[] | String;
+  projectId_not_in?: String[] | String;
+  projectId_lt?: String;
+  projectId_lte?: String;
+  projectId_gt?: String;
+  projectId_gte?: String;
+  projectId_contains?: String;
+  projectId_not_contains?: String;
+  projectId_starts_with?: String;
+  projectId_not_starts_with?: String;
+  projectId_ends_with?: String;
+  projectId_not_ends_with?: String;
+  repository?: ContentRepositoryWhereInput;
+  AND?: ZeitProjectWhereInput[] | ZeitProjectWhereInput;
+  OR?: ZeitProjectWhereInput[] | ZeitProjectWhereInput;
+  NOT?: ZeitProjectWhereInput[] | ZeitProjectWhereInput;
+}
+
+export type DependencyWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
+}>;
 
 export type FileWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
@@ -417,28 +716,40 @@ export type FileWhereUniqueInput = AtLeastOne<{
 export type UserWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
   email?: String;
+  apiToken?: String;
+}>;
+
+export type ZeitProjectWhereUniqueInput = AtLeastOne<{
+  id: ID_Input;
 }>;
 
 export interface ContentRepositoryCreateInput {
-  files?: FileCreateManyInput;
+  files?: FileCreateManyWithoutRepositoryInput;
+  author: UserCreateOneWithoutRepositoriesInput;
+  name?: String;
+  dependencies?: DependencyCreateManyInput;
+  zeitProject?: ZeitProjectCreateOneWithoutRepositoryInput;
 }
 
-export interface FileCreateManyInput {
-  create?: FileCreateInput[] | FileCreateInput;
+export interface FileCreateManyWithoutRepositoryInput {
+  create?:
+    | FileCreateWithoutRepositoryInput[]
+    | FileCreateWithoutRepositoryInput;
   connect?: FileWhereUniqueInput[] | FileWhereUniqueInput;
 }
 
-export interface FileCreateInput {
+export interface FileCreateWithoutRepositoryInput {
   published?: Boolean;
   name: String;
   content: String;
-  parent: ID_Input;
+  parent?: String;
   children?: FileCreatechildrenInput;
   author: UserCreateOneInput;
+  isDirectory?: Boolean;
 }
 
 export interface FileCreatechildrenInput {
-  set?: ID_Input[] | ID_Input;
+  set?: String[] | String;
 }
 
 export interface UserCreateOneInput {
@@ -448,55 +759,103 @@ export interface UserCreateOneInput {
 
 export interface UserCreateInput {
   email: String;
-  password: String;
-  repositories?: ContentRepositoryCreateManyInput;
+  zeitToken?: String;
+  repositories?: ContentRepositoryCreateManyWithoutAuthorInput;
+  apiToken: String;
 }
 
-export interface ContentRepositoryCreateManyInput {
-  create?: ContentRepositoryCreateInput[] | ContentRepositoryCreateInput;
+export interface ContentRepositoryCreateManyWithoutAuthorInput {
+  create?:
+    | ContentRepositoryCreateWithoutAuthorInput[]
+    | ContentRepositoryCreateWithoutAuthorInput;
   connect?:
     | ContentRepositoryWhereUniqueInput[]
     | ContentRepositoryWhereUniqueInput;
 }
 
-export interface ContentRepositoryUpdateInput {
-  files?: FileUpdateManyInput;
+export interface ContentRepositoryCreateWithoutAuthorInput {
+  files?: FileCreateManyWithoutRepositoryInput;
+  name?: String;
+  dependencies?: DependencyCreateManyInput;
+  zeitProject?: ZeitProjectCreateOneWithoutRepositoryInput;
 }
 
-export interface FileUpdateManyInput {
-  create?: FileCreateInput[] | FileCreateInput;
-  update?:
-    | FileUpdateWithWhereUniqueNestedInput[]
-    | FileUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | FileUpsertWithWhereUniqueNestedInput[]
-    | FileUpsertWithWhereUniqueNestedInput;
+export interface DependencyCreateManyInput {
+  create?: DependencyCreateInput[] | DependencyCreateInput;
+  connect?: DependencyWhereUniqueInput[] | DependencyWhereUniqueInput;
+}
+
+export interface DependencyCreateInput {
+  name: String;
+  verison: String;
+}
+
+export interface ZeitProjectCreateOneWithoutRepositoryInput {
+  create?: ZeitProjectCreateWithoutRepositoryInput;
+  connect?: ZeitProjectWhereUniqueInput;
+}
+
+export interface ZeitProjectCreateWithoutRepositoryInput {
+  name: String;
+  projectId: String;
+}
+
+export interface UserCreateOneWithoutRepositoriesInput {
+  create?: UserCreateWithoutRepositoriesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserCreateWithoutRepositoriesInput {
+  email: String;
+  zeitToken?: String;
+  apiToken: String;
+}
+
+export interface ContentRepositoryUpdateInput {
+  files?: FileUpdateManyWithoutRepositoryInput;
+  author?: UserUpdateOneRequiredWithoutRepositoriesInput;
+  name?: String;
+  dependencies?: DependencyUpdateManyInput;
+  zeitProject?: ZeitProjectUpdateOneWithoutRepositoryInput;
+}
+
+export interface FileUpdateManyWithoutRepositoryInput {
+  create?:
+    | FileCreateWithoutRepositoryInput[]
+    | FileCreateWithoutRepositoryInput;
   delete?: FileWhereUniqueInput[] | FileWhereUniqueInput;
   connect?: FileWhereUniqueInput[] | FileWhereUniqueInput;
   set?: FileWhereUniqueInput[] | FileWhereUniqueInput;
   disconnect?: FileWhereUniqueInput[] | FileWhereUniqueInput;
+  update?:
+    | FileUpdateWithWhereUniqueWithoutRepositoryInput[]
+    | FileUpdateWithWhereUniqueWithoutRepositoryInput;
+  upsert?:
+    | FileUpsertWithWhereUniqueWithoutRepositoryInput[]
+    | FileUpsertWithWhereUniqueWithoutRepositoryInput;
   deleteMany?: FileScalarWhereInput[] | FileScalarWhereInput;
   updateMany?:
     | FileUpdateManyWithWhereNestedInput[]
     | FileUpdateManyWithWhereNestedInput;
 }
 
-export interface FileUpdateWithWhereUniqueNestedInput {
+export interface FileUpdateWithWhereUniqueWithoutRepositoryInput {
   where: FileWhereUniqueInput;
-  data: FileUpdateDataInput;
+  data: FileUpdateWithoutRepositoryDataInput;
 }
 
-export interface FileUpdateDataInput {
+export interface FileUpdateWithoutRepositoryDataInput {
   published?: Boolean;
   name?: String;
   content?: String;
-  parent?: ID_Input;
+  parent?: String;
   children?: FileUpdatechildrenInput;
   author?: UserUpdateOneRequiredInput;
+  isDirectory?: Boolean;
 }
 
 export interface FileUpdatechildrenInput {
-  set?: ID_Input[] | ID_Input;
+  set?: String[] | String;
 }
 
 export interface UserUpdateOneRequiredInput {
@@ -508,18 +867,15 @@ export interface UserUpdateOneRequiredInput {
 
 export interface UserUpdateDataInput {
   email?: String;
-  password?: String;
-  repositories?: ContentRepositoryUpdateManyInput;
+  zeitToken?: String;
+  repositories?: ContentRepositoryUpdateManyWithoutAuthorInput;
+  apiToken?: String;
 }
 
-export interface ContentRepositoryUpdateManyInput {
-  create?: ContentRepositoryCreateInput[] | ContentRepositoryCreateInput;
-  update?:
-    | ContentRepositoryUpdateWithWhereUniqueNestedInput[]
-    | ContentRepositoryUpdateWithWhereUniqueNestedInput;
-  upsert?:
-    | ContentRepositoryUpsertWithWhereUniqueNestedInput[]
-    | ContentRepositoryUpsertWithWhereUniqueNestedInput;
+export interface ContentRepositoryUpdateManyWithoutAuthorInput {
+  create?:
+    | ContentRepositoryCreateWithoutAuthorInput[]
+    | ContentRepositoryCreateWithoutAuthorInput;
   delete?:
     | ContentRepositoryWhereUniqueInput[]
     | ContentRepositoryWhereUniqueInput;
@@ -530,24 +886,163 @@ export interface ContentRepositoryUpdateManyInput {
   disconnect?:
     | ContentRepositoryWhereUniqueInput[]
     | ContentRepositoryWhereUniqueInput;
+  update?:
+    | ContentRepositoryUpdateWithWhereUniqueWithoutAuthorInput[]
+    | ContentRepositoryUpdateWithWhereUniqueWithoutAuthorInput;
+  upsert?:
+    | ContentRepositoryUpsertWithWhereUniqueWithoutAuthorInput[]
+    | ContentRepositoryUpsertWithWhereUniqueWithoutAuthorInput;
   deleteMany?:
     | ContentRepositoryScalarWhereInput[]
     | ContentRepositoryScalarWhereInput;
+  updateMany?:
+    | ContentRepositoryUpdateManyWithWhereNestedInput[]
+    | ContentRepositoryUpdateManyWithWhereNestedInput;
 }
 
-export interface ContentRepositoryUpdateWithWhereUniqueNestedInput {
+export interface ContentRepositoryUpdateWithWhereUniqueWithoutAuthorInput {
   where: ContentRepositoryWhereUniqueInput;
-  data: ContentRepositoryUpdateDataInput;
+  data: ContentRepositoryUpdateWithoutAuthorDataInput;
 }
 
-export interface ContentRepositoryUpdateDataInput {
-  files?: FileUpdateManyInput;
+export interface ContentRepositoryUpdateWithoutAuthorDataInput {
+  files?: FileUpdateManyWithoutRepositoryInput;
+  name?: String;
+  dependencies?: DependencyUpdateManyInput;
+  zeitProject?: ZeitProjectUpdateOneWithoutRepositoryInput;
 }
 
-export interface ContentRepositoryUpsertWithWhereUniqueNestedInput {
+export interface DependencyUpdateManyInput {
+  create?: DependencyCreateInput[] | DependencyCreateInput;
+  update?:
+    | DependencyUpdateWithWhereUniqueNestedInput[]
+    | DependencyUpdateWithWhereUniqueNestedInput;
+  upsert?:
+    | DependencyUpsertWithWhereUniqueNestedInput[]
+    | DependencyUpsertWithWhereUniqueNestedInput;
+  delete?: DependencyWhereUniqueInput[] | DependencyWhereUniqueInput;
+  connect?: DependencyWhereUniqueInput[] | DependencyWhereUniqueInput;
+  set?: DependencyWhereUniqueInput[] | DependencyWhereUniqueInput;
+  disconnect?: DependencyWhereUniqueInput[] | DependencyWhereUniqueInput;
+  deleteMany?: DependencyScalarWhereInput[] | DependencyScalarWhereInput;
+  updateMany?:
+    | DependencyUpdateManyWithWhereNestedInput[]
+    | DependencyUpdateManyWithWhereNestedInput;
+}
+
+export interface DependencyUpdateWithWhereUniqueNestedInput {
+  where: DependencyWhereUniqueInput;
+  data: DependencyUpdateDataInput;
+}
+
+export interface DependencyUpdateDataInput {
+  name?: String;
+  verison?: String;
+}
+
+export interface DependencyUpsertWithWhereUniqueNestedInput {
+  where: DependencyWhereUniqueInput;
+  update: DependencyUpdateDataInput;
+  create: DependencyCreateInput;
+}
+
+export interface DependencyScalarWhereInput {
+  id?: ID_Input;
+  id_not?: ID_Input;
+  id_in?: ID_Input[] | ID_Input;
+  id_not_in?: ID_Input[] | ID_Input;
+  id_lt?: ID_Input;
+  id_lte?: ID_Input;
+  id_gt?: ID_Input;
+  id_gte?: ID_Input;
+  id_contains?: ID_Input;
+  id_not_contains?: ID_Input;
+  id_starts_with?: ID_Input;
+  id_not_starts_with?: ID_Input;
+  id_ends_with?: ID_Input;
+  id_not_ends_with?: ID_Input;
+  createdAt?: DateTimeInput;
+  createdAt_not?: DateTimeInput;
+  createdAt_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_not_in?: DateTimeInput[] | DateTimeInput;
+  createdAt_lt?: DateTimeInput;
+  createdAt_lte?: DateTimeInput;
+  createdAt_gt?: DateTimeInput;
+  createdAt_gte?: DateTimeInput;
+  updatedAt?: DateTimeInput;
+  updatedAt_not?: DateTimeInput;
+  updatedAt_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_not_in?: DateTimeInput[] | DateTimeInput;
+  updatedAt_lt?: DateTimeInput;
+  updatedAt_lte?: DateTimeInput;
+  updatedAt_gt?: DateTimeInput;
+  updatedAt_gte?: DateTimeInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
+  verison?: String;
+  verison_not?: String;
+  verison_in?: String[] | String;
+  verison_not_in?: String[] | String;
+  verison_lt?: String;
+  verison_lte?: String;
+  verison_gt?: String;
+  verison_gte?: String;
+  verison_contains?: String;
+  verison_not_contains?: String;
+  verison_starts_with?: String;
+  verison_not_starts_with?: String;
+  verison_ends_with?: String;
+  verison_not_ends_with?: String;
+  AND?: DependencyScalarWhereInput[] | DependencyScalarWhereInput;
+  OR?: DependencyScalarWhereInput[] | DependencyScalarWhereInput;
+  NOT?: DependencyScalarWhereInput[] | DependencyScalarWhereInput;
+}
+
+export interface DependencyUpdateManyWithWhereNestedInput {
+  where: DependencyScalarWhereInput;
+  data: DependencyUpdateManyDataInput;
+}
+
+export interface DependencyUpdateManyDataInput {
+  name?: String;
+  verison?: String;
+}
+
+export interface ZeitProjectUpdateOneWithoutRepositoryInput {
+  create?: ZeitProjectCreateWithoutRepositoryInput;
+  update?: ZeitProjectUpdateWithoutRepositoryDataInput;
+  upsert?: ZeitProjectUpsertWithoutRepositoryInput;
+  delete?: Boolean;
+  disconnect?: Boolean;
+  connect?: ZeitProjectWhereUniqueInput;
+}
+
+export interface ZeitProjectUpdateWithoutRepositoryDataInput {
+  name?: String;
+  projectId?: String;
+}
+
+export interface ZeitProjectUpsertWithoutRepositoryInput {
+  update: ZeitProjectUpdateWithoutRepositoryDataInput;
+  create: ZeitProjectCreateWithoutRepositoryInput;
+}
+
+export interface ContentRepositoryUpsertWithWhereUniqueWithoutAuthorInput {
   where: ContentRepositoryWhereUniqueInput;
-  update: ContentRepositoryUpdateDataInput;
-  create: ContentRepositoryCreateInput;
+  update: ContentRepositoryUpdateWithoutAuthorDataInput;
+  create: ContentRepositoryCreateWithoutAuthorInput;
 }
 
 export interface ContentRepositoryScalarWhereInput {
@@ -581,9 +1076,32 @@ export interface ContentRepositoryScalarWhereInput {
   updatedAt_lte?: DateTimeInput;
   updatedAt_gt?: DateTimeInput;
   updatedAt_gte?: DateTimeInput;
+  name?: String;
+  name_not?: String;
+  name_in?: String[] | String;
+  name_not_in?: String[] | String;
+  name_lt?: String;
+  name_lte?: String;
+  name_gt?: String;
+  name_gte?: String;
+  name_contains?: String;
+  name_not_contains?: String;
+  name_starts_with?: String;
+  name_not_starts_with?: String;
+  name_ends_with?: String;
+  name_not_ends_with?: String;
   AND?: ContentRepositoryScalarWhereInput[] | ContentRepositoryScalarWhereInput;
   OR?: ContentRepositoryScalarWhereInput[] | ContentRepositoryScalarWhereInput;
   NOT?: ContentRepositoryScalarWhereInput[] | ContentRepositoryScalarWhereInput;
+}
+
+export interface ContentRepositoryUpdateManyWithWhereNestedInput {
+  where: ContentRepositoryScalarWhereInput;
+  data: ContentRepositoryUpdateManyDataInput;
+}
+
+export interface ContentRepositoryUpdateManyDataInput {
+  name?: String;
 }
 
 export interface UserUpsertNestedInput {
@@ -591,10 +1109,10 @@ export interface UserUpsertNestedInput {
   create: UserCreateInput;
 }
 
-export interface FileUpsertWithWhereUniqueNestedInput {
+export interface FileUpsertWithWhereUniqueWithoutRepositoryInput {
   where: FileWhereUniqueInput;
-  update: FileUpdateDataInput;
-  create: FileCreateInput;
+  update: FileUpdateWithoutRepositoryDataInput;
+  create: FileCreateWithoutRepositoryInput;
 }
 
 export interface FileScalarWhereInput {
@@ -658,20 +1176,22 @@ export interface FileScalarWhereInput {
   content_not_starts_with?: String;
   content_ends_with?: String;
   content_not_ends_with?: String;
-  parent?: ID_Input;
-  parent_not?: ID_Input;
-  parent_in?: ID_Input[] | ID_Input;
-  parent_not_in?: ID_Input[] | ID_Input;
-  parent_lt?: ID_Input;
-  parent_lte?: ID_Input;
-  parent_gt?: ID_Input;
-  parent_gte?: ID_Input;
-  parent_contains?: ID_Input;
-  parent_not_contains?: ID_Input;
-  parent_starts_with?: ID_Input;
-  parent_not_starts_with?: ID_Input;
-  parent_ends_with?: ID_Input;
-  parent_not_ends_with?: ID_Input;
+  parent?: String;
+  parent_not?: String;
+  parent_in?: String[] | String;
+  parent_not_in?: String[] | String;
+  parent_lt?: String;
+  parent_lte?: String;
+  parent_gt?: String;
+  parent_gte?: String;
+  parent_contains?: String;
+  parent_not_contains?: String;
+  parent_starts_with?: String;
+  parent_not_starts_with?: String;
+  parent_ends_with?: String;
+  parent_not_ends_with?: String;
+  isDirectory?: Boolean;
+  isDirectory_not?: Boolean;
   AND?: FileScalarWhereInput[] | FileScalarWhereInput;
   OR?: FileScalarWhereInput[] | FileScalarWhereInput;
   NOT?: FileScalarWhereInput[] | FileScalarWhereInput;
@@ -686,36 +1206,164 @@ export interface FileUpdateManyDataInput {
   published?: Boolean;
   name?: String;
   content?: String;
-  parent?: ID_Input;
+  parent?: String;
   children?: FileUpdatechildrenInput;
+  isDirectory?: Boolean;
+}
+
+export interface UserUpdateOneRequiredWithoutRepositoriesInput {
+  create?: UserCreateWithoutRepositoriesInput;
+  update?: UserUpdateWithoutRepositoriesDataInput;
+  upsert?: UserUpsertWithoutRepositoriesInput;
+  connect?: UserWhereUniqueInput;
+}
+
+export interface UserUpdateWithoutRepositoriesDataInput {
+  email?: String;
+  zeitToken?: String;
+  apiToken?: String;
+}
+
+export interface UserUpsertWithoutRepositoriesInput {
+  update: UserUpdateWithoutRepositoriesDataInput;
+  create: UserCreateWithoutRepositoriesInput;
+}
+
+export interface ContentRepositoryUpdateManyMutationInput {
+  name?: String;
+}
+
+export interface DependencyUpdateInput {
+  name?: String;
+  verison?: String;
+}
+
+export interface DependencyUpdateManyMutationInput {
+  name?: String;
+  verison?: String;
+}
+
+export interface FileCreateInput {
+  published?: Boolean;
+  name: String;
+  content: String;
+  parent?: String;
+  children?: FileCreatechildrenInput;
+  repository: ContentRepositoryCreateOneWithoutFilesInput;
+  author: UserCreateOneInput;
+  isDirectory?: Boolean;
+}
+
+export interface ContentRepositoryCreateOneWithoutFilesInput {
+  create?: ContentRepositoryCreateWithoutFilesInput;
+  connect?: ContentRepositoryWhereUniqueInput;
+}
+
+export interface ContentRepositoryCreateWithoutFilesInput {
+  author: UserCreateOneWithoutRepositoriesInput;
+  name?: String;
+  dependencies?: DependencyCreateManyInput;
+  zeitProject?: ZeitProjectCreateOneWithoutRepositoryInput;
 }
 
 export interface FileUpdateInput {
   published?: Boolean;
   name?: String;
   content?: String;
-  parent?: ID_Input;
+  parent?: String;
   children?: FileUpdatechildrenInput;
+  repository?: ContentRepositoryUpdateOneRequiredWithoutFilesInput;
   author?: UserUpdateOneRequiredInput;
+  isDirectory?: Boolean;
+}
+
+export interface ContentRepositoryUpdateOneRequiredWithoutFilesInput {
+  create?: ContentRepositoryCreateWithoutFilesInput;
+  update?: ContentRepositoryUpdateWithoutFilesDataInput;
+  upsert?: ContentRepositoryUpsertWithoutFilesInput;
+  connect?: ContentRepositoryWhereUniqueInput;
+}
+
+export interface ContentRepositoryUpdateWithoutFilesDataInput {
+  author?: UserUpdateOneRequiredWithoutRepositoriesInput;
+  name?: String;
+  dependencies?: DependencyUpdateManyInput;
+  zeitProject?: ZeitProjectUpdateOneWithoutRepositoryInput;
+}
+
+export interface ContentRepositoryUpsertWithoutFilesInput {
+  update: ContentRepositoryUpdateWithoutFilesDataInput;
+  create: ContentRepositoryCreateWithoutFilesInput;
 }
 
 export interface FileUpdateManyMutationInput {
   published?: Boolean;
   name?: String;
   content?: String;
-  parent?: ID_Input;
+  parent?: String;
   children?: FileUpdatechildrenInput;
+  isDirectory?: Boolean;
 }
 
 export interface UserUpdateInput {
   email?: String;
-  password?: String;
-  repositories?: ContentRepositoryUpdateManyInput;
+  zeitToken?: String;
+  repositories?: ContentRepositoryUpdateManyWithoutAuthorInput;
+  apiToken?: String;
 }
 
 export interface UserUpdateManyMutationInput {
   email?: String;
-  password?: String;
+  zeitToken?: String;
+  apiToken?: String;
+}
+
+export interface ZeitProjectCreateInput {
+  name: String;
+  projectId: String;
+  repository: ContentRepositoryCreateOneWithoutZeitProjectInput;
+}
+
+export interface ContentRepositoryCreateOneWithoutZeitProjectInput {
+  create?: ContentRepositoryCreateWithoutZeitProjectInput;
+  connect?: ContentRepositoryWhereUniqueInput;
+}
+
+export interface ContentRepositoryCreateWithoutZeitProjectInput {
+  files?: FileCreateManyWithoutRepositoryInput;
+  author: UserCreateOneWithoutRepositoriesInput;
+  name?: String;
+  dependencies?: DependencyCreateManyInput;
+}
+
+export interface ZeitProjectUpdateInput {
+  name?: String;
+  projectId?: String;
+  repository?: ContentRepositoryUpdateOneRequiredWithoutZeitProjectInput;
+}
+
+export interface ContentRepositoryUpdateOneRequiredWithoutZeitProjectInput {
+  create?: ContentRepositoryCreateWithoutZeitProjectInput;
+  update?: ContentRepositoryUpdateWithoutZeitProjectDataInput;
+  upsert?: ContentRepositoryUpsertWithoutZeitProjectInput;
+  connect?: ContentRepositoryWhereUniqueInput;
+}
+
+export interface ContentRepositoryUpdateWithoutZeitProjectDataInput {
+  files?: FileUpdateManyWithoutRepositoryInput;
+  author?: UserUpdateOneRequiredWithoutRepositoriesInput;
+  name?: String;
+  dependencies?: DependencyUpdateManyInput;
+}
+
+export interface ContentRepositoryUpsertWithoutZeitProjectInput {
+  update: ContentRepositoryUpdateWithoutZeitProjectDataInput;
+  create: ContentRepositoryCreateWithoutZeitProjectInput;
+}
+
+export interface ZeitProjectUpdateManyMutationInput {
+  name?: String;
+  projectId?: String;
 }
 
 export interface ContentRepositorySubscriptionWhereInput {
@@ -733,6 +1381,17 @@ export interface ContentRepositorySubscriptionWhereInput {
   NOT?:
     | ContentRepositorySubscriptionWhereInput[]
     | ContentRepositorySubscriptionWhereInput;
+}
+
+export interface DependencySubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: DependencyWhereInput;
+  AND?: DependencySubscriptionWhereInput[] | DependencySubscriptionWhereInput;
+  OR?: DependencySubscriptionWhereInput[] | DependencySubscriptionWhereInput;
+  NOT?: DependencySubscriptionWhereInput[] | DependencySubscriptionWhereInput;
 }
 
 export interface FileSubscriptionWhereInput {
@@ -757,6 +1416,17 @@ export interface UserSubscriptionWhereInput {
   NOT?: UserSubscriptionWhereInput[] | UserSubscriptionWhereInput;
 }
 
+export interface ZeitProjectSubscriptionWhereInput {
+  mutation_in?: MutationType[] | MutationType;
+  updatedFields_contains?: String;
+  updatedFields_contains_every?: String[] | String;
+  updatedFields_contains_some?: String[] | String;
+  node?: ZeitProjectWhereInput;
+  AND?: ZeitProjectSubscriptionWhereInput[] | ZeitProjectSubscriptionWhereInput;
+  OR?: ZeitProjectSubscriptionWhereInput[] | ZeitProjectSubscriptionWhereInput;
+  NOT?: ZeitProjectSubscriptionWhereInput[] | ZeitProjectSubscriptionWhereInput;
+}
+
 export interface NodeNode {
   id: ID_Output;
 }
@@ -765,6 +1435,7 @@ export interface ContentRepository {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  name: String;
 }
 
 export interface ContentRepositoryPromise
@@ -784,6 +1455,20 @@ export interface ContentRepositoryPromise
       last?: Int;
     }
   ) => T;
+  author: <T = UserPromise>() => T;
+  name: () => Promise<String>;
+  dependencies: <T = FragmentableArray<Dependency>>(
+    args?: {
+      where?: DependencyWhereInput;
+      orderBy?: DependencyOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  zeitProject: <T = ZeitProjectPromise>() => T;
 }
 
 export interface ContentRepositorySubscription
@@ -803,6 +1488,20 @@ export interface ContentRepositorySubscription
       last?: Int;
     }
   ) => T;
+  author: <T = UserSubscription>() => T;
+  name: () => Promise<AsyncIterator<String>>;
+  dependencies: <T = Promise<AsyncIterator<DependencySubscription>>>(
+    args?: {
+      where?: DependencyWhereInput;
+      orderBy?: DependencyOrderByInput;
+      skip?: Int;
+      after?: String;
+      before?: String;
+      first?: Int;
+      last?: Int;
+    }
+  ) => T;
+  zeitProject: <T = ZeitProjectSubscription>() => T;
 }
 
 export interface File {
@@ -812,8 +1511,9 @@ export interface File {
   published: Boolean;
   name: String;
   content: String;
-  parent: ID_Output;
-  children: ID_Output[];
+  parent?: String;
+  children: String[];
+  isDirectory: Boolean;
 }
 
 export interface FilePromise extends Promise<File>, Fragmentable {
@@ -823,9 +1523,11 @@ export interface FilePromise extends Promise<File>, Fragmentable {
   published: () => Promise<Boolean>;
   name: () => Promise<String>;
   content: () => Promise<String>;
-  parent: () => Promise<ID_Output>;
-  children: () => Promise<ID_Output[]>;
+  parent: () => Promise<String>;
+  children: () => Promise<String[]>;
+  repository: <T = ContentRepositoryPromise>() => T;
   author: <T = UserPromise>() => T;
+  isDirectory: () => Promise<Boolean>;
 }
 
 export interface FileSubscription
@@ -837,21 +1539,24 @@ export interface FileSubscription
   published: () => Promise<AsyncIterator<Boolean>>;
   name: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
-  parent: () => Promise<AsyncIterator<ID_Output>>;
-  children: () => Promise<AsyncIterator<ID_Output[]>>;
+  parent: () => Promise<AsyncIterator<String>>;
+  children: () => Promise<AsyncIterator<String[]>>;
+  repository: <T = ContentRepositorySubscription>() => T;
   author: <T = UserSubscription>() => T;
+  isDirectory: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface User {
   id: ID_Output;
   email: String;
-  password: String;
+  zeitToken?: String;
+  apiToken: String;
 }
 
 export interface UserPromise extends Promise<User>, Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
-  password: () => Promise<String>;
+  zeitToken: () => Promise<String>;
   repositories: <T = FragmentableArray<ContentRepository>>(
     args?: {
       where?: ContentRepositoryWhereInput;
@@ -863,6 +1568,7 @@ export interface UserPromise extends Promise<User>, Fragmentable {
       last?: Int;
     }
   ) => T;
+  apiToken: () => Promise<String>;
 }
 
 export interface UserSubscription
@@ -870,7 +1576,7 @@ export interface UserSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
+  zeitToken: () => Promise<AsyncIterator<String>>;
   repositories: <T = Promise<AsyncIterator<ContentRepositorySubscription>>>(
     args?: {
       where?: ContentRepositoryWhereInput;
@@ -882,6 +1588,61 @@ export interface UserSubscription
       last?: Int;
     }
   ) => T;
+  apiToken: () => Promise<AsyncIterator<String>>;
+}
+
+export interface Dependency {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  verison: String;
+}
+
+export interface DependencyPromise extends Promise<Dependency>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  verison: () => Promise<String>;
+}
+
+export interface DependencySubscription
+  extends Promise<AsyncIterator<Dependency>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  verison: () => Promise<AsyncIterator<String>>;
+}
+
+export interface ZeitProject {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  projectId: String;
+}
+
+export interface ZeitProjectPromise extends Promise<ZeitProject>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  projectId: () => Promise<String>;
+  repository: <T = ContentRepositoryPromise>() => T;
+}
+
+export interface ZeitProjectSubscription
+  extends Promise<AsyncIterator<ZeitProject>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  projectId: () => Promise<AsyncIterator<String>>;
+  repository: <T = ContentRepositorySubscription>() => T;
 }
 
 export interface ContentRepositoryConnection {
@@ -959,6 +1720,62 @@ export interface AggregateContentRepositoryPromise
 
 export interface AggregateContentRepositorySubscription
   extends Promise<AsyncIterator<AggregateContentRepository>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface DependencyConnection {
+  pageInfo: PageInfo;
+  edges: DependencyEdge[];
+}
+
+export interface DependencyConnectionPromise
+  extends Promise<DependencyConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<DependencyEdge>>() => T;
+  aggregate: <T = AggregateDependencyPromise>() => T;
+}
+
+export interface DependencyConnectionSubscription
+  extends Promise<AsyncIterator<DependencyConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<DependencyEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateDependencySubscription>() => T;
+}
+
+export interface DependencyEdge {
+  node: Dependency;
+  cursor: String;
+}
+
+export interface DependencyEdgePromise
+  extends Promise<DependencyEdge>,
+    Fragmentable {
+  node: <T = DependencyPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface DependencyEdgeSubscription
+  extends Promise<AsyncIterator<DependencyEdge>>,
+    Fragmentable {
+  node: <T = DependencySubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateDependency {
+  count: Int;
+}
+
+export interface AggregateDependencyPromise
+  extends Promise<AggregateDependency>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateDependencySubscription
+  extends Promise<AsyncIterator<AggregateDependency>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -1071,6 +1888,62 @@ export interface AggregateUserSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface ZeitProjectConnection {
+  pageInfo: PageInfo;
+  edges: ZeitProjectEdge[];
+}
+
+export interface ZeitProjectConnectionPromise
+  extends Promise<ZeitProjectConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<ZeitProjectEdge>>() => T;
+  aggregate: <T = AggregateZeitProjectPromise>() => T;
+}
+
+export interface ZeitProjectConnectionSubscription
+  extends Promise<AsyncIterator<ZeitProjectConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ZeitProjectEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateZeitProjectSubscription>() => T;
+}
+
+export interface ZeitProjectEdge {
+  node: ZeitProject;
+  cursor: String;
+}
+
+export interface ZeitProjectEdgePromise
+  extends Promise<ZeitProjectEdge>,
+    Fragmentable {
+  node: <T = ZeitProjectPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface ZeitProjectEdgeSubscription
+  extends Promise<AsyncIterator<ZeitProjectEdge>>,
+    Fragmentable {
+  node: <T = ZeitProjectSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateZeitProject {
+  count: Int;
+}
+
+export interface AggregateZeitProjectPromise
+  extends Promise<AggregateZeitProject>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateZeitProjectSubscription
+  extends Promise<AsyncIterator<AggregateZeitProject>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface BatchPayload {
   count: Long;
 }
@@ -1116,6 +1989,7 @@ export interface ContentRepositoryPreviousValues {
   id: ID_Output;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
+  name: String;
 }
 
 export interface ContentRepositoryPreviousValuesPromise
@@ -1124,6 +1998,7 @@ export interface ContentRepositoryPreviousValuesPromise
   id: () => Promise<ID_Output>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
 }
 
 export interface ContentRepositoryPreviousValuesSubscription
@@ -1132,6 +2007,60 @@ export interface ContentRepositoryPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface DependencySubscriptionPayload {
+  mutation: MutationType;
+  node: Dependency;
+  updatedFields: String[];
+  previousValues: DependencyPreviousValues;
+}
+
+export interface DependencySubscriptionPayloadPromise
+  extends Promise<DependencySubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = DependencyPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = DependencyPreviousValuesPromise>() => T;
+}
+
+export interface DependencySubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<DependencySubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = DependencySubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = DependencyPreviousValuesSubscription>() => T;
+}
+
+export interface DependencyPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  verison: String;
+}
+
+export interface DependencyPreviousValuesPromise
+  extends Promise<DependencyPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  verison: () => Promise<String>;
+}
+
+export interface DependencyPreviousValuesSubscription
+  extends Promise<AsyncIterator<DependencyPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  verison: () => Promise<AsyncIterator<String>>;
 }
 
 export interface FileSubscriptionPayload {
@@ -1166,8 +2095,9 @@ export interface FilePreviousValues {
   published: Boolean;
   name: String;
   content: String;
-  parent: ID_Output;
-  children: ID_Output[];
+  parent?: String;
+  children: String[];
+  isDirectory: Boolean;
 }
 
 export interface FilePreviousValuesPromise
@@ -1179,8 +2109,9 @@ export interface FilePreviousValuesPromise
   published: () => Promise<Boolean>;
   name: () => Promise<String>;
   content: () => Promise<String>;
-  parent: () => Promise<ID_Output>;
-  children: () => Promise<ID_Output[]>;
+  parent: () => Promise<String>;
+  children: () => Promise<String[]>;
+  isDirectory: () => Promise<Boolean>;
 }
 
 export interface FilePreviousValuesSubscription
@@ -1192,8 +2123,9 @@ export interface FilePreviousValuesSubscription
   published: () => Promise<AsyncIterator<Boolean>>;
   name: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
-  parent: () => Promise<AsyncIterator<ID_Output>>;
-  children: () => Promise<AsyncIterator<ID_Output[]>>;
+  parent: () => Promise<AsyncIterator<String>>;
+  children: () => Promise<AsyncIterator<String[]>>;
+  isDirectory: () => Promise<AsyncIterator<Boolean>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -1224,7 +2156,8 @@ export interface UserSubscriptionPayloadSubscription
 export interface UserPreviousValues {
   id: ID_Output;
   email: String;
-  password: String;
+  zeitToken?: String;
+  apiToken: String;
 }
 
 export interface UserPreviousValuesPromise
@@ -1232,7 +2165,8 @@ export interface UserPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
-  password: () => Promise<String>;
+  zeitToken: () => Promise<String>;
+  apiToken: () => Promise<String>;
 }
 
 export interface UserPreviousValuesSubscription
@@ -1240,7 +2174,61 @@ export interface UserPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
-  password: () => Promise<AsyncIterator<String>>;
+  zeitToken: () => Promise<AsyncIterator<String>>;
+  apiToken: () => Promise<AsyncIterator<String>>;
+}
+
+export interface ZeitProjectSubscriptionPayload {
+  mutation: MutationType;
+  node: ZeitProject;
+  updatedFields: String[];
+  previousValues: ZeitProjectPreviousValues;
+}
+
+export interface ZeitProjectSubscriptionPayloadPromise
+  extends Promise<ZeitProjectSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = ZeitProjectPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = ZeitProjectPreviousValuesPromise>() => T;
+}
+
+export interface ZeitProjectSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ZeitProjectSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = ZeitProjectSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = ZeitProjectPreviousValuesSubscription>() => T;
+}
+
+export interface ZeitProjectPreviousValues {
+  id: ID_Output;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+  name: String;
+  projectId: String;
+}
+
+export interface ZeitProjectPreviousValuesPromise
+  extends Promise<ZeitProjectPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+  name: () => Promise<String>;
+  projectId: () => Promise<String>;
+}
+
+export interface ZeitProjectPreviousValuesSubscription
+  extends Promise<AsyncIterator<ZeitProjectPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  name: () => Promise<AsyncIterator<String>>;
+  projectId: () => Promise<AsyncIterator<String>>;
 }
 
 /*
@@ -1287,6 +2275,14 @@ export const models: Model[] = [
   },
   {
     name: "ContentRepository",
+    embedded: false
+  },
+  {
+    name: "ZeitProject",
+    embedded: false
+  },
+  {
+    name: "Dependency",
     embedded: false
   },
   {

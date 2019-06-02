@@ -7,11 +7,19 @@ module.exports = {
   count: Int!
 }
 
+type AggregateDependency {
+  count: Int!
+}
+
 type AggregateFile {
   count: Int!
 }
 
 type AggregateUser {
+  count: Int!
+}
+
+type AggregateZeitProject {
   count: Int!
 }
 
@@ -24,6 +32,10 @@ type ContentRepository {
   createdAt: DateTime!
   updatedAt: DateTime!
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File!]
+  author: User!
+  name: String!
+  dependencies(where: DependencyWhereInput, orderBy: DependencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dependency!]
+  zeitProject: ZeitProject
 }
 
 type ContentRepositoryConnection {
@@ -33,12 +45,47 @@ type ContentRepositoryConnection {
 }
 
 input ContentRepositoryCreateInput {
-  files: FileCreateManyInput
+  files: FileCreateManyWithoutRepositoryInput
+  author: UserCreateOneWithoutRepositoriesInput!
+  name: String
+  dependencies: DependencyCreateManyInput
+  zeitProject: ZeitProjectCreateOneWithoutRepositoryInput
 }
 
-input ContentRepositoryCreateManyInput {
-  create: [ContentRepositoryCreateInput!]
+input ContentRepositoryCreateManyWithoutAuthorInput {
+  create: [ContentRepositoryCreateWithoutAuthorInput!]
   connect: [ContentRepositoryWhereUniqueInput!]
+}
+
+input ContentRepositoryCreateOneWithoutFilesInput {
+  create: ContentRepositoryCreateWithoutFilesInput
+  connect: ContentRepositoryWhereUniqueInput
+}
+
+input ContentRepositoryCreateOneWithoutZeitProjectInput {
+  create: ContentRepositoryCreateWithoutZeitProjectInput
+  connect: ContentRepositoryWhereUniqueInput
+}
+
+input ContentRepositoryCreateWithoutAuthorInput {
+  files: FileCreateManyWithoutRepositoryInput
+  name: String
+  dependencies: DependencyCreateManyInput
+  zeitProject: ZeitProjectCreateOneWithoutRepositoryInput
+}
+
+input ContentRepositoryCreateWithoutFilesInput {
+  author: UserCreateOneWithoutRepositoriesInput!
+  name: String
+  dependencies: DependencyCreateManyInput
+  zeitProject: ZeitProjectCreateOneWithoutRepositoryInput
+}
+
+input ContentRepositoryCreateWithoutZeitProjectInput {
+  files: FileCreateManyWithoutRepositoryInput
+  author: UserCreateOneWithoutRepositoriesInput!
+  name: String
+  dependencies: DependencyCreateManyInput
 }
 
 type ContentRepositoryEdge {
@@ -53,12 +100,15 @@ enum ContentRepositoryOrderByInput {
   createdAt_DESC
   updatedAt_ASC
   updatedAt_DESC
+  name_ASC
+  name_DESC
 }
 
 type ContentRepositoryPreviousValues {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  name: String!
 }
 
 input ContentRepositoryScalarWhereInput {
@@ -92,6 +142,20 @@ input ContentRepositoryScalarWhereInput {
   updatedAt_lte: DateTime
   updatedAt_gt: DateTime
   updatedAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
   AND: [ContentRepositoryScalarWhereInput!]
   OR: [ContentRepositoryScalarWhereInput!]
   NOT: [ContentRepositoryScalarWhereInput!]
@@ -115,34 +179,93 @@ input ContentRepositorySubscriptionWhereInput {
   NOT: [ContentRepositorySubscriptionWhereInput!]
 }
 
-input ContentRepositoryUpdateDataInput {
-  files: FileUpdateManyInput
-}
-
 input ContentRepositoryUpdateInput {
-  files: FileUpdateManyInput
+  files: FileUpdateManyWithoutRepositoryInput
+  author: UserUpdateOneRequiredWithoutRepositoriesInput
+  name: String
+  dependencies: DependencyUpdateManyInput
+  zeitProject: ZeitProjectUpdateOneWithoutRepositoryInput
 }
 
-input ContentRepositoryUpdateManyInput {
-  create: [ContentRepositoryCreateInput!]
-  update: [ContentRepositoryUpdateWithWhereUniqueNestedInput!]
-  upsert: [ContentRepositoryUpsertWithWhereUniqueNestedInput!]
+input ContentRepositoryUpdateManyDataInput {
+  name: String
+}
+
+input ContentRepositoryUpdateManyMutationInput {
+  name: String
+}
+
+input ContentRepositoryUpdateManyWithoutAuthorInput {
+  create: [ContentRepositoryCreateWithoutAuthorInput!]
   delete: [ContentRepositoryWhereUniqueInput!]
   connect: [ContentRepositoryWhereUniqueInput!]
   set: [ContentRepositoryWhereUniqueInput!]
   disconnect: [ContentRepositoryWhereUniqueInput!]
+  update: [ContentRepositoryUpdateWithWhereUniqueWithoutAuthorInput!]
+  upsert: [ContentRepositoryUpsertWithWhereUniqueWithoutAuthorInput!]
   deleteMany: [ContentRepositoryScalarWhereInput!]
+  updateMany: [ContentRepositoryUpdateManyWithWhereNestedInput!]
 }
 
-input ContentRepositoryUpdateWithWhereUniqueNestedInput {
-  where: ContentRepositoryWhereUniqueInput!
-  data: ContentRepositoryUpdateDataInput!
+input ContentRepositoryUpdateManyWithWhereNestedInput {
+  where: ContentRepositoryScalarWhereInput!
+  data: ContentRepositoryUpdateManyDataInput!
 }
 
-input ContentRepositoryUpsertWithWhereUniqueNestedInput {
+input ContentRepositoryUpdateOneRequiredWithoutFilesInput {
+  create: ContentRepositoryCreateWithoutFilesInput
+  update: ContentRepositoryUpdateWithoutFilesDataInput
+  upsert: ContentRepositoryUpsertWithoutFilesInput
+  connect: ContentRepositoryWhereUniqueInput
+}
+
+input ContentRepositoryUpdateOneRequiredWithoutZeitProjectInput {
+  create: ContentRepositoryCreateWithoutZeitProjectInput
+  update: ContentRepositoryUpdateWithoutZeitProjectDataInput
+  upsert: ContentRepositoryUpsertWithoutZeitProjectInput
+  connect: ContentRepositoryWhereUniqueInput
+}
+
+input ContentRepositoryUpdateWithoutAuthorDataInput {
+  files: FileUpdateManyWithoutRepositoryInput
+  name: String
+  dependencies: DependencyUpdateManyInput
+  zeitProject: ZeitProjectUpdateOneWithoutRepositoryInput
+}
+
+input ContentRepositoryUpdateWithoutFilesDataInput {
+  author: UserUpdateOneRequiredWithoutRepositoriesInput
+  name: String
+  dependencies: DependencyUpdateManyInput
+  zeitProject: ZeitProjectUpdateOneWithoutRepositoryInput
+}
+
+input ContentRepositoryUpdateWithoutZeitProjectDataInput {
+  files: FileUpdateManyWithoutRepositoryInput
+  author: UserUpdateOneRequiredWithoutRepositoriesInput
+  name: String
+  dependencies: DependencyUpdateManyInput
+}
+
+input ContentRepositoryUpdateWithWhereUniqueWithoutAuthorInput {
   where: ContentRepositoryWhereUniqueInput!
-  update: ContentRepositoryUpdateDataInput!
-  create: ContentRepositoryCreateInput!
+  data: ContentRepositoryUpdateWithoutAuthorDataInput!
+}
+
+input ContentRepositoryUpsertWithoutFilesInput {
+  update: ContentRepositoryUpdateWithoutFilesDataInput!
+  create: ContentRepositoryCreateWithoutFilesInput!
+}
+
+input ContentRepositoryUpsertWithoutZeitProjectInput {
+  update: ContentRepositoryUpdateWithoutZeitProjectDataInput!
+  create: ContentRepositoryCreateWithoutZeitProjectInput!
+}
+
+input ContentRepositoryUpsertWithWhereUniqueWithoutAuthorInput {
+  where: ContentRepositoryWhereUniqueInput!
+  update: ContentRepositoryUpdateWithoutAuthorDataInput!
+  create: ContentRepositoryCreateWithoutAuthorInput!
 }
 
 input ContentRepositoryWhereInput {
@@ -179,6 +302,25 @@ input ContentRepositoryWhereInput {
   files_every: FileWhereInput
   files_some: FileWhereInput
   files_none: FileWhereInput
+  author: UserWhereInput
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  dependencies_every: DependencyWhereInput
+  dependencies_some: DependencyWhereInput
+  dependencies_none: DependencyWhereInput
+  zeitProject: ZeitProjectWhereInput
   AND: [ContentRepositoryWhereInput!]
   OR: [ContentRepositoryWhereInput!]
   NOT: [ContentRepositoryWhereInput!]
@@ -190,6 +332,254 @@ input ContentRepositoryWhereUniqueInput {
 
 scalar DateTime
 
+type Dependency {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  verison: String!
+}
+
+type DependencyConnection {
+  pageInfo: PageInfo!
+  edges: [DependencyEdge]!
+  aggregate: AggregateDependency!
+}
+
+input DependencyCreateInput {
+  name: String!
+  verison: String!
+}
+
+input DependencyCreateManyInput {
+  create: [DependencyCreateInput!]
+  connect: [DependencyWhereUniqueInput!]
+}
+
+type DependencyEdge {
+  node: Dependency!
+  cursor: String!
+}
+
+enum DependencyOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  name_ASC
+  name_DESC
+  verison_ASC
+  verison_DESC
+}
+
+type DependencyPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  verison: String!
+}
+
+input DependencyScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  verison: String
+  verison_not: String
+  verison_in: [String!]
+  verison_not_in: [String!]
+  verison_lt: String
+  verison_lte: String
+  verison_gt: String
+  verison_gte: String
+  verison_contains: String
+  verison_not_contains: String
+  verison_starts_with: String
+  verison_not_starts_with: String
+  verison_ends_with: String
+  verison_not_ends_with: String
+  AND: [DependencyScalarWhereInput!]
+  OR: [DependencyScalarWhereInput!]
+  NOT: [DependencyScalarWhereInput!]
+}
+
+type DependencySubscriptionPayload {
+  mutation: MutationType!
+  node: Dependency
+  updatedFields: [String!]
+  previousValues: DependencyPreviousValues
+}
+
+input DependencySubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: DependencyWhereInput
+  AND: [DependencySubscriptionWhereInput!]
+  OR: [DependencySubscriptionWhereInput!]
+  NOT: [DependencySubscriptionWhereInput!]
+}
+
+input DependencyUpdateDataInput {
+  name: String
+  verison: String
+}
+
+input DependencyUpdateInput {
+  name: String
+  verison: String
+}
+
+input DependencyUpdateManyDataInput {
+  name: String
+  verison: String
+}
+
+input DependencyUpdateManyInput {
+  create: [DependencyCreateInput!]
+  update: [DependencyUpdateWithWhereUniqueNestedInput!]
+  upsert: [DependencyUpsertWithWhereUniqueNestedInput!]
+  delete: [DependencyWhereUniqueInput!]
+  connect: [DependencyWhereUniqueInput!]
+  set: [DependencyWhereUniqueInput!]
+  disconnect: [DependencyWhereUniqueInput!]
+  deleteMany: [DependencyScalarWhereInput!]
+  updateMany: [DependencyUpdateManyWithWhereNestedInput!]
+}
+
+input DependencyUpdateManyMutationInput {
+  name: String
+  verison: String
+}
+
+input DependencyUpdateManyWithWhereNestedInput {
+  where: DependencyScalarWhereInput!
+  data: DependencyUpdateManyDataInput!
+}
+
+input DependencyUpdateWithWhereUniqueNestedInput {
+  where: DependencyWhereUniqueInput!
+  data: DependencyUpdateDataInput!
+}
+
+input DependencyUpsertWithWhereUniqueNestedInput {
+  where: DependencyWhereUniqueInput!
+  update: DependencyUpdateDataInput!
+  create: DependencyCreateInput!
+}
+
+input DependencyWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  verison: String
+  verison_not: String
+  verison_in: [String!]
+  verison_not_in: [String!]
+  verison_lt: String
+  verison_lte: String
+  verison_gt: String
+  verison_gte: String
+  verison_contains: String
+  verison_not_contains: String
+  verison_starts_with: String
+  verison_not_starts_with: String
+  verison_ends_with: String
+  verison_not_ends_with: String
+  AND: [DependencyWhereInput!]
+  OR: [DependencyWhereInput!]
+  NOT: [DependencyWhereInput!]
+}
+
+input DependencyWhereUniqueInput {
+  id: ID
+}
+
 type File {
   id: ID!
   createdAt: DateTime!
@@ -197,9 +587,11 @@ type File {
   published: Boolean!
   name: String!
   content: String!
-  parent: ID!
-  children: [ID!]!
+  parent: String
+  children: [String!]!
+  repository: ContentRepository!
   author: User!
+  isDirectory: Boolean!
 }
 
 type FileConnection {
@@ -209,21 +601,33 @@ type FileConnection {
 }
 
 input FileCreatechildrenInput {
-  set: [ID!]
+  set: [String!]
 }
 
 input FileCreateInput {
   published: Boolean
   name: String!
   content: String!
-  parent: ID!
+  parent: String
   children: FileCreatechildrenInput
+  repository: ContentRepositoryCreateOneWithoutFilesInput!
   author: UserCreateOneInput!
+  isDirectory: Boolean
 }
 
-input FileCreateManyInput {
-  create: [FileCreateInput!]
+input FileCreateManyWithoutRepositoryInput {
+  create: [FileCreateWithoutRepositoryInput!]
   connect: [FileWhereUniqueInput!]
+}
+
+input FileCreateWithoutRepositoryInput {
+  published: Boolean
+  name: String!
+  content: String!
+  parent: String
+  children: FileCreatechildrenInput
+  author: UserCreateOneInput!
+  isDirectory: Boolean
 }
 
 type FileEdge {
@@ -246,6 +650,8 @@ enum FileOrderByInput {
   content_DESC
   parent_ASC
   parent_DESC
+  isDirectory_ASC
+  isDirectory_DESC
 }
 
 type FilePreviousValues {
@@ -255,8 +661,9 @@ type FilePreviousValues {
   published: Boolean!
   name: String!
   content: String!
-  parent: ID!
-  children: [ID!]!
+  parent: String
+  children: [String!]!
+  isDirectory: Boolean!
 }
 
 input FileScalarWhereInput {
@@ -320,20 +727,22 @@ input FileScalarWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
-  parent: ID
-  parent_not: ID
-  parent_in: [ID!]
-  parent_not_in: [ID!]
-  parent_lt: ID
-  parent_lte: ID
-  parent_gt: ID
-  parent_gte: ID
-  parent_contains: ID
-  parent_not_contains: ID
-  parent_starts_with: ID
-  parent_not_starts_with: ID
-  parent_ends_with: ID
-  parent_not_ends_with: ID
+  parent: String
+  parent_not: String
+  parent_in: [String!]
+  parent_not_in: [String!]
+  parent_lt: String
+  parent_lte: String
+  parent_gt: String
+  parent_gte: String
+  parent_contains: String
+  parent_not_contains: String
+  parent_starts_with: String
+  parent_not_starts_with: String
+  parent_ends_with: String
+  parent_not_ends_with: String
+  isDirectory: Boolean
+  isDirectory_not: Boolean
   AND: [FileScalarWhereInput!]
   OR: [FileScalarWhereInput!]
   NOT: [FileScalarWhereInput!]
@@ -358,53 +767,48 @@ input FileSubscriptionWhereInput {
 }
 
 input FileUpdatechildrenInput {
-  set: [ID!]
-}
-
-input FileUpdateDataInput {
-  published: Boolean
-  name: String
-  content: String
-  parent: ID
-  children: FileUpdatechildrenInput
-  author: UserUpdateOneRequiredInput
+  set: [String!]
 }
 
 input FileUpdateInput {
   published: Boolean
   name: String
   content: String
-  parent: ID
+  parent: String
   children: FileUpdatechildrenInput
+  repository: ContentRepositoryUpdateOneRequiredWithoutFilesInput
   author: UserUpdateOneRequiredInput
+  isDirectory: Boolean
 }
 
 input FileUpdateManyDataInput {
   published: Boolean
   name: String
   content: String
-  parent: ID
+  parent: String
   children: FileUpdatechildrenInput
-}
-
-input FileUpdateManyInput {
-  create: [FileCreateInput!]
-  update: [FileUpdateWithWhereUniqueNestedInput!]
-  upsert: [FileUpsertWithWhereUniqueNestedInput!]
-  delete: [FileWhereUniqueInput!]
-  connect: [FileWhereUniqueInput!]
-  set: [FileWhereUniqueInput!]
-  disconnect: [FileWhereUniqueInput!]
-  deleteMany: [FileScalarWhereInput!]
-  updateMany: [FileUpdateManyWithWhereNestedInput!]
+  isDirectory: Boolean
 }
 
 input FileUpdateManyMutationInput {
   published: Boolean
   name: String
   content: String
-  parent: ID
+  parent: String
   children: FileUpdatechildrenInput
+  isDirectory: Boolean
+}
+
+input FileUpdateManyWithoutRepositoryInput {
+  create: [FileCreateWithoutRepositoryInput!]
+  delete: [FileWhereUniqueInput!]
+  connect: [FileWhereUniqueInput!]
+  set: [FileWhereUniqueInput!]
+  disconnect: [FileWhereUniqueInput!]
+  update: [FileUpdateWithWhereUniqueWithoutRepositoryInput!]
+  upsert: [FileUpsertWithWhereUniqueWithoutRepositoryInput!]
+  deleteMany: [FileScalarWhereInput!]
+  updateMany: [FileUpdateManyWithWhereNestedInput!]
 }
 
 input FileUpdateManyWithWhereNestedInput {
@@ -412,15 +816,25 @@ input FileUpdateManyWithWhereNestedInput {
   data: FileUpdateManyDataInput!
 }
 
-input FileUpdateWithWhereUniqueNestedInput {
-  where: FileWhereUniqueInput!
-  data: FileUpdateDataInput!
+input FileUpdateWithoutRepositoryDataInput {
+  published: Boolean
+  name: String
+  content: String
+  parent: String
+  children: FileUpdatechildrenInput
+  author: UserUpdateOneRequiredInput
+  isDirectory: Boolean
 }
 
-input FileUpsertWithWhereUniqueNestedInput {
+input FileUpdateWithWhereUniqueWithoutRepositoryInput {
   where: FileWhereUniqueInput!
-  update: FileUpdateDataInput!
-  create: FileCreateInput!
+  data: FileUpdateWithoutRepositoryDataInput!
+}
+
+input FileUpsertWithWhereUniqueWithoutRepositoryInput {
+  where: FileWhereUniqueInput!
+  update: FileUpdateWithoutRepositoryDataInput!
+  create: FileCreateWithoutRepositoryInput!
 }
 
 input FileWhereInput {
@@ -484,21 +898,24 @@ input FileWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
-  parent: ID
-  parent_not: ID
-  parent_in: [ID!]
-  parent_not_in: [ID!]
-  parent_lt: ID
-  parent_lte: ID
-  parent_gt: ID
-  parent_gte: ID
-  parent_contains: ID
-  parent_not_contains: ID
-  parent_starts_with: ID
-  parent_not_starts_with: ID
-  parent_ends_with: ID
-  parent_not_ends_with: ID
+  parent: String
+  parent_not: String
+  parent_in: [String!]
+  parent_not_in: [String!]
+  parent_lt: String
+  parent_lte: String
+  parent_gt: String
+  parent_gte: String
+  parent_contains: String
+  parent_not_contains: String
+  parent_starts_with: String
+  parent_not_starts_with: String
+  parent_ends_with: String
+  parent_not_ends_with: String
+  repository: ContentRepositoryWhereInput
   author: UserWhereInput
+  isDirectory: Boolean
+  isDirectory_not: Boolean
   AND: [FileWhereInput!]
   OR: [FileWhereInput!]
   NOT: [FileWhereInput!]
@@ -513,9 +930,16 @@ scalar Long
 type Mutation {
   createContentRepository(data: ContentRepositoryCreateInput!): ContentRepository!
   updateContentRepository(data: ContentRepositoryUpdateInput!, where: ContentRepositoryWhereUniqueInput!): ContentRepository
+  updateManyContentRepositories(data: ContentRepositoryUpdateManyMutationInput!, where: ContentRepositoryWhereInput): BatchPayload!
   upsertContentRepository(where: ContentRepositoryWhereUniqueInput!, create: ContentRepositoryCreateInput!, update: ContentRepositoryUpdateInput!): ContentRepository!
   deleteContentRepository(where: ContentRepositoryWhereUniqueInput!): ContentRepository
   deleteManyContentRepositories(where: ContentRepositoryWhereInput): BatchPayload!
+  createDependency(data: DependencyCreateInput!): Dependency!
+  updateDependency(data: DependencyUpdateInput!, where: DependencyWhereUniqueInput!): Dependency
+  updateManyDependencies(data: DependencyUpdateManyMutationInput!, where: DependencyWhereInput): BatchPayload!
+  upsertDependency(where: DependencyWhereUniqueInput!, create: DependencyCreateInput!, update: DependencyUpdateInput!): Dependency!
+  deleteDependency(where: DependencyWhereUniqueInput!): Dependency
+  deleteManyDependencies(where: DependencyWhereInput): BatchPayload!
   createFile(data: FileCreateInput!): File!
   updateFile(data: FileUpdateInput!, where: FileWhereUniqueInput!): File
   updateManyFiles(data: FileUpdateManyMutationInput!, where: FileWhereInput): BatchPayload!
@@ -528,6 +952,12 @@ type Mutation {
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createZeitProject(data: ZeitProjectCreateInput!): ZeitProject!
+  updateZeitProject(data: ZeitProjectUpdateInput!, where: ZeitProjectWhereUniqueInput!): ZeitProject
+  updateManyZeitProjects(data: ZeitProjectUpdateManyMutationInput!, where: ZeitProjectWhereInput): BatchPayload!
+  upsertZeitProject(where: ZeitProjectWhereUniqueInput!, create: ZeitProjectCreateInput!, update: ZeitProjectUpdateInput!): ZeitProject!
+  deleteZeitProject(where: ZeitProjectWhereUniqueInput!): ZeitProject
+  deleteManyZeitProjects(where: ZeitProjectWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -551,26 +981,35 @@ type Query {
   contentRepository(where: ContentRepositoryWhereUniqueInput!): ContentRepository
   contentRepositories(where: ContentRepositoryWhereInput, orderBy: ContentRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ContentRepository]!
   contentRepositoriesConnection(where: ContentRepositoryWhereInput, orderBy: ContentRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ContentRepositoryConnection!
+  dependency(where: DependencyWhereUniqueInput!): Dependency
+  dependencies(where: DependencyWhereInput, orderBy: DependencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Dependency]!
+  dependenciesConnection(where: DependencyWhereInput, orderBy: DependencyOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): DependencyConnection!
   file(where: FileWhereUniqueInput!): File
   files(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [File]!
   filesConnection(where: FileWhereInput, orderBy: FileOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FileConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  zeitProject(where: ZeitProjectWhereUniqueInput!): ZeitProject
+  zeitProjects(where: ZeitProjectWhereInput, orderBy: ZeitProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ZeitProject]!
+  zeitProjectsConnection(where: ZeitProjectWhereInput, orderBy: ZeitProjectOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ZeitProjectConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
   contentRepository(where: ContentRepositorySubscriptionWhereInput): ContentRepositorySubscriptionPayload
+  dependency(where: DependencySubscriptionWhereInput): DependencySubscriptionPayload
   file(where: FileSubscriptionWhereInput): FileSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  zeitProject(where: ZeitProjectSubscriptionWhereInput): ZeitProjectSubscriptionPayload
 }
 
 type User {
   id: ID!
   email: String!
-  password: String!
+  zeitToken: String
   repositories(where: ContentRepositoryWhereInput, orderBy: ContentRepositoryOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ContentRepository!]
+  apiToken: String!
 }
 
 type UserConnection {
@@ -581,13 +1020,25 @@ type UserConnection {
 
 input UserCreateInput {
   email: String!
-  password: String!
-  repositories: ContentRepositoryCreateManyInput
+  zeitToken: String
+  repositories: ContentRepositoryCreateManyWithoutAuthorInput
+  apiToken: String!
 }
 
 input UserCreateOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
+}
+
+input UserCreateOneWithoutRepositoriesInput {
+  create: UserCreateWithoutRepositoriesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserCreateWithoutRepositoriesInput {
+  email: String!
+  zeitToken: String
+  apiToken: String!
 }
 
 type UserEdge {
@@ -600,8 +1051,10 @@ enum UserOrderByInput {
   id_DESC
   email_ASC
   email_DESC
-  password_ASC
-  password_DESC
+  zeitToken_ASC
+  zeitToken_DESC
+  apiToken_ASC
+  apiToken_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -611,7 +1064,8 @@ enum UserOrderByInput {
 type UserPreviousValues {
   id: ID!
   email: String!
-  password: String!
+  zeitToken: String
+  apiToken: String!
 }
 
 type UserSubscriptionPayload {
@@ -634,19 +1088,22 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateDataInput {
   email: String
-  password: String
-  repositories: ContentRepositoryUpdateManyInput
+  zeitToken: String
+  repositories: ContentRepositoryUpdateManyWithoutAuthorInput
+  apiToken: String
 }
 
 input UserUpdateInput {
   email: String
-  password: String
-  repositories: ContentRepositoryUpdateManyInput
+  zeitToken: String
+  repositories: ContentRepositoryUpdateManyWithoutAuthorInput
+  apiToken: String
 }
 
 input UserUpdateManyMutationInput {
   email: String
-  password: String
+  zeitToken: String
+  apiToken: String
 }
 
 input UserUpdateOneRequiredInput {
@@ -656,9 +1113,27 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutRepositoriesInput {
+  create: UserCreateWithoutRepositoriesInput
+  update: UserUpdateWithoutRepositoriesDataInput
+  upsert: UserUpsertWithoutRepositoriesInput
+  connect: UserWhereUniqueInput
+}
+
+input UserUpdateWithoutRepositoriesDataInput {
+  email: String
+  zeitToken: String
+  apiToken: String
+}
+
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutRepositoriesInput {
+  update: UserUpdateWithoutRepositoriesDataInput!
+  create: UserCreateWithoutRepositoriesInput!
 }
 
 input UserWhereInput {
@@ -690,23 +1165,37 @@ input UserWhereInput {
   email_not_starts_with: String
   email_ends_with: String
   email_not_ends_with: String
-  password: String
-  password_not: String
-  password_in: [String!]
-  password_not_in: [String!]
-  password_lt: String
-  password_lte: String
-  password_gt: String
-  password_gte: String
-  password_contains: String
-  password_not_contains: String
-  password_starts_with: String
-  password_not_starts_with: String
-  password_ends_with: String
-  password_not_ends_with: String
+  zeitToken: String
+  zeitToken_not: String
+  zeitToken_in: [String!]
+  zeitToken_not_in: [String!]
+  zeitToken_lt: String
+  zeitToken_lte: String
+  zeitToken_gt: String
+  zeitToken_gte: String
+  zeitToken_contains: String
+  zeitToken_not_contains: String
+  zeitToken_starts_with: String
+  zeitToken_not_starts_with: String
+  zeitToken_ends_with: String
+  zeitToken_not_ends_with: String
   repositories_every: ContentRepositoryWhereInput
   repositories_some: ContentRepositoryWhereInput
   repositories_none: ContentRepositoryWhereInput
+  apiToken: String
+  apiToken_not: String
+  apiToken_in: [String!]
+  apiToken_not_in: [String!]
+  apiToken_lt: String
+  apiToken_lte: String
+  apiToken_gt: String
+  apiToken_gte: String
+  apiToken_contains: String
+  apiToken_not_contains: String
+  apiToken_starts_with: String
+  apiToken_not_starts_with: String
+  apiToken_ends_with: String
+  apiToken_not_ends_with: String
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
@@ -715,6 +1204,181 @@ input UserWhereInput {
 input UserWhereUniqueInput {
   id: ID
   email: String
+  apiToken: String
+}
+
+type ZeitProject {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  projectId: String!
+  repository: ContentRepository!
+}
+
+type ZeitProjectConnection {
+  pageInfo: PageInfo!
+  edges: [ZeitProjectEdge]!
+  aggregate: AggregateZeitProject!
+}
+
+input ZeitProjectCreateInput {
+  name: String!
+  projectId: String!
+  repository: ContentRepositoryCreateOneWithoutZeitProjectInput!
+}
+
+input ZeitProjectCreateOneWithoutRepositoryInput {
+  create: ZeitProjectCreateWithoutRepositoryInput
+  connect: ZeitProjectWhereUniqueInput
+}
+
+input ZeitProjectCreateWithoutRepositoryInput {
+  name: String!
+  projectId: String!
+}
+
+type ZeitProjectEdge {
+  node: ZeitProject!
+  cursor: String!
+}
+
+enum ZeitProjectOrderByInput {
+  id_ASC
+  id_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+  name_ASC
+  name_DESC
+  projectId_ASC
+  projectId_DESC
+}
+
+type ZeitProjectPreviousValues {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  projectId: String!
+}
+
+type ZeitProjectSubscriptionPayload {
+  mutation: MutationType!
+  node: ZeitProject
+  updatedFields: [String!]
+  previousValues: ZeitProjectPreviousValues
+}
+
+input ZeitProjectSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ZeitProjectWhereInput
+  AND: [ZeitProjectSubscriptionWhereInput!]
+  OR: [ZeitProjectSubscriptionWhereInput!]
+  NOT: [ZeitProjectSubscriptionWhereInput!]
+}
+
+input ZeitProjectUpdateInput {
+  name: String
+  projectId: String
+  repository: ContentRepositoryUpdateOneRequiredWithoutZeitProjectInput
+}
+
+input ZeitProjectUpdateManyMutationInput {
+  name: String
+  projectId: String
+}
+
+input ZeitProjectUpdateOneWithoutRepositoryInput {
+  create: ZeitProjectCreateWithoutRepositoryInput
+  update: ZeitProjectUpdateWithoutRepositoryDataInput
+  upsert: ZeitProjectUpsertWithoutRepositoryInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ZeitProjectWhereUniqueInput
+}
+
+input ZeitProjectUpdateWithoutRepositoryDataInput {
+  name: String
+  projectId: String
+}
+
+input ZeitProjectUpsertWithoutRepositoryInput {
+  update: ZeitProjectUpdateWithoutRepositoryDataInput!
+  create: ZeitProjectCreateWithoutRepositoryInput!
+}
+
+input ZeitProjectWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  projectId: String
+  projectId_not: String
+  projectId_in: [String!]
+  projectId_not_in: [String!]
+  projectId_lt: String
+  projectId_lte: String
+  projectId_gt: String
+  projectId_gte: String
+  projectId_contains: String
+  projectId_not_contains: String
+  projectId_starts_with: String
+  projectId_not_starts_with: String
+  projectId_ends_with: String
+  projectId_not_ends_with: String
+  repository: ContentRepositoryWhereInput
+  AND: [ZeitProjectWhereInput!]
+  OR: [ZeitProjectWhereInput!]
+  NOT: [ZeitProjectWhereInput!]
+}
+
+input ZeitProjectWhereUniqueInput {
+  id: ID
 }
 `
       }

@@ -1,23 +1,8 @@
 import React from 'react';
-import githubPages from '../backends/githubPages';
 import mdxcms from '../backends/mdxcms';
-import zeit from '../backends/zeit';
 import useCMSReload from '../react/useCMSReload';
 
-const getFetcher = backend => {
-  switch (backend) {
-    case 'github':
-      return githubPages;
-    case 'mdxcms':
-      return mdxcms;
-    case 'zeit':
-      return zeit;
-    default:
-      throw new Error(`unrecognized backend: ${backend}`);
-  }
-};
-
-const withMDXCMS = backend => meta => Component => {
+const withMDXCMS = meta => Component => {
   const _Component = ({ pageProps, mdx, etag }) => {
     useCMSReload(etag);
 
@@ -28,11 +13,9 @@ const withMDXCMS = backend => meta => Component => {
     let pageProps = {};
     const { res, pathname } = ctx;
 
-    const dataFetcher = getFetcher(backend);
-
-    const mdx = await dataFetcher({
-      ...meta,
+    const mdx = await mdxcms({
       pathname,
+      ...meta,
     });
 
     const etag = require('crypto')

@@ -9,6 +9,8 @@ exports.default = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime-corejs2/regenerator"));
 
+var _stringify = _interopRequireDefault(require("@babel/runtime-corejs2/core-js/json/stringify"));
+
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime-corejs2/helpers/asyncToGenerator"));
 
 var _isomorphicUnfetch = _interopRequireDefault(require("isomorphic-unfetch"));
@@ -19,30 +21,40 @@ function () {
   var _ref2 = (0, _asyncToGenerator2.default)(
   /*#__PURE__*/
   _regenerator.default.mark(function _callee(_ref) {
-    var fileId, url, result, data, _JSON$parse, content;
+    var pathname, apiToken, repositoryName, url, body, result, _ref3, content;
 
     return _regenerator.default.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            fileId = _ref.fileId;
-            url = "https://mdxcms.com/api/file/".concat(fileId);
-            _context.next = 4;
+            pathname = _ref.pathname, apiToken = _ref.apiToken, repositoryName = _ref.repositoryName;
+            url = "http://localhost:3000/api/file";
+            body = {
+              pathname: pathname,
+              apiToken: apiToken,
+              repositoryName: repositoryName
+            };
+            _context.next = 5;
             return (0, _isomorphicUnfetch.default)(url, {
-              credentials: 'include'
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: (0, _stringify.default)(body) // body data type must match "Content-Type" header
+
             });
 
-          case 4:
+          case 5:
             result = _context.sent;
-            _context.next = 7;
-            return result.text();
+            _context.next = 8;
+            return result.json();
 
-          case 7:
-            data = _context.sent;
-            _JSON$parse = JSON.parse(data), content = _JSON$parse.content;
+          case 8:
+            _ref3 = _context.sent;
+            content = _ref3.content;
             return _context.abrupt("return", content);
 
-          case 10:
+          case 11:
           case "end":
             return _context.stop();
         }

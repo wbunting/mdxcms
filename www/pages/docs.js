@@ -8,7 +8,7 @@ import Header from '../components/Header';
 import Page from '../components/Page';
 import Container from '../components/Container';
 
-import withMDXCMS from '@mdxcms/client/lib/integrations/next';
+import withMDXCMS from 'mdxcms/lib/integrations/next';
 import MDXComponents from '../components/MDXComponents';
 import checkLoggedIn from '../lib/checkLoggedIn';
 
@@ -35,7 +35,7 @@ Docs.getInitialProps = async context => {
   return { ...loggedInUser };
 };
 
-export default withMDXCMS('github')({
+export default withMDXCMS({
   owner: 'wbunting',
   repo: 'mdxcms-content',
 })(withAmp(Docs, { hybrid: true }));
