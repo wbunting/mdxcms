@@ -3,11 +3,10 @@ import { Box, Flex, Button, Text } from 'rebass';
 import styled from 'styled-components';
 import { useMutation } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
+import Select from 'react-select';
 
 import File from '../../Icons/File';
 import FilePlus from '../../Icons/FilePlus';
-import Folder from '../../Icons/Folder';
-import FolderPlus from '../../Icons/FolderPlus';
 
 const NEW_FILE = gql`
   mutation createFile($content: String!, $name: String!, $repositoryId: ID!) {
@@ -98,10 +97,11 @@ const Container = styled.div`
   /* There is a bug with ios that causes the sidebar to be longer than the preview, when you then
    * scroll the preview it scrolls the editor down (page is longer). If I set this to 100% scrolling
    * is broken in Chrome though. That's why we have this check */
-  height: 100vh;
+  height: calc(100vh - 48px);
   color: rgba(255, 255, 255, 0.8);
   z-index: 10;
   overflow: auto;
+  border: 1px solid black;
 `;
 
 const Item = styled.div`
@@ -136,21 +136,50 @@ const Files = ({
   </>
 );
 
-const RepositoryPicker = () => (
-  <Box px={2}>
-    <Title>Repo</Title>
-  </Box>
-);
+const SelectContainer = styled.div`
+  width: 232px;
+  height: 52px;
+`;
+
+const RepositoryPicker = ({ repositories, repository, setActiveRepo }) => {
+  const selectedProject = repositories[repository];
+
+  const projects = repositories.map(r => ({
+    ...r,
+    label: r.name,
+    value: r.name,
+  }));
+
+  return (
+    <Box px={2} py={2}>
+      <SelectContainer>
+        <Select
+          options={projects}
+          value={selectedProject}
+          onChange={p => {
+            repositories.find(r => r === p);
+          }}
+        />
+      </SelectContainer>
+    </Box>
+  );
+};
 
 const Sidebar = ({
   repository,
+  repositories,
+  setActiveRepo,
   activeFile,
   setActiveFile,
   activeFileUnsavedChanges,
 }) => (
   <Container>
     <Item>
-      <RepositoryPicker />
+      <RepositoryPicker
+        repositories={repositories}
+        repository={repository}
+        setActiveRepo={setActiveRepo}
+      />
     </Item>
     <Item>
       <Files

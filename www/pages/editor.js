@@ -73,6 +73,8 @@ const EditorPage = ({ repositories, apiToken }) => {
         <Flex>
           <Sidebar
             repository={repositories[activeRepo]}
+            repositories={repositories}
+            setActiveRepo={setActiveRepo}
             files={repositories[activeRepo].files}
             activeFile={activeFile.id}
             setActiveFile={setActiveFile}

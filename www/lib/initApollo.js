@@ -12,7 +12,7 @@ if (!process.browser) {
 
 function create(initialState, { getToken, fetchOptions }) {
   const httpLink = createHttpLink({
-    uri: `${process.env.HOST}/api/graphql`,
+    uri: `http://localhost:3000/api/graphql`,
     credentials: 'same-origin',
     fetchOptions,
   });

@@ -310,6 +310,8 @@ export type FileOrderByInput =
   | "name_DESC"
   | "content_ASC"
   | "content_DESC"
+  | "previousContent_ASC"
+  | "previousContent_DESC"
   | "parent_ASC"
   | "parent_DESC"
   | "isDirectory_ASC"
@@ -430,6 +432,20 @@ export interface FileWhereInput {
   content_not_starts_with?: String;
   content_ends_with?: String;
   content_not_ends_with?: String;
+  previousContent?: String;
+  previousContent_not?: String;
+  previousContent_in?: String[] | String;
+  previousContent_not_in?: String[] | String;
+  previousContent_lt?: String;
+  previousContent_lte?: String;
+  previousContent_gt?: String;
+  previousContent_gte?: String;
+  previousContent_contains?: String;
+  previousContent_not_contains?: String;
+  previousContent_starts_with?: String;
+  previousContent_not_starts_with?: String;
+  previousContent_ends_with?: String;
+  previousContent_not_ends_with?: String;
   parent?: String;
   parent_not?: String;
   parent_in?: String[] | String;
@@ -743,6 +759,7 @@ export interface FileCreateWithoutRepositoryInput {
   published?: Boolean;
   name: String;
   content: String;
+  previousContent?: String;
   parent?: String;
   children?: FileCreatechildrenInput;
   author: UserCreateOneInput;
@@ -849,6 +866,7 @@ export interface FileUpdateWithoutRepositoryDataInput {
   published?: Boolean;
   name?: String;
   content?: String;
+  previousContent?: String;
   parent?: String;
   children?: FileUpdatechildrenInput;
   author?: UserUpdateOneRequiredInput;
@@ -1177,6 +1195,20 @@ export interface FileScalarWhereInput {
   content_not_starts_with?: String;
   content_ends_with?: String;
   content_not_ends_with?: String;
+  previousContent?: String;
+  previousContent_not?: String;
+  previousContent_in?: String[] | String;
+  previousContent_not_in?: String[] | String;
+  previousContent_lt?: String;
+  previousContent_lte?: String;
+  previousContent_gt?: String;
+  previousContent_gte?: String;
+  previousContent_contains?: String;
+  previousContent_not_contains?: String;
+  previousContent_starts_with?: String;
+  previousContent_not_starts_with?: String;
+  previousContent_ends_with?: String;
+  previousContent_not_ends_with?: String;
   parent?: String;
   parent_not?: String;
   parent_in?: String[] | String;
@@ -1207,6 +1239,7 @@ export interface FileUpdateManyDataInput {
   published?: Boolean;
   name?: String;
   content?: String;
+  previousContent?: String;
   parent?: String;
   children?: FileUpdatechildrenInput;
   isDirectory?: Boolean;
@@ -1248,6 +1281,7 @@ export interface FileCreateInput {
   published?: Boolean;
   name: String;
   content: String;
+  previousContent?: String;
   parent?: String;
   children?: FileCreatechildrenInput;
   repository: ContentRepositoryCreateOneWithoutFilesInput;
@@ -1271,6 +1305,7 @@ export interface FileUpdateInput {
   published?: Boolean;
   name?: String;
   content?: String;
+  previousContent?: String;
   parent?: String;
   children?: FileUpdatechildrenInput;
   repository?: ContentRepositoryUpdateOneRequiredWithoutFilesInput;
@@ -1301,6 +1336,7 @@ export interface FileUpdateManyMutationInput {
   published?: Boolean;
   name?: String;
   content?: String;
+  previousContent?: String;
   parent?: String;
   children?: FileUpdatechildrenInput;
   isDirectory?: Boolean;
@@ -1512,6 +1548,7 @@ export interface File {
   published: Boolean;
   name: String;
   content: String;
+  previousContent?: String;
   parent?: String;
   children: String[];
   isDirectory: Boolean;
@@ -1524,6 +1561,7 @@ export interface FilePromise extends Promise<File>, Fragmentable {
   published: () => Promise<Boolean>;
   name: () => Promise<String>;
   content: () => Promise<String>;
+  previousContent: () => Promise<String>;
   parent: () => Promise<String>;
   children: () => Promise<String[]>;
   repository: <T = ContentRepositoryPromise>() => T;
@@ -1540,6 +1578,7 @@ export interface FileSubscription
   published: () => Promise<AsyncIterator<Boolean>>;
   name: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
+  previousContent: () => Promise<AsyncIterator<String>>;
   parent: () => Promise<AsyncIterator<String>>;
   children: () => Promise<AsyncIterator<String[]>>;
   repository: <T = ContentRepositorySubscription>() => T;
@@ -2096,6 +2135,7 @@ export interface FilePreviousValues {
   published: Boolean;
   name: String;
   content: String;
+  previousContent?: String;
   parent?: String;
   children: String[];
   isDirectory: Boolean;
@@ -2110,6 +2150,7 @@ export interface FilePreviousValuesPromise
   published: () => Promise<Boolean>;
   name: () => Promise<String>;
   content: () => Promise<String>;
+  previousContent: () => Promise<String>;
   parent: () => Promise<String>;
   children: () => Promise<String[]>;
   isDirectory: () => Promise<Boolean>;
@@ -2124,6 +2165,7 @@ export interface FilePreviousValuesSubscription
   published: () => Promise<AsyncIterator<Boolean>>;
   name: () => Promise<AsyncIterator<String>>;
   content: () => Promise<AsyncIterator<String>>;
+  previousContent: () => Promise<AsyncIterator<String>>;
   parent: () => Promise<AsyncIterator<String>>;
   children: () => Promise<AsyncIterator<String[]>>;
   isDirectory: () => Promise<AsyncIterator<Boolean>>;

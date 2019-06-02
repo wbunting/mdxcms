@@ -587,6 +587,7 @@ type File {
   published: Boolean!
   name: String!
   content: String!
+  previousContent: String
   parent: String
   children: [String!]!
   repository: ContentRepository!
@@ -608,6 +609,7 @@ input FileCreateInput {
   published: Boolean
   name: String!
   content: String!
+  previousContent: String
   parent: String
   children: FileCreatechildrenInput
   repository: ContentRepositoryCreateOneWithoutFilesInput!
@@ -624,6 +626,7 @@ input FileCreateWithoutRepositoryInput {
   published: Boolean
   name: String!
   content: String!
+  previousContent: String
   parent: String
   children: FileCreatechildrenInput
   author: UserCreateOneInput!
@@ -648,6 +651,8 @@ enum FileOrderByInput {
   name_DESC
   content_ASC
   content_DESC
+  previousContent_ASC
+  previousContent_DESC
   parent_ASC
   parent_DESC
   isDirectory_ASC
@@ -661,6 +666,7 @@ type FilePreviousValues {
   published: Boolean!
   name: String!
   content: String!
+  previousContent: String
   parent: String
   children: [String!]!
   isDirectory: Boolean!
@@ -727,6 +733,20 @@ input FileScalarWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
+  previousContent: String
+  previousContent_not: String
+  previousContent_in: [String!]
+  previousContent_not_in: [String!]
+  previousContent_lt: String
+  previousContent_lte: String
+  previousContent_gt: String
+  previousContent_gte: String
+  previousContent_contains: String
+  previousContent_not_contains: String
+  previousContent_starts_with: String
+  previousContent_not_starts_with: String
+  previousContent_ends_with: String
+  previousContent_not_ends_with: String
   parent: String
   parent_not: String
   parent_in: [String!]
@@ -774,6 +794,7 @@ input FileUpdateInput {
   published: Boolean
   name: String
   content: String
+  previousContent: String
   parent: String
   children: FileUpdatechildrenInput
   repository: ContentRepositoryUpdateOneRequiredWithoutFilesInput
@@ -785,6 +806,7 @@ input FileUpdateManyDataInput {
   published: Boolean
   name: String
   content: String
+  previousContent: String
   parent: String
   children: FileUpdatechildrenInput
   isDirectory: Boolean
@@ -794,6 +816,7 @@ input FileUpdateManyMutationInput {
   published: Boolean
   name: String
   content: String
+  previousContent: String
   parent: String
   children: FileUpdatechildrenInput
   isDirectory: Boolean
@@ -820,6 +843,7 @@ input FileUpdateWithoutRepositoryDataInput {
   published: Boolean
   name: String
   content: String
+  previousContent: String
   parent: String
   children: FileUpdatechildrenInput
   author: UserUpdateOneRequiredInput
@@ -898,6 +922,20 @@ input FileWhereInput {
   content_not_starts_with: String
   content_ends_with: String
   content_not_ends_with: String
+  previousContent: String
+  previousContent_not: String
+  previousContent_in: [String!]
+  previousContent_not_in: [String!]
+  previousContent_lt: String
+  previousContent_lte: String
+  previousContent_gt: String
+  previousContent_gte: String
+  previousContent_contains: String
+  previousContent_not_contains: String
+  previousContent_starts_with: String
+  previousContent_not_starts_with: String
+  previousContent_ends_with: String
+  previousContent_not_ends_with: String
   parent: String
   parent_not: String
   parent_in: [String!]
