@@ -1379,6 +1379,7 @@ input ZeitProjectWhereInput {
 
 input ZeitProjectWhereUniqueInput {
   id: ID
+  projectId: String
 }
 `
       }

@@ -141,38 +141,12 @@ const Input = styled.input`
 // });
 
 const Signup = () => {
-  const [method, setMethod] = React.useState(null);
-
   const redirectToZeit = () => {
-    const url = `https://zeit.co/oauth/authorize?client_id=oac_Z0iR2lPBkdPRNpFr7Q6gERIi`;
+    const url = `https://zeit.co/oauth/authorize?client_id=${
+      process.env.NOW_INTEGRATION_ID
+    }`;
 
     window.location.href = url;
-
-    setMethod('zeit');
-  };
-
-  const renderButtons = () => {
-    if (method === 'zeit') {
-      return null;
-    } else if (!method) {
-      return (
-        <>
-          <Box py={1}>
-            <Button
-              width={250}
-              bg="black"
-              color="white"
-              onClick={() => redirectToZeit()}
-            >
-              <Flex justifyContent="center" alignItems="center">
-                <ZeitLogo invert />
-                <Box px={2}>Sign up with Zeit</Box>
-              </Flex>
-            </Button>
-          </Box>
-        </>
-      );
-    }
   };
 
   return (
@@ -189,7 +163,19 @@ const Signup = () => {
             <Box py={1}>
               <p>A dead-simple way to manage your site's `.mdx` content</p>
             </Box>
-            {renderButtons()}
+            <Box py={1}>
+              <Button
+                width={250}
+                bg="black"
+                color="white"
+                onClick={() => redirectToZeit()}
+              >
+                <Flex justifyContent="center" alignItems="center">
+                  <ZeitLogo invert />
+                  <Box px={2}>Sign up with Zeit</Box>
+                </Flex>
+              </Button>
+            </Box>
             <Box py={1}>
               <Link href="/login">
                 <a>Already have an account? Sign in with Zeit</a>

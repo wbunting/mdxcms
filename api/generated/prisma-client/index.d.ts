@@ -721,6 +721,7 @@ export type UserWhereUniqueInput = AtLeastOne<{
 
 export type ZeitProjectWhereUniqueInput = AtLeastOne<{
   id: ID_Input;
+  projectId?: String;
 }>;
 
 export interface ContentRepositoryCreateInput {

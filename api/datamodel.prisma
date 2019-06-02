@@ -22,7 +22,7 @@ type ZeitProject {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
   name: String!
-  projectId: String!
+  projectId: String! @unique
   repository: ContentRepository!
 }
 
@@ -41,6 +41,7 @@ type File {
   published: Boolean! @default(value: false)
   name: String!
   content: String!
+  previousContent: String
   parent: String
   children: [String!]! @scalarList(strategy: RELATION)
   repository: ContentRepository!

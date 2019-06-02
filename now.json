@@ -42,6 +42,10 @@
       "dest": "/api/rest/file/index.js"
     },
     {
+      "src": "/api/fileHook",
+      "dest": "/api/rest/file/fileHook.js"
+    },
+    {
       "src": "/api/zeit/projects",
       "dest": "/api/rest/zeit/projects.js"
     },
@@ -65,6 +69,7 @@
   "env": {
     "JWT_SECRET": "@jwt-token",
     "NOW_INTEGRATION_SECRET": "@now-integration-secret",
-    "NOW_INTEGRATION_ID": "@now-integration-id"
+    "NOW_INTEGRATION_ID": "@now-integration-id",
+    "HOST": "@mdxcms-host"
   }
 }

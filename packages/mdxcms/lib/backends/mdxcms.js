@@ -28,7 +28,7 @@ function () {
         switch (_context.prev = _context.next) {
           case 0:
             pathname = _ref.pathname, apiToken = _ref.apiToken, repositoryName = _ref.repositoryName;
-            url = "http://localhost:3000/api/file";
+            url = "".concat(process.env.HOST, "/api/file");
             body = {
               pathname: pathname,
               apiToken: apiToken,

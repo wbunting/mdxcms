@@ -108,7 +108,7 @@ Welcome.getInitialProps = async context => {
 
   const { token } = parseCookies(context.req);
   const projectsResp = await fetch(
-    `http://localhost:3000/api/zeit/projects?token=${token}`
+    `${process.env.HOST}/api/zeit/projects?token=${token}`
   );
   const projects = await projectsResp.text();
   return {

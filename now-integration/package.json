@@ -10,6 +10,7 @@
     "codesandbox-import-utils": "^2.1.5",
     "datauri": "^2.0.0",
     "humps": "^2.0.1",
+    "isomorphic-unfetch": "^3.0.0",
     "node-fetch": "^2.5.0",
     "shortid": "^2.2.14"
   },

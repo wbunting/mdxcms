@@ -1,9 +1,5 @@
 const { prisma } = require('../generated/prisma-client');
 const { ApolloServer, gql } = require('apollo-server');
-const { hash, compare } = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const fetch = require('isomorphic-unfetch');
-const ZEIT_API = 'https://api.zeit.co';
 
 const { permissions } = require('./permissions');
 const { getUserId } = require('./utils');
@@ -126,9 +122,10 @@ const resolvers = {
     },
     updateFile: async (root, args, context) => {
       const userId = getUserId(context);
+      const currentFile = await context.prisma.file({ id: args.fileId });
       const file = await context.prisma.updateFile({
         where: { id: args.fileId },
-        data: { content: args.content },
+        data: { content: args.content, previousContent: currentFile.content },
       });
 
       return file;

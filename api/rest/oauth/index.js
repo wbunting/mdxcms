@@ -4,6 +4,7 @@ const fetch = require('isomorphic-unfetch');
 const { parse } = require('url');
 const { hash } = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const cookie = require('cookie');
 
 const { ZEIT_API, getZeitUser } = require('../../lib/util');
 
@@ -17,35 +18,48 @@ const encodeParams = jsonParams =>
     .join('&');
 
 const getZeitToken = async code => {
-  const baseUri = 'http://localhost:3000';
-  // process.env.NOW_REGION === 'dev1'
-  //   ? 'http://localhost:3000'
-  //   : 'https://mdxcms.com';
-
   const params = {
     client_id: process.env.NOW_INTEGRATION_ID,
     client_secret: process.env.NOW_INTEGRATION_SECRET,
     code,
-    redirect_uri: `${baseUri}/oauth`,
+    redirect_uri: `${process.env.HOST}/api/oauth`,
   };
 
-  const response = await fetch(`${ZEIT_API}/v2/oauth/access_token`, {
+  const res = await fetch(`${ZEIT_API}/v2/oauth/access_token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: encodeParams(params),
   });
-  const data = await response.json();
-  const { access_token } = data;
-  return access_token;
+  const data = await res.json();
+
+  if (!res.ok) {
+    const err = new Error(
+      body.error_description || 'Failed to fetch accessToken'
+    );
+    err.res = res;
+    err.body = body;
+    throw err;
+  }
+
+  return data.access_token;
 };
 
 module.exports = async (req, res) => {
-  const { query } = parse(req.url, true);
-  const { code } = query;
+  const {
+    query: { code, next },
+  } = parse(req.url, true);
 
+  if (!code) {
+    res.statusCode = 400;
+    res.end('missing query parameter: code');
+    return;
+  }
+
+  console.log('fetching accessToken');
   const zeitToken = await getZeitToken(code);
+
   const zeitUser = await getZeitUser(zeitToken, res);
   const { email } = zeitUser;
 
@@ -54,32 +68,36 @@ module.exports = async (req, res) => {
     email,
   });
 
-  if (userWithThisEmail) {
-    res.end(
-      JSON.stringify({
-        token: jwt.sign(
-          { userId: userWithThisEmail.id },
-          process.env.JWT_SECRET
-        ),
-        user: userWithThisEmail,
-      })
-    );
-  } else {
+  const hashedPassword = await hash(email, 10);
+
+  let newUser;
+  if (!userWithThisEmail) {
     // if user does not exist then create one
     // since we are using oauth the password is irrelevant
-    const hashedPassword = await hash(email, 10);
-
-    const user = await prisma.createUser({
+    newUser = await prisma.createUser({
       email,
       apiToken: hashedPassword,
       zeitToken,
     });
-
-    res.end(
-      JSON.stringify({
-        token: jwt.sign({ userId: user.id }, process.env.JWT_SECRET),
-        user,
-      })
-    );
   }
+
+  const userId = userWithThisEmail ? userWithThisEmail.id : newUser.id;
+
+  const setCookie = cookie.serialize(
+    'token',
+    jwt.sign(
+      { userId, zeitToken, apiToken: hashedPassword },
+      process.env.JWT_SECRET
+    ),
+    {
+      maxAge: 30 * 24 * 60 * 60, // 30 days
+      path: '/',
+      secure: req.connection.encrypted,
+    }
+  );
+  res.setHeader('Set-Cookie', setCookie);
+
+  res.statusCode = 302;
+  res.setHeader('Location', next || `${process.env.HOST}/editor`);
+  res.end();
 };

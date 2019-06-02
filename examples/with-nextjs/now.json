@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "with-mdxcms-backend",
+  "name": "with-nextjs",
   "builds": [
     {
       "src": "next.config.js",

@@ -1,5 +1,6 @@
 import { withUiHook, htm, ZeitClient } from '@zeit/integration-utils';
 import { Metadata, ViewOptions, Deployment } from './types';
+import fetch from 'node-fetch';
 
 export const getQueryStr = (obj: {
   [k: string]: string | number | null | undefined;
@@ -25,22 +26,42 @@ export async function getDeployments(
   return deployments;
 }
 
-const dashboard = async (viewOptions: ViewOptions) => {
-  const { payload, zeitClient } = viewOptions.options;
-  const { projectId } = payload;
-  const deployments = await getDeployments(zeitClient, {
-    query: { limit: 30, projectId },
+const getFiles = async (projectId: string) => {
+  const result = await fetch(`${process.env.HOST}/api/fileHook`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      projectId,
+      pathname: '/hello-world',
+    }),
   });
 
-  const data = deployments.map(({ uid }) => ({ id: uid }));
+  const data = await result.json();
+
+  console.log(data);
+
+  return data;
+};
+
+const dashboard = async (viewOptions: ViewOptions) => {
+  const { payload } = viewOptions.options;
+
+  if (!payload.projectId) {
+    throw new Error('Cannot get dashboard for project');
+  }
+
+  const { files, project } = await getFiles(payload.projectId);
 
   return htm`
     <Page>
-      ${data.map(
-        d => htm`
-            <P>${d.id}</P>
-          `
-      )}
+      <H1>Content Repository is configured!</H1>
+      <H2>Files</H2>
+      <P>${JSON.stringify(files)}</P>
+      <H2>Project</H2>
+      <P>${JSON.stringify(project)}</P>
+      <H2>Edit these files <Link href="https://mdxcms.com/editor">here</Link></H2>
     </Page>
   `;
 };
