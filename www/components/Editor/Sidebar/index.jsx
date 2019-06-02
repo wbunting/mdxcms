@@ -48,9 +48,6 @@ const Control = ({ repository, handleNewFile, handleNewFolder }) => {
       </Box>
       <Flex alignItems="center">
         <NewFile repositoryId={repository.id} />
-        <Box px={2}>
-          <FolderPlus onClick={handleNewFolder} color="white" />
-        </Box>
       </Flex>
     </Flex>
   );
@@ -139,7 +136,11 @@ const Files = ({
   </>
 );
 
-const RepositoryPicker = () => <Box>Repo</Box>;
+const RepositoryPicker = () => (
+  <Box px={2}>
+    <Title>Repo</Title>
+  </Box>
+);
 
 const Sidebar = ({
   repository,
