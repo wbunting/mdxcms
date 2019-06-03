@@ -1,4 +1,4 @@
-endpoint: ${env:PRISMA_ENDPOINT}
+endpoint: https://us1.prisma.sh/will-bunting-3ac39d/mdxcms/dev
 datamodel: datamodel.prisma
 
 generate:

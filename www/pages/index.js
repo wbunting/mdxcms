@@ -28,6 +28,7 @@ const Home = ({ mdx }) => {
 };
 
 export default withMDXCMS({
-  owner: 'wbunting',
-  repo: 'mdxcms-content',
+  apiToken: process.env.MDXCMS_SECRET,
+  repositoryName: 'mdxcms',
+  pathname: '/index',
 })(withAmp(Home, { hybrid: true }));

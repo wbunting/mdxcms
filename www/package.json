@@ -45,7 +45,7 @@
     "isomorphic-unfetch": "^3.0.0",
     "lodash.debounce": "^4.0.8",
     "lodash.omit": "^4.5.0",
-    "mdxcms": "1.0.1",
+    "mdxcms": "1.0.3",
     "ms": "^2.1.1",
     "next": "^8.1.0",
     "next-transpile-modules": "^2.3.1",

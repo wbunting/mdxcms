@@ -19,10 +19,10 @@ const Editor = ({ activeFile, code, setCode, save }) => {
           <Box px={2}>
             <Button
               width={100}
-              bg={editor === 'raw' ? 'black' : 'white'}
-              color={editor === 'raw' ? 'white' : 'black'}
               onClick={() => setEditor('raw')}
-              border={editor === 'raw' && '1px solid black'}
+              variant={editor === 'raw' ? 'primary' : 'secondary'}
+              px={1}
+              py={1}
             >
               <Flex alignItems="center" justifyContent="center">
                 <Box px={2}>Raw</Box>
@@ -32,10 +32,10 @@ const Editor = ({ activeFile, code, setCode, save }) => {
           <Box>
             <Button
               width={100}
-              bg={editor === 'wysiwyg' ? 'black' : 'white'}
-              color={editor === 'wysiwyg' ? 'white' : 'black'}
-              border={editor === 'wysiwyg' && '1px solid black'}
               onClick={() => setEditor('wysiwyg')}
+              variant={editor === 'wysiwyg' ? 'primary' : 'secondary'}
+              px={1}
+              py={1}
             >
               <Flex alignItems="center" justifyContent="center">
                 <Box px={2}>WYSIWYG</Box>
@@ -49,13 +49,7 @@ const Editor = ({ activeFile, code, setCode, save }) => {
           </Box>
         )}
         <Flex>
-          <Button
-            width={100}
-            bg="white"
-            color="black"
-            border="1px solid black"
-            onClick={save}
-          >
+          <Button width={100} onClick={save} variant="primary" px={1} py={1}>
             <Flex alignItems="center" justifyContent="center">
               <Box px={2}>Save</Box>
             </Flex>

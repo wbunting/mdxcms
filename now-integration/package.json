@@ -5,16 +5,18 @@
   "license": "MIT",
   "dependencies": {
     "@zeit/fetch": "^5.1.0",
-    "@zeit/integration-utils": "^0.4.0",
+    "@zeit/integration-utils": "^0.6.1",
     "codesandbox-import-util-types": "^2.1.5",
     "codesandbox-import-utils": "^2.1.5",
     "datauri": "^2.0.0",
+    "diff": "^4.0.1",
     "humps": "^2.0.1",
     "isomorphic-unfetch": "^3.0.0",
     "node-fetch": "^2.5.0",
     "shortid": "^2.2.14"
   },
   "devDependencies": {
+    "@types/diff": "^4.0.2",
     "@types/humps": "^1.1.2",
     "@types/node-fetch": "^2.3.3",
     "micro": "^9.3.4",

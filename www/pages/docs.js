@@ -36,6 +36,7 @@ Docs.getInitialProps = async context => {
 };
 
 export default withMDXCMS({
-  owner: 'wbunting',
-  repo: 'mdxcms-content',
+  apiToken: process.env.MDXCMS_SECRET,
+  repositoryName: 'mdxcms',
+  pathname: '/docs',
 })(withAmp(Docs, { hybrid: true }));

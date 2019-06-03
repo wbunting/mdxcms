@@ -26,11 +26,7 @@ const RawEditor = ({ code, handleChange }) => {
   return (
     <>
       <MetaLinks />
-      <EditorBox
-        bg="#151718"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-      >
+      <EditorBox justifyContent="flex-start" alignItems="flex-start">
         <Carbon
           key="markdown"
           ref={carbonNode}

@@ -9,10 +9,25 @@ export default {
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64],
   buttons: {
     primary: {
-      color: '#fff',
+      color: '#000',
+      backgroundColor: white,
+      border: '1px solid black',
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
+    secondary: {
+      color: white,
+      backgroundColor: '#000',
+      border: '1px solid black',
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
+    icon: {
+      color: '#000',
       backgroundColor: white,
       '&:hover': {
-        backgroundColor: orange,
         cursor: 'pointer',
       },
     },

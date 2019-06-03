@@ -57,7 +57,6 @@ module.exports = async (req, res) => {
     return;
   }
 
-  console.log('fetching accessToken');
   const zeitToken = await getZeitToken(code);
 
   const zeitUser = await getZeitUser(zeitToken, res);

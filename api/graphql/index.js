@@ -14,6 +14,7 @@ const typeDefs = gql`
   type Mutation {
     createFile(content: String!, name: String!, repositoryId: ID!): File
     updateFile(fileId: ID!, content: String!, repositoryName: String!): File
+    renameFile(fileId: ID!, newName: String!): File
     createRepo(projectId: ID!, name: String!): ContentRepository
   }
 
@@ -128,6 +129,14 @@ const resolvers = {
         data: { content: args.content, previousContent: currentFile.content },
       });
 
+      return file;
+    },
+    renameFile: async (root, args, context) => {
+      const userId = getUserId(context);
+      const file = await context.prisma.updateFile({
+        where: { id: args.fileId },
+        data: { name: args.newName },
+      });
       return file;
     },
   },

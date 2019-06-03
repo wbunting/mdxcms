@@ -158,6 +158,7 @@ class Carbon extends React.PureComponent {
               position: relative;
               min-width: ${config.widthAdjustment ? '90px' : '680px'};
               max-width: 1024px;
+              width: 100%;
               padding: ${paddingVertical} ${paddingHorizontal};
             }
             .container :global(.watermark) {
@@ -199,7 +200,6 @@ class Carbon extends React.PureComponent {
               min-width: inherit;
               position: relative;
               z-index: 1;
-              border-radius: 5px;
               ${config.dropShadow
                 ? `box-shadow: 0 ${config.dropShadowOffsetY} ${
                     config.dropShadowBlurRadius
@@ -213,7 +213,7 @@ class Carbon extends React.PureComponent {
               padding-left: 12px;
               ${config.lineNumbers
                 ? 'padding-left: 12px;'
-                : ''} border-radius: 5px;
+                : ''} border-radius: 0px;
               font-family: ${config.fontFamily}, monospace !important;
               font-size: ${config.fontSize};
               line-height: ${config.lineHeight};
@@ -260,11 +260,12 @@ class Carbon extends React.PureComponent {
             .section,
             .export-container {
               height: 100%;
+              width: 100%;
               display: flex;
               flex-direction: column;
               justify-content: flex-start;
               align-items: flex-start;
-              overflow: hidden;
+              overflow: scroll;
             }
           `}
         </style>

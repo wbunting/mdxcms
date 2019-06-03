@@ -77,14 +77,7 @@ function Navbar({ className, hideLogo, route, loggedIn, isMobile }) {
                     </a>
                   </Link>
                   <Link href="/signup" prefetch>
-                    <Button
-                      bg="white"
-                      border="1px solid #ffffff"
-                      borderColor="black"
-                      borderRadius={4}
-                      px={2}
-                      py={0.5}
-                    >
+                    <Button variant="primary" px={1} py={1}>
                       <a title="Get Started" className="button">
                         Get Started
                       </a>

@@ -55,7 +55,7 @@ function Page({ title, description, children }) {
           html,
           body {
             background-color: #fff;
-            color: #111;
+            color: #black;
           }
           ::selection {
             background-color: #0070f3;

@@ -92,7 +92,7 @@ export const THEMES = [
     name: 'Base 16 (Light)',
     light: true,
     highlights: {
-      background: '#f5f5f5',
+      background: '#fff',
       text: '#202020',
       variable: '#90a959',
       attribute: '#90a959',
@@ -912,8 +912,8 @@ export const LANGUAGE_MIME_HASH = toHash(LANGUAGES, 'mime');
 export const LANGUAGE_MODE_HASH = toHash(LANGUAGES, 'mode');
 export const LANGUAGE_NAME_HASH = toHash(LANGUAGES, 'short');
 
-export const DEFAULT_LANGUAGE = 'auto';
-export const DEFAULT_THEME = THEMES_HASH.seti;
+export const DEFAULT_LANGUAGE = 'markdown';
+export const DEFAULT_THEME = THEMES_HASH['one-light'];
 export const DEFAULT_BG_COLOR = 'rgba(171, 184, 195, 1)';
 export const DEFAULT_EXPORT_SIZE = EXPORT_SIZES_HASH['2x'];
 
@@ -963,7 +963,7 @@ export const DEFAULT_SETTINGS = {
   backgroundImageSelection: null,
   backgroundMode: 'color',
   backgroundColor: DEFAULT_BG_COLOR,
-  dropShadow: true,
+  dropShadow: false,
   dropShadowOffsetY: '20px',
   dropShadowBlurRadius: '68px',
   theme: DEFAULT_THEME.id,
@@ -974,7 +974,7 @@ export const DEFAULT_SETTINGS = {
   lineHeight: '133%',
   windowControls: true,
   widthAdjustment: true,
-  lineNumbers: false,
+  lineNumbers: true,
   exportSize: '2x',
   watermark: false,
   squaredImage: false,

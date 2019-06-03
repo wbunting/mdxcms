@@ -10,7 +10,7 @@ export default class Header extends PureComponent {
       background,
       defaultActive,
       dotBackground,
-      children
+      children,
     } = this.props;
 
     const desktopHeight = height.desktop || Number(height) || 0;
@@ -28,7 +28,7 @@ export default class Header extends PureComponent {
       <header>
         <div
           className={classNames('fixed-container active', {
-            'show-logo': dotBackground
+            'show-logo': dotBackground,
           })}
         >
           {children}
@@ -67,34 +67,34 @@ export default class Header extends PureComponent {
               z-index: ${zIndex || 1000};
               transition: box-shadow 0.5s ease, background 0.2s ease;
               ${dotBackground
-              ? `
+                ? `
                 background-image: radial-gradient(circle, #D7D7D7, #D7D7D7 1px, #FFF 1px, #FFF);
                 background-size: 28px 28px;
               `
-              : 'background: rgba(255, 255, 255, 0);'};
+                : 'background: rgba(255, 255, 255, 0);'};
             }
             .active {
               background: ${background || 'rgba(255, 255, 255, 0.98)'};
-              border-bottom: 2px solid #efefef;
+              border-bottom: 1px solid #efefef;
               box-shadow: ${desktopShadow
-              ? '0px 6px 20px rgba(0, 0, 0, 0.06)'
-              : 'unset'};
+                ? '0px 6px 20px rgba(0, 0, 0, 0.06)'
+                : 'unset'};
               pointer-events: auto;
             }
             @media screen and (max-width: 960px) {
               .active {
-                border-bottom: 2px solid #efefef;
+                border-bottom: 1px solid #efefef;
                 box-shadow: ${tabletShadow
-              ? '0px 6px 20px rgba(0, 0, 0, 0.06)'
-              : 'unset'};
+                  ? '0px 6px 20px rgba(0, 0, 0, 0.06)'
+                  : 'unset'};
               }
             }
             @media screen and (max-width: 640px) {
               .active {
-                border-bottom: 2px solid #efefef;
+                border-bottom: 1px solid #efefef;
                 box-shadow: ${mobileShadow
-              ? '0px 6px 20px rgba(0, 0, 0, 0.06)'
-              : 'unset'};
+                  ? '0px 6px 20px rgba(0, 0, 0, 0.06)'
+                  : 'unset'};
               }
             }
           `}

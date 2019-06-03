@@ -58,8 +58,6 @@ const Login = () => {
 Login.getInitialProps = async context => {
   const { loggedInUser } = await checkLoggedIn(context.apolloClient);
 
-  console.log(loggedInUser);
-
   if (loggedInUser.me) {
     // Already signed in? No need to continue.
     // Throw them back to the main page

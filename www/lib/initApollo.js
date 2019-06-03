@@ -12,7 +12,7 @@ if (!process.browser) {
 
 function create(initialState, { getToken, fetchOptions }) {
   const httpLink = createHttpLink({
-    uri: `http://localhost:3000/api/graphql`,
+    uri: `https://mdxcms.com/api/graphql`,
     credentials: 'same-origin',
     fetchOptions,
   });

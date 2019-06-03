@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-unfetch';
 
 const mdxcms = async ({ pathname, apiToken, repositoryName }) => {
-  const url = `http://localhost:3000/api/file`;
+  const url = `https://mdxcms.com/api/file`;
   const body = {
     pathname,
     apiToken,

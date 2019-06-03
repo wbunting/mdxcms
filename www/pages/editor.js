@@ -3,6 +3,7 @@ import { Flex } from 'rebass';
 import { HotKeys } from 'react-hotkeys';
 import gql from 'graphql-tag';
 import { useMutation } from 'react-apollo-hooks';
+import { withRouter } from 'next/router';
 
 import Editor from '../components/Editor';
 import Sidebar from '../components/Editor/Sidebar';
@@ -34,63 +35,78 @@ const keyMap = {
   SAVE: 'command+s',
 };
 
-const EditorPage = ({ repositories, apiToken }) => {
-  const [activeRepo, setActiveRepo] = React.useState(0);
-  const [activeFile, setActiveFile] = React.useState(
-    repositories[activeRepo].files[0]
-  );
-  const [code, setCode] = React.useState(
-    repositories[activeRepo].files[0].content
-  );
-  const createPost = useMutation(UPDATE_FILE, {
-    variables: {
-      fileId: activeFile.id,
-      repositoryName: repositories[activeRepo].name,
-      content: code,
+const EditorPage = withRouter(
+  ({
+    repositories,
+    router: {
+      query: { project },
     },
-  });
+  }) => {
+    const [activeRepo, setActiveRepo] = React.useState(() => {
+      if (project) {
+        return repositories.findIndex(p => p.name === project);
+      }
+      return 0;
+    });
+    const [activeFile, setActiveFile] = React.useState(
+      repositories[activeRepo].files[0]
+    );
+    const [code, setCode] = React.useState(
+      repositories[activeRepo].files[0].content
+    );
+    const createPost = useMutation(UPDATE_FILE, {
+      variables: {
+        fileId: activeFile.id,
+        repositoryName: repositories[activeRepo].name,
+        content: code,
+      },
+    });
+    React.useEffect(() => {
+      setCode(activeFile.content);
+    }, [activeFile]);
 
-  const save = async event => {
-    event.preventDefault();
-    try {
-      const res = await createPost();
-      setActiveFile({ ...activeFile, content: res.data.updateFile.content });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+    const save = async event => {
+      event.preventDefault();
+      try {
+        const res = await createPost();
+        setActiveFile({ ...activeFile, content: res.data.updateFile.content });
+      } catch (e) {
+        console.log(e);
+      }
+    };
 
-  const handlers = {
-    SAVE: save,
-  };
+    const handlers = {
+      SAVE: save,
+    };
 
-  return (
-    <HotKeys keyMap={keyMap} handlers={handlers}>
-      <Header height={48} shadow={false}>
-        <Navbar hideLogo={false} loggedIn />
-      </Header>
-      <Page>
-        <Flex>
-          <Sidebar
-            repository={repositories[activeRepo]}
-            repositories={repositories}
-            setActiveRepo={setActiveRepo}
-            files={repositories[activeRepo].files}
-            activeFile={activeFile.id}
-            setActiveFile={setActiveFile}
-            activeFileUnsavedChanges={activeFile.content !== code}
-          />
-          <Editor
-            activeFile={activeFile}
-            code={code}
-            setCode={setCode}
-            save={save}
-          />
-        </Flex>
-      </Page>
-    </HotKeys>
-  );
-};
+    return (
+      <HotKeys keyMap={keyMap} handlers={handlers}>
+        <Header height={48} shadow={false}>
+          <Navbar hideLogo={false} loggedIn />
+        </Header>
+        <Page>
+          <Flex>
+            <Sidebar
+              repository={repositories[activeRepo]}
+              repositories={repositories}
+              setActiveRepo={setActiveRepo}
+              files={repositories[activeRepo].files}
+              activeFile={activeFile.id}
+              setActiveFile={setActiveFile}
+              activeFileUnsavedChanges={activeFile.content !== code}
+            />
+            <Editor
+              activeFile={activeFile}
+              code={code}
+              setCode={setCode}
+              save={save}
+            />
+          </Flex>
+        </Page>
+      </HotKeys>
+    );
+  }
+);
 
 // if you are already logged in then redirect to editor
 EditorPage.getInitialProps = async context => {

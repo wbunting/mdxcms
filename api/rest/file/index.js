@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 app.post('*', async (req, res) => {
   // make sure we are authenticated
   const { apiToken, pathname, repositoryName } = req.body;
+
   const user = await prisma.user({ apiToken });
 
   if (!user) {
