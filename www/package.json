@@ -39,7 +39,7 @@
     "graphql": "14.0.2",
     "graphql-tag": "^2.10.1",
     "highlight.js": "^9.15.6",
-    "https-proxy-agent": "^2.2.1",
+    "https-proxy-agent": "^2.2.3",
     "image-extensions": "^1.1.0",
     "immutable": "^3.8.2",
     "isomorphic-unfetch": "^3.0.0",
