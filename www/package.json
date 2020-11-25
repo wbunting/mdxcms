@@ -38,7 +38,7 @@
     "github-slugger": "^1.2.1",
     "graphql": "14.0.2",
     "graphql-tag": "^2.10.1",
-    "highlight.js": "^9.15.6",
+    "highlight.js": "^10.1.2",
     "https-proxy-agent": "^2.2.1",
     "image-extensions": "^1.1.0",
     "immutable": "^3.8.2",
